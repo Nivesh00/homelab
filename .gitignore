@@ -2,4 +2,4 @@
 
 # Exclude all inventroies
 cluster_setup/inventory/*
-# !inventory/default.yml
+!cluster_setup/inventory/default.yml
