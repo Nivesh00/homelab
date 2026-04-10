@@ -1,0 +1,5 @@
+.local
+
+# Exclude all inventroies
+cluster_setup/inventory/*
+# !inventory/default.yml
