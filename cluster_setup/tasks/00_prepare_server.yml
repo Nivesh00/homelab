@@ -1,0 +1,49 @@
+- name: Update cache and upgrade packages
+  ansible.builtin.apt:
+    upgrade: yes
+    update_cache: yes
+
+- name: Install packages UFW, Curl
+  ansible.builtin.apt:
+    name:
+      - ufw
+      - curl
+    state: present
+
+# https://docs.k3s.io/installation/requirements#networking
+- name: Configure UFW
+  block:
+    - name: Enable UFW and temporarily allow all connections
+      community.general.ufw:
+        state: enabled
+        policy: allow
+
+    - name: UFW - allow all outgoing Traffic
+      community.general.ufw:
+        policy: allow
+        direction: outgoing
+
+    - name: UFW - allow required ports
+      community.general.ufw:
+        rule: allow
+        proto: '{{ ufw_rule.proto | default("any") }}'
+        port: '{{ ufw_rule.port }}'
+      loop:
+        - { port: 22,           proto: any }
+        - { port: 80,           proto: any }
+        - { port: 443,          proto: any }
+        - { port: 6443,         proto: tcp }
+        - { port: 10250,        proto: tcp }
+        - { port: 2381,         proto: tcp }
+        - { port: 6444,         proto: tcp }
+        - { port: 10010,        proto: tcp }
+        - { port: 10248:10250,  proto: tcp }
+        - { port: 10256:10259,  proto: tcp }
+        - { port: 30000:32767,  proto: tcp }
+      loop_control:
+        loop_var: ufw_rule
+
+    - name: UFW - deny all other incoming Traffic
+      community.general.ufw:
+        policy: deny
+        direction: incoming

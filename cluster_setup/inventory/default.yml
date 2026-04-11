@@ -1,9 +1,0 @@
-all:
-  children:
-    server:
-      hosts:
-        main_server:
-          ansible_host: 127.0.0.1
-          ansible_user: root
-          ansible_ssh_private_key_file: /path/to/ssh/file
-          ansible_python_interpreter: /usr/local/bin/python3

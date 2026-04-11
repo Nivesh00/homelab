@@ -25,3 +25,6 @@ secrets-encryption-provider: aescbc
 
 # https://github.com/flannel-io/flannel/blob/master/Documentation/backends.md
 flannel-backend: host-gw
+
+write-kubeconfig: /root/kubeconfig
+write-kubeconfig-mode: 600

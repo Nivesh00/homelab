@@ -1,0 +1,16 @@
+- name: Install K3S
+  hosts: main_server
+  gather_facts: no
+
+  vars_files:
+    - vars/00_default.yml
+    - vars/00_k3s.yml
+
+  tasks:
+    - name: Prepare server for K3S installation
+      ansible.builtin.import_tasks: tasks/00_prepare_server.yml
+      tags: [pre_install]
+
+    - name: Install K3S on server
+      ansible.builtin.import_tasks: tasks/01_install_k3s.yml
+      tags: [install]

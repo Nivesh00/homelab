@@ -1,0 +1,3 @@
+K8S_CONFIG: '~/.kube/{{ inv_k8s.kubeconfig }}'
+
+ANSIBLE_NO_LOG: false

@@ -1,5 +1,8 @@
+# Local misc dir
 .local
+.inventory
 
-# Exclude all inventroies
-**/inventory/*
-!**/inventory/default.yml
+# Python virtual environment
+.venv
+
+.ansible.log

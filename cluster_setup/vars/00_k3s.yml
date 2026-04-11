@@ -1,0 +1,6 @@
+# https://docs.k3s.io/reference/env-variables
+## All variables will be appended, do not include `INSTALL_K3S` in var key
+K3S:
+  INSTALL:
+    VERSION: v1.35.2+k3s1
+    CHANNEL: stable

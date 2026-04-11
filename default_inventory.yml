@@ -1,0 +1,21 @@
+all:
+  vars:
+    ENVIRONMENT: # e.g. dev, stg, prd
+  
+  children:
+    servers:
+      hosts:
+        main_server:
+          ansible_host: <remote-ip>
+          ansible_user: <remote-user>
+          ansible_ssh_private_key_file: /path/to/ssh/file
+          ansible_python_interpreter: /usr/bin/python3
+
+        localhost:
+          ansible_host: 127.0.0.1
+          ansible_connection: local
+          ansible_python_interpreter: /usr/bin/python3
+
+      vars:
+        inv_k8s:
+          kubeconfig: config # kubeconfig filename at path ~/.kube

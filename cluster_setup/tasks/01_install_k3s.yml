@@ -1,0 +1,58 @@
+
+- name: Validate kubeconfig file for local machine
+  delegate_to: localhost
+  block:
+    - name: Check if file already exists
+      ansible.builtin.stat:
+        path: '{{ K8S_CONFIG }}'
+      register: config_check
+
+    - name: Fail if file already exists
+      ansible.builtin.fail:
+        msg: Kubeconfig file {{ K8S_CONFIG }} already exists
+      when: config_check.stat.isreg is defined and config_check.stat.isreg
+
+- name: Prepare K3S installation variables
+  delegate_to: main_server
+  block:
+    - name: Create K3S installation variables dictionary
+      ansible.builtin.set_fact:
+        K3S_INSTALLATION_VARS: {}
+
+    - name: Add all user-defined variables to dictionary
+      ansible.builtin.set_fact:
+        K3S_INSTALLATION_VARS: '{{ K3S_INSTALLATION_VARS | combine({ "INSTALL_K3S_" + k3s_var.key: k3s_var.value  }) }}'
+      loop: '{{ K3S.INSTALL | dict2items }}'
+      loop_control:
+        loop_var: k3s_var
+
+- name: Load configuration file on server
+  delegate_to: main_server
+  block:
+    - name: Create path to K3S configuration file
+      ansible.builtin.shell: mkdir -p /etc/rancher/k3s
+    
+    - name: Copy configuration file to server
+      ansible.builtin.copy:
+        src: files/00_config.yaml
+        dest: /etc/rancher/k3s/config.yaml
+        remote_src: false
+
+- name: Install K3S
+  delegate_to: main_server
+  ansible.builtin.shell: curl -sfL https://get.k3s.io | sh -
+  register: debug_msg
+  environment: '{{ K3S_INSTALLATION_VARS }}'
+
+- name: Copy kubeconfig file from remote host to localhost
+  no_log: '{{ ANSIBLE_NO_LOG }}'
+  block:
+    - name: Create directory ~/.kube if it doesn't exists
+      delegate_to: localhost
+      ansible.builtin.shell: mkdir -p ~/.kube
+    
+    - name: Copy kubeconfig to '{{ K8S_CONFIG }}'
+      ansible.builtin.fetch:
+        src: ~/kubeconfig
+        dest: '{{ K8S_CONFIG }}'
+        flat: true
