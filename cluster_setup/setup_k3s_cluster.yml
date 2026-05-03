@@ -14,3 +14,7 @@
     - name: Install K3S on server
       ansible.builtin.import_tasks: tasks/01_install_k3s.yml
       tags: [install]
+
+    - name: Uninstall K3S
+      ansible.builtin.shell: /usr/local/bin/k3s-uninstall.sh
+      tags: [never, uninstall]

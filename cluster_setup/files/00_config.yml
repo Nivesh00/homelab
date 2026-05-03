@@ -1,9 +1,8 @@
 ## https://docs.k3s.io/installation/configuration#configuration-file
 ## https://docs.k3s.io/cli/server
 
-# https://docs.k3s.io/security/hardening-guide#configuration-for-kubernetes-components
+## https://docs.k3s.io/security/hardening-guide#configuration-for-kubernetes-components
 protect-kernel-defaults: true
-secrets-encryption: true
 kube-apiserver-arg:
   - "enable-admission-plugins=NodeRestriction,EventRateLimit"
   - 'admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml'
@@ -19,12 +18,12 @@ kubelet-arg:
   - 'streaming-connection-idle-timeout=5m'
   - "tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305"
 
-# https://docs.k3s.io/security/secrets-encryption
+## https://docs.k3s.io/security/secrets-encryption
 secrets-encryption: true
 secrets-encryption-provider: aescbc
 
-# https://github.com/flannel-io/flannel/blob/master/Documentation/backends.md
+## https://github.com/flannel-io/flannel/blob/master/Documentation/backends.md
 flannel-backend: host-gw
 
-write-kubeconfig: /root/kubeconfig
+# write-kubeconfig: /root/kubeconfig
 write-kubeconfig-mode: 600

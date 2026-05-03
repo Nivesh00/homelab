@@ -29,9 +29,9 @@
         proto: '{{ ufw_rule.proto | default("any") }}'
         port: '{{ ufw_rule.port }}'
       loop:
-        - { port: 22,           proto: any }
-        - { port: 80,           proto: any }
-        - { port: 443,          proto: any }
+        - { port: 22,           proto: tcp }
+        - { port: 80,           proto: tcp }
+        - { port: 443,          proto: tcp }
         - { port: 6443,         proto: tcp }
         - { port: 10250,        proto: tcp }
         - { port: 2381,         proto: tcp }
@@ -43,7 +43,18 @@
       loop_control:
         loop_var: ufw_rule
 
-    - name: UFW - deny all other incoming Traffic
+    - name: UFW - deny all other incoming traffic
       community.general.ufw:
         policy: deny
-        direction: incoming
+        direction: routed
+
+    - name: UFW - deny all routed/port-forwarding traffic
+      community.general.ufw:
+        policy: allow
+        direction: outgoing
+
+- name: Reboot remote server
+  ansible.builtin.reboot:
+    reboot_command: reboot now
+    reboot_timeout: 120
+    post_reboot_delay: 10

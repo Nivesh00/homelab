@@ -4,3 +4,4 @@ K3S:
   INSTALL:
     VERSION: v1.35.2+k3s1
     CHANNEL: stable
+  FLANNEL_BACKEND: host-gw # # One of 'none', 'vxlan', 'ipsec'(deprecated), 'host-gw', 'wireguard-native', or 'wireguard'(deprecated)

@@ -13,7 +13,6 @@
       when: config_check.stat.isreg is defined and config_check.stat.isreg
 
 - name: Prepare K3S installation variables
-  delegate_to: main_server
   block:
     - name: Create K3S installation variables dictionary
       ansible.builtin.set_fact:
@@ -26,21 +25,31 @@
       loop_control:
         loop_var: k3s_var
 
-- name: Load configuration file on server
-  delegate_to: main_server
-  block:
-    - name: Create path to K3S configuration file
-      ansible.builtin.shell: mkdir -p /etc/rancher/k3s
-    
-    - name: Copy configuration file to server
-      ansible.builtin.copy:
-        src: files/00_config.yaml
-        dest: /etc/rancher/k3s/config.yaml
-        remote_src: false
+# - name: Load configuration file on server
+#   block:
+#     - name: Create path to K3S configuration file
+#       ansible.builtin.shell: mkdir -p '{{ k3s_dir_path }}'
+#       loop:
+#         - '/etc/rancher/k3s/'
+#         - '/var/lib/rancher/k3s/server/'
+#       loop_control:
+#         loop_var: k3s_dir_path
+
+#     - name: Copy configuration file to server
+#       ansible.builtin.copy:
+#         src: '{{ k3s_config_file.src }}'
+#         dest: '{{ k3s_config_file.dest }}'
+#         remote_src: false
+#       loop:
+#         - { src: files/00_config.yml, dest: /etc/rancher/k3s/config.yaml }
+#         - { src: files/01_psa.yml,    dest: /var/lib/rancher/k3s/server/psa.yaml }
+#         - { src: files/02_audit.yml,  dest: /var/lib/rancher/k3s/server/audit.yaml }
+#       loop_control:
+#         loop_var: k3s_config_file
 
 - name: Install K3S
-  delegate_to: main_server
-  ansible.builtin.shell: curl -sfL https://get.k3s.io | sh -
+  ansible.builtin.shell: >-
+    curl -sfL https://get.k3s.io | sh -s - --flannel-backend {{ K3S.FLANNEL_BACKEND }}
   register: debug_msg
   environment: '{{ K3S_INSTALLATION_VARS }}'
 
@@ -53,6 +62,6 @@
     
     - name: Copy kubeconfig to '{{ K8S_CONFIG }}'
       ansible.builtin.fetch:
-        src: ~/kubeconfig
+        src: /etc/rancher/k3s/k3s.yaml
         dest: '{{ K8S_CONFIG }}'
         flat: true

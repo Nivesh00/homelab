@@ -15,7 +15,7 @@
     all:
         vars:
             ENVIRONMENT: # e.g. dev, stg, prd
-        
+
         children:
             servers:
             hosts:
@@ -41,7 +41,7 @@
     ansible-playbook -i path/to/inventory.yml setup_k3s_cluster.yml
     ```
 
-1. Your kubeconfig file should now be available under `~/.kube/<inv_k8s.kubeconfig>`
+1. Your kubeconfig file should now be available under `~/.kube/<inv_k8s.kubeconfig>`. Change the ip from `127.0.0.1` to the ip of the server and done! The cluster should now be accessible using [kubectl](https://kubernetes.io/docs/reference/kubectl/)
 
 ## Playbook Details
 
