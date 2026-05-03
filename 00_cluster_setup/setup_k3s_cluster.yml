@@ -4,7 +4,6 @@
 
   vars_files:
     - vars/00_default.yml
-    - vars/00_k3s.yml
 
   tasks:
     - name: Prepare server for K3S installation

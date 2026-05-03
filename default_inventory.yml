@@ -16,11 +16,9 @@ all:
           ansible_connection: local
           ansible_python_interpreter: /usr/bin/python3
 
+      # Following variables are not needed for K3S Installation
+      # Only needed for platform deployment
       vars:
-        inv_installation:
-          # kubeconfig filename at path ~/.kube
-          kubeconfig: default # Default file copied from server
-
         inv_k8s:
           # kubeconfig filename at path ~/.kube
           kubeconfig: master_config # Master config

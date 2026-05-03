@@ -1,3 +1,0 @@
-K8S_CONFIG: '~/.kube/{{ inv_installation.kubeconfig }}'
-
-ANSIBLE_NO_LOG: false

@@ -1,3 +1,7 @@
+K8S_CONFIG: '~/.kube/default.yml' # Where kubeconfig file will be generated on localhost
+
+ANSIBLE_NO_LOG: false
+
 # https://docs.k3s.io/reference/env-variables
 ## All variables will be appended, do not include `INSTALL_K3S` in var key
 K3S:
