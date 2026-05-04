@@ -17,6 +17,7 @@
     - name: Create K3S installation variables dictionary
       ansible.builtin.set_fact:
         K3S_INSTALLATION_VARS: {}
+        K3S_DISABLE: ''
 
     - name: Add all user-defined variables to dictionary
       ansible.builtin.set_fact:
@@ -24,6 +25,13 @@
       loop: '{{ K3S.INSTALL | dict2items }}'
       loop_control:
         loop_var: k3s_var
+
+    - name: Create parameters for disabling components
+      ansible.builtin.set_fact:
+        K3S_DISABLE: '{{ K3S_DISABLE }} --disable={{ disable_item }}'
+      loop: '{{ K3S_DISABLE_ITEMS }}'
+      loop_control:
+        loop_var: disable_item
 
 ## Deactivated due to EventRateLimit problems
 # - name: Load configuration file on server
@@ -50,7 +58,7 @@
 
 - name: Install K3S
   ansible.builtin.shell: >-
-    curl -sfL https://get.k3s.io | sh -s - --flannel-backend {{ K3S.FLANNEL_BACKEND }}
+    curl -sfL https://get.k3s.io | sh -s - --flannel-backend={{ K3S.FLANNEL_BACKEND }} {{ K3S_DISABLE }}
   register: debug_msg
   environment: '{{ K3S_INSTALLATION_VARS }}'
 
