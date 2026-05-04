@@ -1,0 +1,7 @@
+# Kubernetes defaults
+K8S_CONFIG: '~/.kube/{{ inv_k8s.kubeconfig }}'
+K8S_CONTEXT: '{{ inv_k8s.context }}'
+
+# Image registries
+image_registry:
+  docker: docker.io

@@ -1,0 +1,19 @@
+################### Tasks template ##########################
+# - name: Prepare deployment
+#   ansible.core.import_tasks: tasks/templates/prepare_deployment.yml
+#   vars:
+#     k8s_namespace: '{{ inv_.namespace }}'
+#     k8s_component: 
+##############################################################
+
+- name: Set default facts for {{ k8s_component }}
+  ansible.builtin.set_fact:
+    k8s_namespace: '{{ k8s_namespace }}'
+    k8s_component: '{{ k8s_component }}'
+
+- name: Create k8s namespace for {{ k8s_component }}
+  kubernetes.core.k8s:
+    name: '{{ k8s_namespace }}'
+    api_version: v1
+    kind: Namespace
+    state: present

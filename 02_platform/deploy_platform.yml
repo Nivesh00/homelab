@@ -1,0 +1,16 @@
+- name: Deploy platform components
+  hosts: localhost
+  gather_facts: no
+
+  vars_files:
+    - vars/00_default.yml
+    - vars/00_software_references.yml
+  tasks:
+    - name: Prepare server for K3S installation
+      ansible.builtin.import_tasks: tasks/00_pre_deploy.yml
+      tags: [always, pre_deploy]
+
+    - name: Install Traefik Gateway
+      ansible.builtin.import_tasks: tasks/01_traefik_gateway.yml
+      when: inv_traefik is defined and inv_traefik.enable
+      tags: [traefik]
