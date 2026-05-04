@@ -46,12 +46,12 @@
     - name: UFW - deny all other incoming traffic
       community.general.ufw:
         policy: deny
-        direction: routed
+        direction: incoming
 
     - name: UFW - deny all routed/port-forwarding traffic
       community.general.ufw:
-        policy: allow
-        direction: outgoing
+        policy: deny
+        direction: routed
 
 - name: Reboot remote server
   ansible.builtin.reboot:
