@@ -13,6 +13,8 @@
 
 - name: Create k8s namespace for {{ k8s_component }}
   kubernetes.core.k8s:
+    kubeconfig: '{{ K8S_CONFIG }}'
+    context: '{{ K8S_CONTEXT }}'
     name: '{{ k8s_namespace }}'
     api_version: v1
     kind: Namespace

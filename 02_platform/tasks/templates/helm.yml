@@ -1,6 +1,6 @@
 ############ To call tasks, use following template ############
 # - name: Install Helm chart
-#   ansible.core.import_tasks: tasks/templates/helm.yml
+#   ansible.builtin.import_tasks: tasks/templates/helm.yml
 #   vars:
 #     helm_repo_name:
 #     helm_repo_url:
@@ -10,6 +10,7 @@
 #     helm_chart_version:
 #     helm_create_namespace:
 #     helm_values_file:
+#     helm_wait:
 ################################################################
 
 # Template to apply helm chart
@@ -36,4 +37,5 @@
     chart_version: "{{ helm_chart_version }}"
     update_repo_cache: true
     create_namespace: "{{ helm_create_namespace }}"
-    values: "{{ lookup('template', '{{ helm_values_file }}') | from_yaml }}"
+    release_values: "{{ lookup('ansible.builtin.template', helm_values_file) | from_yaml }}"
+    wait: '{{ helm_wait }}'

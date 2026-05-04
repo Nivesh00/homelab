@@ -13,7 +13,7 @@ if [ $USE_VENV ]; then
     if [ -e $VENV_ACTIVATE ]; then
         source $VENV_ACTIVATE
     else
-        echo "$VENV_ACTIVATE does not exist"
+        echo "$VENV_ACTIVATE does not exist. Create virtual Python environment before running this script."
         exit 1
     fi
 fi
@@ -21,5 +21,6 @@ fi
 python3 -m pip install jsonpatch
 python3 -m pip install PyYAML==6.0.3
 python3 -m pip install ansible-core==2.20
+python3 -m pip install kubernetes==35.0.0
 ansible-galaxy collection install community.general
 ansible-galaxy collection install kubernetes.core

@@ -4,12 +4,12 @@
 
 image:  # @schema additionalProperties: false
   # -- Traefik image host registry
-  registry: '{{ ref_traefik.image.registry }}'
+  registry: '{{ software_ref.traefik.image.registry }}'
   # -- Traefik image repository
-  repository: '{{ ref_traefik.image.repository }}'
+  repository: '{{ software_ref.traefik.image.repository }}'
   # -- defaults to appVersion. It's used for version checking, even prefixed with experimental- or latest-.
   # When a digest is required, `versionOverride` can be used to set the version.
-  tag: '{{ ref_traefik.image.tag }}'  # @schema type:[string, null]
+  tag: '{{ software_ref.traefik.image.tag }}'  # @schema type:[string, null]
   # -- Traefik image pull policy
   pullPolicy: IfNotPresent
 
@@ -49,11 +49,15 @@ deployment:
   annotations: {}
   # -- Additional deployment labels (e.g. for filtering deployment by custom labels)
   labels: {}
+{% raw %}
   # -- Additional pod annotations (e.g. for mesh injection or prometheus scraping)
   # It supports templating. One can set it with values like traefik/name: '{{ template "traefik.name" . }}'
+{% endraw %}
   podAnnotations: {}
+{% raw %}
   # -- Additional Pod labels (e.g. for filtering Pod by custom labels)
   # It supports templating. One can set it with values like traefik/name: '{{ template "traefik.name" . }}'
+{% endraw %}
   podLabels: {}
   # -- Additional containers (e.g. for metric offloading sidecars)
   additionalContainers: []
@@ -481,12 +485,14 @@ providers:
 # - "--ping"
 # - "--ping.entrypoint=web"`
 volumes: []
+{% raw %}
 # - name: public-cert
 #   mountPath: "/certs"
 #   type: secret
 # - name: '{{ printf "%s-configs" .Release.Name }}'
 #   mountPath: "/config"
 #   type: configMap
+{% endraw %}
 
 # -- Additional volumeMounts to add to the Traefik container
 additionalVolumeMounts: []
@@ -1111,12 +1117,14 @@ autoscaling:  # @schema additionalProperties: false
   metrics: []
   # -- behavior configures the scaling behavior of the target in both Up and Down directions (scaleUp and scaleDown fields respectively).
   behavior: {}
+{% raw %}
   # -- scaleTargetRef points to the target resource to scale, and is used for the pods for which metrics should be collected, as well as to actually change the replica count.
   # @default -- Traefik Deployment
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: "{{ template \"traefik.fullname\" . }}"
+{% endraw %}
 
 persistence:
   # -- Enable persistence using Persistent Volume Claims
@@ -1168,12 +1176,18 @@ serviceAccount:  # @schema additionalProperties: false
 serviceAccountAnnotations: {}
 
 # -- [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for `traefik` container.
+{% if software_res.traefik is defined %}
+resources:
+{{ software_res.traefik | to_yaml | indent(width=2, first=True) }}
+{% else %}
 resources: {}
+{% endif %}
 
 # -- This example pod anti-affinity forces the scheduler to put traefik pods
 # -- on nodes where no other traefik pods are scheduled.
 # It should be used when hostNetwork: true to prevent port conflicts
 affinity: {}
+{% raw %}
 #  podAntiAffinity:
 #    requiredDuringSchedulingIgnoredDuringExecution:
 #      - labelSelector:
@@ -1181,6 +1195,7 @@ affinity: {}
 #            app.kubernetes.io/name: '{{ template "traefik.name" . }}'
 #            app.kubernetes.io/instance: '{{ .Release.Name }}-{{ include "traefik.namespace" . }}'
 #        topologyKey: kubernetes.io/hostname
+{% endraw %}
 
 # -- nodeSelector is the simplest recommended form of node selection constraint.
 nodeSelector: {}
@@ -1189,6 +1204,7 @@ tolerations: []
 # -- You can use topology spread constraints to control
 # how Pods are spread across your cluster among failure-domains.
 topologySpreadConstraints: []
+{% raw %}
 # This example topologySpreadConstraints forces the scheduler to put traefik pods
 # on nodes where no other traefik pods are scheduled.
 #  - labelSelector:
@@ -1197,6 +1213,7 @@ topologySpreadConstraints: []
 #    maxSkew: 1
 #    topologyKey: kubernetes.io/hostname
 #    whenUnsatisfiable: DoNotSchedule
+{% endraw %}
 
 # -- [Pod Priority and Preemption](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/)
 priorityClassName: ""
@@ -1294,8 +1311,10 @@ hub:  # @schema additionalProperties: false
       connectByDefault: false
       # -- Constraints is an expression that Traefik matches against the container's labels
       constraints: ""
+{% raw %}
       # -- Default rule.
       defaultRule: "Host(`{{ normalize .Name }}`)"
+{% endraw %}
       endpoint:
         # -- The address of the Consul server
         address: ""

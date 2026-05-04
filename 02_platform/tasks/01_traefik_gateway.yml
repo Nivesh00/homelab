@@ -1,5 +1,5 @@
 - name: Prepare Traefik deployment
-  ansible.core.import_tasks: tasks/templates/prepare_deployment.yml
+  ansible.builtin.import_tasks: tasks/templates/prepare_deployment.yml
   vars:
     k8s_namespace: '{{ inv_traefik.namespace }}'
     k8s_component: Traefik
@@ -9,30 +9,30 @@
     kubeconfig: '{{ K8S_CONFIG }}'
     context: '{{ K8S_CONTEXT }}'
     state: present
-    src: https://github.com/kubernetes-sigs/gateway-api/releases/download/{{ ref_gateway_api.version }}/{{ ref_gateway_api.channel }}-install.yaml
+    src: https://github.com/kubernetes-sigs/gateway-api/releases/download/{{ software_ref.gateway_api.version }}/{{ software_ref.gateway_api.channel }}-install.yaml
     apply: true
     server_side_apply:
-      field_manager: kubectl
+      field_manager: ansible
 
 - name: Install Traefik CRDs
   kubernetes.core.k8s:
     kubeconfig: '{{ K8S_CONFIG }}'
     context: '{{ K8S_CONTEXT }}'
     state: present
-    src: https://raw.githubusercontent.com/traefik/traefik/{{ ref_traefik.crd_version }}/docs/content/reference/dynamic-configuration/kubernetes-gateway-rbac.yml
+    src: https://raw.githubusercontent.com/traefik/traefik/{{ software_ref.traefik.crd_version }}/docs/content/reference/dynamic-configuration/kubernetes-gateway-rbac.yml
     apply: true
     server_side_apply:
-      field_manager: kubectl
+      field_manager: ansible
 
 - name: Install Traefik
-  ansible.core.import_tasks: tasks/templates/helm.yml
+  ansible.builtin.import_tasks: tasks/templates/helm.yml
   vars:
-    helm_repo_name: '{{ ref_traefik.helm.repo_name }}'
-    helm_repo_url: '{{ ref_traefik.helm.repo_url }}'
-    helm_release_namespace: '{{ ref_traefik.helm.repo_name }}'
-    helm_release_name: '{{ ref_traefik.helm.release_name }}'
-    helm_chart_ref: '{{ ref_traefik.helm.ref | default('') }}'
-    helm_chart_version: '{{ ref_traefik.helm.version }}'
+    helm_repo_name: '{{ software_ref.traefik.helm.repo_name }}'
+    helm_repo_url: '{{ software_ref.traefik.helm.repo_url }}'
+    helm_release_namespace: '{{ software_ref.traefik.helm.repo_name }}'
+    helm_release_name: '{{ software_ref.traefik.helm.release_name }}'
+    helm_chart_ref: '{{ software_ref.traefik.helm.repo_name }}/{{ software_ref.traefik.helm.chart_name }}'
+    helm_chart_version: '{{ software_ref.traefik.helm.chart_version }}'
     helm_create_namespace: false
-    helm_values_file: 'templates/01_traefik_gateway/traefik.yml'
-
+    helm_values_file: 'templates/01_traefik_gateway/traefik_values.yml'
+    helm_wait: true

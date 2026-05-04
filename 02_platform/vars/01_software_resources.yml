@@ -1,0 +1,9 @@
+# {{ software_res.<component> | to_yaml | indent(width=<xxx>, first=True) }}
+software_res:
+  traefik:
+    requests:
+      memory: 50Mi
+      cpu: 50m
+    limits:
+      memory: 250Mi
+      cpu: 200m
