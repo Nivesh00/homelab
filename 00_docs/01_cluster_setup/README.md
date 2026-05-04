@@ -8,6 +8,7 @@
     ```sh
     bash cluster_setup/install_ansible.sh   
     ```
+   Ansible modules can also be installed manually.
 
 1. Configure your inventory using the [default_inventory](../default_inventory.yml) template. To setup the K3S cluster, the following minimal template can be used
     ```yml
@@ -29,19 +30,15 @@
                 ansible_host: 127.0.0.1
                 ansible_connection: local
                 ansible_python_interpreter: /usr/bin/python3
-
-            vars:
-                inv_k8s:
-                    kubeconfig: config # kubeconfig filename at path ~/.kube
     ```
-    Futhermore, variables can be edited/added in the file [00_k3s.yml](./vars/00_k3s.yml) and [config file](./files/00_config.yaml) to further configure the K3S installation
+    Futhermore, variables can be edited/added in the file [00_default.yml](./vars/00_default.yml) to further configure the K3S installation
 
 1. Run playbook by using following command
     ```sh
     ansible-playbook -i path/to/inventory.yml setup_k3s_cluster.yml
     ```
 
-1. Your kubeconfig file should now be available under `~/.kube/<inv_k8s.kubeconfig>`. Change the ip from `127.0.0.1` to the ip of the server and done! The cluster should now be accessible using [kubectl](https://kubernetes.io/docs/reference/kubectl/)
+1. Your kubeconfig file should now be available under `~/.kube/default.yml`. Change the ip from `127.0.0.1` to the ip of the server and done! The cluster should now be accessible using [kubectl](https://kubernetes.io/docs/reference/kubectl/)
 
 ## Playbook Details
 

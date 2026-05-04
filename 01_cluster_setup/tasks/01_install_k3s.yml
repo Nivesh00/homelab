@@ -25,6 +25,7 @@
       loop_control:
         loop_var: k3s_var
 
+## Deactivated due to EventRateLimit problems
 # - name: Load configuration file on server
 #   block:
 #     - name: Create path to K3S configuration file
