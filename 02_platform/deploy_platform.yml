@@ -8,9 +8,9 @@
     - vars/01_software_resources.yml
 
   tasks:
-    # - name: Prepare server for K3S installation
-    #   ansible.builtin.import_tasks: tasks/00_pre_deploy.yml
-    #   tags: [always, pre_deploy]
+    - name: Prepare server for K3S installation
+      ansible.builtin.import_tasks: tasks/00_pre_deploy.yml
+      tags: [always, pre_deploy]
 
     - name: Install Traefik Gateway
       ansible.builtin.import_tasks: tasks/01_traefik_gateway.yml

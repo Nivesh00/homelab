@@ -29,7 +29,7 @@
   vars:
     helm_repo_name: '{{ software_ref.traefik.helm.repo_name }}'
     helm_repo_url: '{{ software_ref.traefik.helm.repo_url }}'
-    helm_release_namespace: '{{ software_ref.traefik.helm.repo_name }}'
+    helm_release_namespace: '{{ k8s_namespace }}'
     helm_release_name: '{{ software_ref.traefik.helm.release_name }}'
     helm_chart_ref: '{{ software_ref.traefik.helm.repo_name }}/{{ software_ref.traefik.helm.chart_name }}'
     helm_chart_version: '{{ software_ref.traefik.helm.chart_version }}'

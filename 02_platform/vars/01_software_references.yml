@@ -10,7 +10,7 @@ software_ref:
     image:
       registry: docker.io
       repository: traefik
-      tag: v3.7.0-rc2
+      tag: v3.7.0-rc.2
     helm:
       repo_url: https://traefik.github.io/charts
       repo_name: traefik
