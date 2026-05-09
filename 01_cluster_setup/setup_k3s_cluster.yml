@@ -14,6 +14,15 @@
       ansible.builtin.import_tasks: tasks/01_install_k3s.yml
       tags: [install]
 
+    - name: Create Kubeconfig file
+      ansible.builtin.import_tasks: tasks/02_create_kubeconfig.yml
+      tags: [kubeconfig]
+
+    - name: Create Kubeconfig file
+      ansible.builtin.import_tasks: tasks/02_create_kubeconfig.yml
+      tags: [flux]
+      when: inv_flux.enable
+
     - name: Uninstall K3S
       ansible.builtin.shell: /usr/local/bin/k3s-uninstall.sh
       tags: [never, uninstall]

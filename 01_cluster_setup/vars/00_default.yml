@@ -1,4 +1,5 @@
-K8S_CONFIG: '~/.kube/default.yml' # Where kubeconfig file will be generated on localhost
+K8S_CONFIG: '~/.kube/{{ inv_k8s.kubeconfig }}' # Where kubeconfig file will be generated on localhost
+K8S_CONTEXT: '{{ inv_k8s.context }}'
 
 ANSIBLE_NO_LOG: false
 
