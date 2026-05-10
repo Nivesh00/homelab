@@ -1,0 +1,59 @@
+- name: Install Flux CLI if not installed
+  block:
+    - name: Check if Flux is installed
+      ansible.builtin.shell: >-
+        flux -v
+      ignore_errors: true
+      changed_when: false
+      register: flux_version
+
+    - name: Install Flux CLI
+      become: true
+      ansible.builtin.shell: >-
+        curl -s https://fluxcd.io/install.sh | sudo bash
+      when: "'flux version' not in flux_version.stdout"
+
+- name: Check Flux prerequisites
+  block:
+    - name: Run Flux prerequisites command
+      ansible.builtin.command:
+        cmd: >-
+          flux check
+          --kubeconfig {{ K8S_CONFIG }}
+          --context {{ K8S_CONTEXT }}
+          --pre
+      changed_when: false
+      register: flux_prereqs
+
+    - name: Fail if prerequisites check did not succeed
+      ansible.builtin.fail:
+        msg: Flux check for prerequisites did not pass.
+      when: 
+        - "'prerequisites checks passed' not in flux_prereqs.stderr"
+
+- name: Get cluster name
+  block:
+    - name: Split context into user and cluster name
+      ansible.builtin.set_fact:
+        K8S_USER_DATA: "{{ inv_k8s.context | split('@') }}"
+    - name: Set kubeconfig user and cluster as vars
+      ansible.builtin.set_fact:
+        K8S_CLUSTER: "{{ inv_setup.kubeconfig.cluster | default('default')  }}"
+        K8S_USER: "{{ inv_setup.kubeconfig.user | default('default')  }}"
+
+# https://fluxcd.io/flux/get-started/#install-flux-onto-your-cluster
+- name: Bootstrap Flux with GitHub
+  ansible.builtin.command:
+    cmd: >-
+      flux bootstrap github
+      --kubeconfig {{ K8S_CONFIG }}
+      --context {{ K8S_CONTEXT }}
+      --owner={{ inv_flux.github.user }}
+      --token={{ inv_flux.github.token }}
+      --repository={{ inv_flux.github.repo }}
+      --branch=main
+      --path=./clusters/{{ K8S_CLUSTER }}
+      --private={{ inv_flux.github.private }}
+      --personal
+  register: bootstrap_result
+  changed_when: "'configured' in bootstrap_result.stderr"

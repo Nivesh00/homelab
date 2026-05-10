@@ -19,8 +19,8 @@ all:
       vars:
         # Kubernetes specific
         inv_k8s:
-          kubeconfig: master_config_test # kubeconfig filename at path ~/.kube
-          context: homelab-admin@homelab # user and cluster name, seperated by an '@'
+          kubeconfig: master_config # kubeconfig filename at path ~/.kube
+          context: user@cluster # user and cluster name, seperated by an '@'
 
         inv_flux:
           enable: true
@@ -28,6 +28,8 @@ all:
           github:
             user:
             token:
+            repo: homelab
+            private: false
 
       # Following variables are not needed for K3S Installation
       # Only needed for platform deployment

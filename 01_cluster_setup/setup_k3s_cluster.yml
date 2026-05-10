@@ -19,7 +19,8 @@
       tags: [kubeconfig]
 
     - name: Create Kubeconfig file
-      ansible.builtin.import_tasks: tasks/02_create_kubeconfig.yml
+      delegate_to: localhost
+      ansible.builtin.import_tasks: tasks/03_deploy_flux.yml
       tags: [flux]
       when: inv_flux.enable
 
