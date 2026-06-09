@@ -36,6 +36,7 @@
     - name: Split context into user and cluster name
       ansible.builtin.set_fact:
         K8S_USER_DATA: "{{ inv_k8s.context | split('@') }}"
+
     - name: Set kubeconfig user and cluster as vars
       ansible.builtin.set_fact:
         K8S_CLUSTER: "{{ inv_setup.kubeconfig.cluster | default('default')  }}"
@@ -48,12 +49,12 @@
       flux bootstrap github
       --kubeconfig {{ K8S_CONFIG }}
       --context {{ K8S_CONTEXT }}
-      --owner={{ inv_flux.github.user }}
-      --token={{ inv_flux.github.token }}
-      --repository={{ inv_flux.github.repo }}
-      --branch=main
-      --path=./clusters/{{ K8S_CLUSTER }}
-      --private={{ inv_flux.github.private }}
+      --owner {{ inv_flux.github.user }}
+      --token {{ inv_flux.github.token }}
+      --repository {{ inv_flux.github.repo }}
+      --branch main
+      --path ./02_clusters/{{ K8S_CLUSTER }}
+      --private {{ inv_flux.github.private }}
       --personal
   register: bootstrap_result
   changed_when: "'configured' in bootstrap_result.stderr"
