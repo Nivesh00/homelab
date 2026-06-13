@@ -31,17 +31,6 @@
       when: 
         - "'prerequisites checks passed' not in flux_prereqs.stderr"
 
-- name: Get cluster name
-  block:
-    - name: Split context into user and cluster name
-      ansible.builtin.set_fact:
-        K8S_USER_DATA: "{{ inv_k8s.context | split('@') }}"
-
-    - name: Set kubeconfig user and cluster as vars
-      ansible.builtin.set_fact:
-        K8S_CLUSTER: "{{ inv_setup.kubeconfig.cluster | default('default')  }}"
-        K8S_USER: "{{ inv_setup.kubeconfig.user | default('default')  }}"
-
 # https://fluxcd.io/flux/get-started/#install-flux-onto-your-cluster
 - name: Bootstrap Flux with GitHub
   ansible.builtin.command:
@@ -52,7 +41,7 @@
       --owner {{ inv_flux.github.user }}
       --token {{ inv_flux.github.token }}
       --repository {{ inv_flux.github.repo }}
-      --branch main
+      --branch {{ inv_flux.github.branch }}
       --path ./02_clusters/{{ K8S_CLUSTER }}
       --private {{ inv_flux.github.private }}
       --personal

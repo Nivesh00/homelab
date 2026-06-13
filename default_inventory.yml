@@ -29,6 +29,7 @@ all:
             user:
             token:
             repo: homelab
+            branch:
             private: false
 
       # Following variables are not needed for K3S Installation
