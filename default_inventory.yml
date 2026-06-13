@@ -19,7 +19,7 @@ all:
       vars:
         # Kubernetes specific
         inv_k8s:
-          kubeconfig: master_config # kubeconfig filename at path ~/.kube
+          kubeconfig: ~/.kube/config # /path/to/kubeconfig
           context: user@cluster # user and cluster name, seperated by an '@'
 
         inv_flux:
