@@ -31,6 +31,13 @@ spec:
       retries: 3
   test:
     enable: true
+  valuesFrom:
+    - kind: ConfigMap
+      name: traefik-helm-values
+      valuesKey: values.yml
+    - kind: ConfigMap
+      name: traefik-helm-values-mod
+      valuesKey: values.yml
   driftDetection:
     mode: enabled
     ignore:
