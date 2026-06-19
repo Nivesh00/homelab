@@ -4,6 +4,7 @@
 
   vars_files:
     - vars/00_default.yml
+    - vars/01_software_references.yml
 
   tasks:
     - name: Prepare server for K3S installation
@@ -17,6 +18,11 @@
     - name: Create Kubeconfig file
       ansible.builtin.import_tasks: tasks/02_create_kubeconfig.yml
       tags: [kubeconfig]
+
+    - name: Install CRDs
+      ansible.builtin.include_tasks: tasks/04_install_crds.yml
+      when: inv_k8s.crds.enable
+      tags: [crds]
 
     - name: Create Kubeconfig file
       delegate_to: localhost
