@@ -1,0 +1,9 @@
+software_ref:
+  # https://gateway-api.sigs.k8s.io/guides/getting-started/#installing-gateway-api
+  gateway_api:
+    version: v1.5.1
+    channel: standard
+
+  # https://artifacthub.io/packages/helm/traefik/traefik
+  traefik:
+    crd_version: v3.7

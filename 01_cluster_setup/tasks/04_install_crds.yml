@@ -1,0 +1,25 @@
+- name: Install Gateway API CRDs
+  delegate_to: localhost
+  kubernetes.core.k8s:
+    kubeconfig: '{{ K8S_CONFIG }}'
+    context: '{{ K8S_CONTEXT }}'
+    state: present
+    src: https://github.com/kubernetes-sigs/gateway-api/releases/download/{{ software_ref.gateway_api.version }}/{{ software_ref.gateway_api.channel }}-install.yaml
+    apply: true
+    server_side_apply:
+      field_manager: ansible
+  when: inv_k8s.crds.gateway_api
+  tags: [crd_install, gateway_api]
+
+- name: Install Traefik CRDs
+  delegate_to: localhost
+  kubernetes.core.k8s:
+    kubeconfig: '{{ K8S_CONFIG }}'
+    context: '{{ K8S_CONTEXT }}'
+    state: present
+    src: https://raw.githubusercontent.com/traefik/traefik/{{ software_ref.traefik.crd_version }}/docs/content/reference/dynamic-configuration/kubernetes-gateway-rbac.yml
+    apply: true
+    server_side_apply:
+      field_manager: ansible
+  when: inv_k8s.crds.traefik
+  tags: [crd_install, traefik]
