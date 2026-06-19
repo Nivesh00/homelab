@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: traefik-helm-values-mod
 data:
-  values.yml: |
+  values.yml: |-
     image:  # @schema additionalProperties: false
       # -- Traefik image host registry
       registry: docker.io
