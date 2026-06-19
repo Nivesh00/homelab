@@ -20,15 +20,16 @@
       tags: [kubeconfig]
 
     - name: Install CRDs
-      ansible.builtin.include_tasks: tasks/04_install_crds.yml
+      delegate_to: localhost
+      ansible.builtin.import_tasks: tasks/04_install_crds.yml
       when: inv_k8s.crds.enable
       tags: [crds]
 
     - name: Create Kubeconfig file
       delegate_to: localhost
       ansible.builtin.import_tasks: tasks/03_deploy_flux.yml
-      tags: [flux]
       when: inv_flux.enable
+      tags: [flux]
 
     - name: Uninstall K3S
       ansible.builtin.shell: /usr/local/bin/k3s-uninstall.sh
