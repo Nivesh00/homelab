@@ -74,6 +74,12 @@ data:
       #       mountPath: /data
       # -- Use process namespace sharing
       shareProcessNamespace: false
+      # @schema type: [boolean, null]
+      # -- Whether to use the host user namespace. Setting this to false enables user namespaces,
+      # which can improve security by isolating the pod's users from the host.
+      # See https://kubernetes.io/docs/concepts/workloads/pods/user-namespaces/
+      # @default -- unset (inherits cluster default)
+      hostUsers:
       # -- Custom pod DNS policy. Apply if `hostNetwork: true`
       dnsPolicy: ""
       # -- Custom pod [DNS config](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#poddnsconfig-v1-core)
@@ -95,9 +101,7 @@ data:
       #     scheme: HTTP
       # -- Set a runtimeClassName on pod
       runtimeClassName: ""
-      # -- Percentage of memory limit to set for GOMEMLIMIT
-      # -- set as decimal (0.9 = 90%, 0.95 = 95% etc)
-      # -- only takes effect when resources.limits.memory is set
+      # -- Percentage of memory limit to set for GOMEMLIMIT, set as decimal (0.9 = 90%, 0.95 = 95% etc). Only takes effect when resources.limits.memory is set. Set to 0 to disable (e.g. when using VPA or setting it via env)
       goMemLimitPercentage: 0.9
 
     # -- [Pod Disruption Budget](https://kubernetes.io/docs/reference/kubernetes-api/policy-resources/pod-disruption-budget-v1/)
@@ -109,7 +113,7 @@ data:
 
     ingressClass:  # @schema additionalProperties: false
       # -- Create a default IngressClass for Traefik
-      enabled: true
+      enabled: false
       isDefaultClass: true
       name: ""
 
@@ -194,8 +198,10 @@ data:
       dashboard: true
       # -- Custom name for the dashboard (v3.7+).
       dashboardName: ""  # @schema type:[string, null]
+      # -- Disable the advertisement from the dashboard.
+      disableDashboardAd:  # @schema type:[boolean, null]
       # -- Enable the insecure API (HTTP)
-      insecure: false # @schema type:[boolean, null]
+      insecure:  # @schema type:[boolean, null]
       # -- Enable the debug API
       debug:  # @schema type:[boolean, null]
       # -- Configure API basePath
@@ -296,6 +302,8 @@ data:
         allowExternalNameServices: false
         # -- Allows to return 503 when there are no endpoints available
         allowEmptyServices: true
+        # -- List of namespaces from which IngressRoute, IngressRouteTCP, IngressRouteUDP, and TraefikService are allowed to declare cross-provider references. Requires traefik v3.7.1+.
+        crossProviderNamespaces: []
         # -- When the parameter is set, only resources containing an annotation with the same value are processed. Otherwise, resources missing the annotation, having an empty value, or the value traefik are processed. It will also set required annotation on Dashboard and Healthcheck IngressRoute when enabled.
         ingressClass: ""
         # -- See [upstream documentation](https://doc.traefik.io/traefik/reference/install-configuration/providers/kubernetes/kubernetes-ingress/#opt-providers-kubernetesIngress-labelselector)
@@ -313,6 +321,8 @@ data:
         allowExternalNameServices: false
         # -- Allows to return 503 when there are no endpoints available
         allowEmptyServices: true
+        # -- List of namespaces from which Ingresses or Services are allowed to declare Middlewares, TLSOptions, or ServersTransport references. Requires traefik v3.7.1+.
+        crossProviderNamespaces: []
         # -- Only for Traefik v3.0, Deprecated since v3.1. See [upstream documentation](https://doc.traefik.io/traefik/v3.0/providers/kubernetes-ingress/#disableingressclasslookup)
         disableIngressClassLookup: false
         # -- When ingressClass is set, only Ingresses containing an annotation with the same value are processed. Otherwise, Ingresses missing the annotation, having an empty value, or the value traefik are processed.
@@ -322,7 +332,7 @@ data:
         namespaces: []
         # IP used for Kubernetes Ingress endpoints
         publishedService:
-          # -- Enable [publishedService](https://doc.traefik.io/traefik/providers/kubernetes-ingress/#publishedservice),
+          # -- Enable [publishedService](https://doc.traefik.io/traefik/reference/install-configuration/providers/kubernetes/kubernetes-ingress/#ingressendpointpublishedservice),
           # usually with the Service provided by this Chart. It's possible to use it with an external Service using pathOverride.
           enabled: true
           # -- Override path of Kubernetes Service used to copy status from. Format: namespace/servicename.
@@ -343,6 +353,8 @@ data:
       kubernetesGateway:
         # -- Enable Traefik Gateway provider for Gateway API
         enabled: true
+        # -- List of namespaces from which Gateway API routes are allowed to declare TraefikService backendRef references. Requires traefik v3.7.1+.
+        crossProviderNamespaces: []
         # -- Toggles support for the Experimental Channel resources (Gateway API release channels documentation).
         # This option currently enables support for TCPRoute and TLSRoute.
         experimentalChannel: false
@@ -352,6 +364,10 @@ data:
         labelSelector: ""
         # -- Defines whether to use Native Kubernetes load-balancing mode by default.
         nativeLBByDefault: false
+        # -- Maximum QPS to the Kubernetes API server. A negative value disables client-side ratelimiting (v3.7.3+). Defaults to 50.
+        qps:  # @schema type:[integer, null]
+        # -- Maximum burst of requests to the Kubernetes API server (v3.7.3+). Defaults to 100.
+        burst:  # @schema type:[integer, null]
         statusAddress:
           # -- This IP will get copied to the Gateway status.addresses, and currently only supports one IP value (IPv4 or IPv6).
           ip: ""
@@ -369,8 +385,8 @@ data:
         enabled: false
         # -- Allows Traefik to automatically watch for file changes
         watch: true
-        # -- File content (YAML format, go template supported) (see https://doc.traefik.io/traefik/providers/file/)
-        content: ""
+        # -- File content as an object (will be YAML-formatted, go template supported) (see https://doc.traefik.io/traefik/reference/install-configuration/providers/others/file/)
+        content: {}
 
       # @schema additionalProperties: false
       kubernetesIngressNGINX:
@@ -384,13 +400,16 @@ data:
         ingressClassByName: false
         # -- Define if Ingress Controller should also watch for Ingresses without an IngressClass or the annotation specified
         watchIngressWithoutClass: false
-        # -- Namespace the controller watches for updates to Kubernetes objects. Mutually exclusive with watchNamespaceSelector.
+        # -- Single namespace the controller watches for updates to Kubernetes objects. Mutually exclusive with watchNamespaceSelector.
         watchNamespace: ""
         # -- Select namespaces the controller watches for updates to Kubernetes objects. Mutually exclusive with watchNamespace.
         watchNamespaceSelector: ""
         publishService:
-          # -- Service fronting the Ingress controller. Takes the form 'namespace/name'
+          # -- Enable publishService. Service fronting the Ingress controller, used to set the load-balancer status of Ingress objects.
+          # Usually the Service provided by this Chart. It's possible to use it with an external Service using pathOverride.
           enabled: false
+          # -- Override path of Kubernetes Service used to copy status from. Format: namespace/servicename.
+          # Default to Service deployed with this Chart.
           pathOverride: ""
         # -- Customized address (or addresses, separated by comma) to set as the load-balancer status of Ingress objects this controller satisfies
         publishStatusAddress: ""
@@ -409,45 +428,54 @@ data:
         # -- Defines whether to enable request buffering (default: false)
         proxyRequestBuffering: null  # @schema type:[boolean, null]
         # -- Default buffer size for reading client request body in bytes (default: 16384)
-        clientBodyBufferSize: 0
+        clientBodyBufferSize:  # @schema type:[integer, null]
         # -- Default maximum size of a client request body in bytes (default: 1048576)
-        proxyBodySize: 0
+        proxyBodySize:  # @schema type:[integer, null]
         # -- Defines whether to enable response buffering (default: false)
         proxyBuffering: null  # @schema type:[boolean, null]
         # -- Default buffer size for reading the response body in bytes (default: 8192)
-        proxyBufferSize: 0
+        proxyBufferSize:  # @schema type:[integer, null]
         # -- Default number of buffers for reading a response (default: 4)
-        proxyBuffersNumber: 0
+        proxyBuffersNumber:  # @schema type:[integer, null]
         # -- Amount of time to wait until a connection to a server can be established. Unitless, in seconds (default: 60)
-        proxyConnectTimeout: 0
+        proxyConnectTimeout:  # @schema type:[integer, null]
         # -- Amount of time between two successive read operations. Unitless, in seconds (default: 60)
-        proxyReadTimeout: 0
+        proxyReadTimeout:  # @schema type:[integer, null]
         # -- Amount of time between two successive write operations. Unitless, in seconds (default: 60)
-        proxySendTimeout: 0
+        proxySendTimeout:  # @schema type:[integer, null]
         # -- Defines in which cases a request should be retried (default: "error timeout")
         proxyNextUpstream: ""
         # -- Limits the number of possible tries if the backend server does not reply (default: 3)
-        proxyNextUpstreamTries: 0
+        proxyNextUpstreamTries:  # @schema type:[integer, null]
         # -- Limits the total elapsed time to retry the request. Unitless, in seconds (default: 0)
-        proxyNextUpstreamTimeout: 0
+        proxyNextUpstreamTimeout:  # @schema type:[integer, null]
         # -- Defines which HTTP status codes should result in calling the default backend to return an error page
         customHTTPErrors: []
         # -- Defines the idle timeout for keep-alive connections to upstream servers. Unitless, in seconds (default: 60)
-        upstreamKeepaliveTimeout: 0
+        upstreamKeepaliveTimeout:  # @schema type:[integer, null]
         # -- Allow Ingress to reference resources (e.g. ConfigMaps, Secrets) in different namespaces (default: false)
         allowCrossNamespaceResources: null  # @schema type:[boolean, null]
         # -- List of allowed response headers inside the custom headers annotations
         globalAllowedResponseHeaders: []
         # -- URL to the service that provides authentication for all the locations. Per ingress auth-url annotation has precedence over this option.
         globalAuthUrl: ""
+        # -- When set, the strategy is applied to every generated IPAllowList middleware.
+        # @default -- See below
+        ipAllowListStrategy:
+          # -- Number of trusted proxy hops to skip when extracting the client IP from the X-Forwarded-For header. 0 disables depth-based extraction. (default: 0)
+          depth: 0
+          # -- List of IPs to exclude when scanning the X-Forwarded-For header to find the client IP.
+          excludedIPS: []
+          # -- IPv6 subnet size used to group IPv6 addresses when checking the allow list. 0 disables subnet grouping.
+          ipv6Subnet: 0
         # -- Enables parsing and adding -snippet annotations/directives (default: false)
         allowSnippetAnnotations: null  # @schema type:[boolean, null]
         # -- Defines whether to reject the entire ingress when any path contains regex characters and pathType is Prefix or Exact (default: true)
         strictValidatePathType: null  # @schema type:[boolean, null]
         # -- Defines the EntryPoint to use for HTTP requests
-        httpEntryPoint: ""
+        httpEntryPoint: "web"
         # -- Defines the EntryPoint to use for HTTPS requests
-        httpsEntryPoint: ""
+        httpsEntryPoint: "websecure"
         # @schema additionalProperties: false
         modsec:
           # -- Enable ModSec engine. Requires Traefik Hub >= v3.20.0-ea.8.
@@ -487,133 +515,136 @@ data:
     # - name: traefik-logs
     #   mountPath: /var/log/traefik
 
-    logs:
-      general:
-        # -- Set [logs format](https://doc.traefik.io/traefik/observability/logs/#format)
-        format:  # @schema enum:["common", "json", null]; type:[string, null]; default: "common"
-        # By default, the level is set to INFO.
-        # -- Alternative logging levels are TRACE, DEBUG, INFO, WARN, ERROR, FATAL, and PANIC.
-        level: "INFO"  # @schema enum:[TRACE,DEBUG,INFO,WARN,ERROR,FATAL,PANIC]; default: "INFO"
-        # -- To write the logs into a log file, use the filePath option.
-        filePath: ""
-        # -- When set to true and format is common, it disables the colorized output.
-        noColor: false
-        otlp:
-          # -- Set to true in order to enable OpenTelemetry on logs. Note that experimental.otlpLogs needs to be enabled.
-          enabled: false
-          # -- Service name used in OTLP backend. Default: traefik.
-          serviceName:  # @schema type:[string, null]
-          http:
-            # -- Set to true in order to send logs to the OpenTelemetry Collector using HTTP.
-            enabled: false
-            # -- Format: <scheme>://<host>:<port><path>. Default: https://localhost:4318/v1/logs
-            endpoint: ""
-            # -- Additional headers sent with logs by the reporter to the OpenTelemetry Collector.
-            headers: {}
-            ## Defines the TLS configuration used by the reporter to send logs to the OpenTelemetry Collector.
-            tls:
-              # -- The path to the certificate authority, it defaults to the system bundle.
-              ca: ""
-              # -- The path to the public certificate. When using this option, setting the key option is required.
-              cert: ""
-              # -- The path to the private key. When using this option, setting the cert option is required.
-              key: ""
-              # -- When set to true, the TLS connection accepts any certificate presented by the server regardless of the hostnames it covers.
-              insecureSkipVerify:  # @schema type:[boolean, null]
-          grpc:
-            # -- Set to true in order to send logs  to the OpenTelemetry Collector using gRPC
-            enabled: false
-            # -- Format: <host>:<port>. Default: "localhost:4317"
-            endpoint: ""
-            # -- Allows reporter to send logs to the OpenTelemetry Collector without using a secured protocol.
-            insecure: false
-            ## Defines the TLS configuration used by the reporter to send logs to the OpenTelemetry Collector.
-            tls:
-              # -- The path to the certificate authority, it defaults to the system bundle.
-              ca: ""
-              # -- The path to the public certificate. When using this option, setting the key option is required.
-              cert: ""
-              # -- The path to the private key. When using this option, setting the cert option is required.
-              key: ""
-              # -- When set to true, the TLS connection accepts any certificate presented by the server regardless of the hostnames it covers.
-              insecureSkipVerify:  # @schema type:[boolean, null]
-          # -- Defines additional resource attributes to be sent to the collector.
-          resourceAttributes: {}
-
-      access:
-        # -- To enable access logs
+    # -- See [logs reference](https://doc.traefik.io/traefik/reference/install-configuration/observability/logs-and-accesslogs/)
+    log:
+      # -- Set [logs format](https://doc.traefik.io/traefik/reference/install-configuration/observability/logs-and-accesslogs/#opt-log-format)
+      format:  # @schema enum:["common", "json", null]; type:[string, null]; default: "common"
+      # By default, the level is set to INFO.
+      # -- Alternative logging levels are TRACE, DEBUG, INFO, WARN, ERROR, FATAL, and PANIC.
+      level: "INFO"  # @schema enum:[TRACE,DEBUG,INFO,WARN,ERROR,FATAL,PANIC]; default: "INFO"
+      # -- To write the logs into a log file, use the filePath option.
+      filePath: ""
+      # -- When set to true and format is common, it disables the colorized output.
+      noColor: false
+      otlp:
+        # -- Set to true in order to enable OpenTelemetry on logs. Note that experimental.otlpLogs needs to be enabled.
         enabled: false
-        # -- Set [access log format](https://doc.traefik.io/traefik/observability/access-logs/#format)
-        format:  # @schema enum:["common", "genericCLF", "json", null]; type:[string, null]; default: "common"
-        # filePath: "/var/log/traefik/access.log
-        # -- Set [bufferingSize](https://doc.traefik.io/traefik/observability/access-logs/#bufferingsize)
-        bufferingSize:  # @schema type:[integer, null]
-        # -- Set [timezone](https://doc.traefik.io/traefik/observability/access-logs/#time-zones)
-        timezone: ""
-        # -- Set [filtering](https://docs.traefik.io/observability/access-logs/#filtering)
-        # @default -- See below
-        filters:  # @schema additionalProperties: false
-          # -- Set statusCodes, to limit the access logs to requests with a status codes in the specified range
-          statuscodes: ""
-          # -- Set retryAttempts, to keep the access logs when at least one retry has happened
-          retryattempts: false
-          # -- Set minDuration, to keep access logs when requests take longer than the specified duration
-          minduration: ""
-        # -- Enables accessLogs for internal resources. Default: false.
-        addInternals: false
-        # -- Enables access log output alongside OTLP (v3.7+).
-        dualOutput: false
-        fields:
-          general:
-            # -- Set default mode for fields.names
-            defaultmode: keep  # @schema enum:[keep, drop, redact]; default: keep
-            # -- Names of the fields to limit.
-            names: {}
-          headers:
-            # -- [Limit logged fields or headers](https://doc.traefik.io/traefik/observability/access-logs/#limiting-the-fieldsincluding-headers)
-            defaultmode: drop  # @schema enum:[keep, drop, redact]; default: drop
-            names: {}
-        otlp:
-          # -- Set to true in order to enable OpenTelemetry on access logs. Note that experimental.otlpLogs needs to be enabled.
+        # -- Service name used in OTLP backend. Default: traefik.
+        serviceName:  # @schema type:[string, null]
+        http:
+          # -- Set to true in order to send logs to the OpenTelemetry Collector using HTTP.
           enabled: false
-          # -- Service name used in OTLP backend. Default: traefik.
-          serviceName:  # @schema type:[string, null]
-          http:
-            # -- Set to true in order to send access logs to the OpenTelemetry Collector using HTTP.
-            enabled: false
-            # -- Format: <scheme>://<host>:<port><path>. Default: https://localhost:4318/v1/logs
-            endpoint: ""
-            # -- Additional headers sent with access logs by the reporter to the OpenTelemetry Collector.
-            headers: {}
-            ## Defines the TLS configuration used by the reporter to send access logs to the OpenTelemetry Collector.
-            tls:
-              # -- The path to the certificate authority, it defaults to the system bundle.
-              ca: ""
-              # -- The path to the public certificate. When using this option, setting the key option is required.
-              cert: ""
-              # -- The path to the private key. When using this option, setting the cert option is required.
-              key: ""
-              # -- When set to true, the TLS connection accepts any certificate presented by the server regardless of the hostnames it covers.
-              insecureSkipVerify:  # @schema type:[boolean, null]
-          grpc:
-            # -- Set to true in order to send access logs to the OpenTelemetry Collector using gRPC
-            enabled: false
-            # -- Format: <host>:<port>. Default: "localhost:4317"
-            endpoint: ""
-            # -- Allows reporter to send access logs to the OpenTelemetry Collector without using a secured protocol.
-            insecure: false
-            ## Defines the TLS configuration used by the reporter to send access logs to the OpenTelemetry Collector.
-            tls:
-              # -- The path to the certificate authority, it defaults to the system bundle.
-              ca: ""
-              # -- The path to the public certificate. When using this option, setting the key option is required.
-              cert: ""
-              # -- The path to the private key. When using this option, setting the cert option is required.
-              key: ""
-              # -- When set to true, the TLS connection accepts any certificate presented by the server regardless of the hostnames it covers.
-              insecureSkipVerify:  # @schema type:[boolean, null]
-          # -- Defines additional resource attributes to be sent to the collector.
-          resourceAttributes: {}
+          # -- Format: <scheme>://<host>:<port><path>. Default: https://localhost:4318/v1/logs
+          endpoint: ""
+          # -- Additional headers sent with logs by the reporter to the OpenTelemetry Collector.
+          headers: {}
+          ## Defines the TLS configuration used by the reporter to send logs to the OpenTelemetry Collector.
+          tls:
+            # -- The path to the certificate authority, it defaults to the system bundle.
+            ca: ""
+            # -- The path to the public certificate. When using this option, setting the key option is required.
+            cert: ""
+            # -- The path to the private key. When using this option, setting the cert option is required.
+            key: ""
+            # -- When set to true, the TLS connection accepts any certificate presented by the server regardless of the hostnames it covers.
+            insecureSkipVerify:  # @schema type:[boolean, null]
+        grpc:
+          # -- Set to true in order to send logs  to the OpenTelemetry Collector using gRPC
+          enabled: false
+          # -- Format: <host>:<port>. Default: "localhost:4317"
+          endpoint: ""
+          # -- Allows reporter to send logs to the OpenTelemetry Collector without using a secured protocol.
+          insecure: false
+          ## Defines the TLS configuration used by the reporter to send logs to the OpenTelemetry Collector.
+          tls:
+            # -- The path to the certificate authority, it defaults to the system bundle.
+            ca: ""
+            # -- The path to the public certificate. When using this option, setting the key option is required.
+            cert: ""
+            # -- The path to the private key. When using this option, setting the cert option is required.
+            key: ""
+            # -- When set to true, the TLS connection accepts any certificate presented by the server regardless of the hostnames it covers.
+            insecureSkipVerify:  # @schema type:[boolean, null]
+        # -- Defines additional resource attributes to be sent to the collector.
+        resourceAttributes: {}
+
+    # -- See [access logs reference](https://doc.traefik.io/traefik/reference/install-configuration/observability/logs-and-accesslogs/)
+    accessLog:
+      # -- To enable access logs
+      enabled: false
+      # -- Set [access log format](https://doc.traefik.io/traefik/reference/install-configuration/observability/logs-and-accesslogs/#opt-accesslog-format)
+      format:  # @schema enum:["common", "genericCLF", "json", null]; type:[string, null]; default: "common"
+      # filePath: "/var/log/traefik/access.log
+      # -- Set [bufferingSize](https://doc.traefik.io/traefik/reference/install-configuration/observability/logs-and-accesslogs/#opt-accesslog-bufferingSize)
+      bufferingSize:  # @schema type:[integer, null]
+      # -- Set [timezone](https://doc.traefik.io/traefik/reference/install-configuration/observability/logs-and-accesslogs/#time-zones)
+      timezone: ""
+      # -- Set [filtering](https://doc.traefik.io/traefik/observe/logs-and-access-logs/#access-log-filters)
+      # @default -- See below
+      filters:  # @schema additionalProperties: false
+        # -- Set statusCodes, to limit the access logs to requests with a status codes in the specified range
+        statusCodes: ""
+        # -- Set retryAttempts, to keep the access logs when at least one retry has happened
+        retryAttempts: false
+        # -- Set minDuration, to keep access logs when requests take longer than the specified duration
+        minDuration: ""
+      # -- Enables accessLogs for internal resources. Default: false.
+      addInternals: false
+      # -- Enables access log output alongside OTLP (v3.7+).
+      dualOutput: false
+      fields:
+        # -- Set default mode for fields.names
+        defaultMode: keep  # @schema enum:[keep, drop, redact]; default: keep
+        # -- Names of the fields to limit.
+        names: {}
+        headers:
+          # -- [Limit logged fields or headers](https://doc.traefik.io/traefik/observe/logs-and-access-logs/#log-fields-customization)
+          defaultMode: drop  # @schema enum:[keep, drop, redact]; default: drop
+          names: {}
+        queryParameters:
+          # -- Keep or drop all query parameters in the RequestPath access log field (v3.7.3+).
+          defaultMode:  # @schema enum:[keep, drop, null]; type:[string, null]; default: null
+      otlp:
+        # -- Set to true in order to enable OpenTelemetry on access logs. Note that experimental.otlpLogs needs to be enabled.
+        enabled: false
+        # -- Service name used in OTLP backend. Default: traefik.
+        serviceName:  # @schema type:[string, null]
+        http:
+          # -- Set to true in order to send access logs to the OpenTelemetry Collector using HTTP.
+          enabled: false
+          # -- Format: <scheme>://<host>:<port><path>. Default: https://localhost:4318/v1/logs
+          endpoint: ""
+          # -- Additional headers sent with access logs by the reporter to the OpenTelemetry Collector.
+          headers: {}
+          ## Defines the TLS configuration used by the reporter to send access logs to the OpenTelemetry Collector.
+          tls:
+            # -- The path to the certificate authority, it defaults to the system bundle.
+            ca: ""
+            # -- The path to the public certificate. When using this option, setting the key option is required.
+            cert: ""
+            # -- The path to the private key. When using this option, setting the cert option is required.
+            key: ""
+            # -- When set to true, the TLS connection accepts any certificate presented by the server regardless of the hostnames it covers.
+            insecureSkipVerify:  # @schema type:[boolean, null]
+        grpc:
+          # -- Set to true in order to send access logs to the OpenTelemetry Collector using gRPC
+          enabled: false
+          # -- Format: <host>:<port>. Default: "localhost:4317"
+          endpoint: ""
+          # -- Allows reporter to send access logs to the OpenTelemetry Collector without using a secured protocol.
+          insecure: false
+          ## Defines the TLS configuration used by the reporter to send access logs to the OpenTelemetry Collector.
+          tls:
+            # -- The path to the certificate authority, it defaults to the system bundle.
+            ca: ""
+            # -- The path to the public certificate. When using this option, setting the key option is required.
+            cert: ""
+            # -- The path to the private key. When using this option, setting the cert option is required.
+            key: ""
+            # -- When set to true, the TLS connection accepts any certificate presented by the server regardless of the hostnames it covers.
+            insecureSkipVerify:  # @schema type:[boolean, null]
+        # -- Defines additional resource attributes to be sent to the collector.
+        resourceAttributes: {}
 
     metrics:
       # -- Enable metrics for internal resources. Default: false
@@ -621,51 +652,51 @@ data:
 
       ## Prometheus is enabled by default.
       ## It can be disabled by setting "prometheus: null"
-      prometheus:
-        # -- Entry point used to expose metrics.
-        entryPoint: metrics
-        # -- Enable metrics on entry points. Default: true
-        addEntryPointsLabels:  # @schema type:[boolean, null]
-        # -- Enable metrics on routers. Default: false
-        addRoutersLabels:  # @schema type:[boolean, null]
-        # -- Enable metrics on services. Default: true
-        addServicesLabels:  # @schema type:[boolean, null]
-        # -- Buckets for latency metrics. Default="0.1,0.3,1.2,5.0"
-        buckets: ""
-        # -- When manualRouting is true, it disables the default internal router in
-        ## order to allow creating a custom router for prometheus@internal service.
-        manualRouting: false
-        # -- Add HTTP header labels to metrics. See EXAMPLES.md or upstream doc for usage.
-        headerLabels: {}  # @schema type:[object, null]
-        service:
-          # -- Create a dedicated metrics service to use with ServiceMonitor
-          enabled: false
-          labels: {}
-          annotations: {}
-        # -- When set to true, it won't check if Prometheus Operator CRDs are deployed
-        disableAPICheck:  # @schema type:[boolean, null]
-        serviceMonitor:
-          # -- Enable optional CR for Prometheus Operator. See EXAMPLES.md for more details.
-          enabled: false
-          apiVersion: "monitoring.coreos.com/v1"
-          metricRelabelings: []
-          relabelings: []
-          jobLabel: ""
-          interval: ""
-          honorLabels: false
-          scrapeTimeout: ""
-          honorTimestamps: false
-          enableHttp2: false
-          followRedirects: false
-          additionalLabels: {}
-          namespace: ""
-          namespaceSelector: {}
-        prometheusRule:
-          # -- Enable optional CR for Prometheus Operator. See EXAMPLES.md for more details.
-          enabled: false
-          apiVersion: "monitoring.coreos.com/v1"
-          additionalLabels: {}
-          namespace: ""
+      prometheus: null
+        # # -- Entry point used to expose metrics.
+        # entryPoint: metrics
+        # # -- Enable metrics on entry points. Default: true
+        # addEntryPointsLabels:  # @schema type:[boolean, null]
+        # # -- Enable metrics on routers. Default: false
+        # addRoutersLabels:  # @schema type:[boolean, null]
+        # # -- Enable metrics on services. Default: true
+        # addServicesLabels:  # @schema type:[boolean, null]
+        # # -- Buckets for latency metrics. Default="0.1,0.3,1.2,5.0"
+        # buckets: ""
+        # # -- When manualRouting is true, it disables the default internal router in
+        # ## order to allow creating a custom router for prometheus@internal service.
+        # manualRouting: false
+        # # -- Add HTTP header labels to metrics. See EXAMPLES.md or upstream doc for usage.
+        # headerLabels: {}  # @schema type:[object, null]
+        # service:
+        #   # -- Create a dedicated metrics service to use with ServiceMonitor
+        #   enabled: false
+        #   labels: {}
+        #   annotations: {}
+        # # -- When set to true, it won't check if Prometheus Operator CRDs are deployed
+        # disableAPICheck:  # @schema type:[boolean, null]
+        # serviceMonitor:
+        #   # -- Enable optional CR for Prometheus Operator. See EXAMPLES.md for more details.
+        #   enabled: false
+        #   apiVersion: "monitoring.coreos.com/v1"
+        #   metricRelabelings: []
+        #   relabelings: []
+        #   jobLabel: ""
+        #   interval: ""
+        #   honorLabels: false
+        #   scrapeTimeout: ""
+        #   honorTimestamps: false
+        #   enableHttp2: false
+        #   followRedirects: false
+        #   additionalLabels: {}
+        #   namespace: ""
+        #   namespaceSelector: {}
+        # prometheusRule:
+        #   # -- Enable optional CR for Prometheus Operator. See EXAMPLES.md for more details.
+        #   enabled: false
+        #   apiVersion: "monitoring.coreos.com/v1"
+        #   additionalLabels: {}
+        #   namespace: ""
 
       #  datadog:
       #    ## Address instructs exporter to send metrics to datadog-agent at this address.
@@ -768,13 +799,13 @@ data:
 
     ocsp:
       # -- Enable OCSP stapling support.
-      # See https://doc.traefik.io/traefik/https/ocsp/#overview
+      # See https://doc.traefik.io/traefik/reference/install-configuration/tls/ocsp/
       enabled: false
       # -- Defines the OCSP responder URLs to use instead of the one provided by the certificate.
       responderOverrides: {}
 
     ## Tracing
-    # -- https://doc.traefik.io/traefik/observability/tracing/overview/
+    # -- https://doc.traefik.io/traefik/reference/install-configuration/observability/tracing/
     # @default -- See _values.yaml_
     tracing:  # @schema additionalProperties: false
       # -- Enables tracing for internal resources. Default: false.
@@ -792,7 +823,7 @@ data:
       # -- The proportion of requests to trace, specified between 0.0 and 1.0. Default: 1.0.
       sampleRate:  # @schema type:[number, null]; minimum:0; maximum:1
       otlp:
-        # -- See https://doc.traefik.io/traefik/v3.0/observability/tracing/opentelemetry/
+        # -- See https://doc.traefik.io/traefik/reference/install-configuration/observability/tracing/#configuration-options
         enabled: false
         http:
           # -- Set to true in order to send metrics to the OpenTelemetry Collector using HTTP.
@@ -913,6 +944,8 @@ data:
         protocol: TCP
         # -- See [upstream documentation](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport)
         nodePort:  # @schema type:[integer, null]; minimum:0
+        # -- See [upstream documentation](https://doc.traefik.io/traefik/reference/install-configuration/entrypoints/#allowacmebypass)
+        allowACMEByPass: false
         http:
           redirections:
             # -- Port Redirections
@@ -930,8 +963,7 @@ data:
           # -- Enable the Proxy Protocol header parsing for the entry point
           trustedIPs: []
           insecure: false
-        # -- Set transport settings for the entrypoint; see also
-        # https://doc.traefik.io/traefik/routing/entrypoints/#transport
+        # -- Set transport settings for the entrypoint
         # @default -- nil
         transport:
           respondingTimeouts:
@@ -972,7 +1004,7 @@ data:
         nodePort:  # @schema type:[integer, null]; minimum:0
         # -- See [upstream documentation](https://kubernetes.io/docs/concepts/services-networking/service/#application-protocol)
         appProtocol:  # @schema type:[string, null]
-        # -- See [upstream documentation](https://doc.traefik.io/traefik/routing/entrypoints/#allowacmebypass)
+        # -- See [upstream documentation](https://doc.traefik.io/traefik/reference/install-configuration/entrypoints/#allowacmebypass)
         allowACMEByPass: false
         http:
           # -- See [upstream documentation](https://doc.traefik.io/traefik/security/request-path/#encoded-character-filtering)
@@ -1001,7 +1033,7 @@ data:
         http3:
           ## -- Enable HTTP/3 on the entrypoint
           ## Enabling it will also enable http3 experimental feature
-          ## https://doc.traefik.io/traefik/routing/entrypoints/#http3
+          ## https://doc.traefik.io/traefik/reference/install-configuration/entrypoints/#opt-http3
           ## There are known limitations when trying to listen on same ports for
           ## TCP & UDP (Http3). There is a workaround in this chart using dual Service.
           ## https://github.com/kubernetes/kubernetes/issues/47249#issuecomment-587960741
@@ -1017,7 +1049,6 @@ data:
           # -- Enable the Proxy Protocol header parsing for the entry point
           trustedIPs: []
           insecure: false
-        # -- See [upstream documentation](https://doc.traefik.io/traefik/routing/entrypoints/#transport)
         # @default -- nil
         transport:
           respondingTimeouts:
@@ -1061,12 +1092,13 @@ data:
           # -- Defines the tracing verbosity level for this entryPoint.
           traceVerbosity:  # @schema enum:[minimal, detailed, null]; type:[string, null]; default: minimal
 
-    # -- TLS Options are created as [TLSOption CRDs](https://doc.traefik.io/traefik/https/tls/#tls-options)
+    # -- TLS Options are created as [TLSOption CRDs](https://doc.traefik.io/traefik/reference/routing-configuration/kubernetes/crd/tls/tlsoption/)
     # When using `labelSelector`, you'll need to set labels on tlsOption accordingly.
     # See EXAMPLE.md for details.
     tlsOptions: {}
 
-    # -- TLS Store are created as [TLSStore CRDs](https://doc.traefik.io/traefik/https/tls/#default-certificate). This is useful if you want to set a default certificate. See EXAMPLE.md for details.
+    # -- TLS Store are created as [TLSStore CRDs](https://doc.traefik.io/traefik/reference/routing-configuration/kubernetes/crd/tls/tlsstore/).
+    # This is useful if you want to set a default certificate. See EXAMPLE.md for details.
     tlsStore: {}
 
     service:
@@ -1128,7 +1160,7 @@ data:
       subPath: ""
 
     # -- Certificates resolvers configuration.
-    # Ref: https://doc.traefik.io/traefik/https/acme/#certificate-resolvers
+    # Ref: https://doc.traefik.io/traefik/reference/install-configuration/tls/certificate-resolvers/acme/
     # See EXAMPLES.md for more details.
     certificatesResolvers: {}
 
@@ -1141,13 +1173,13 @@ data:
     rbac:  # @schema additionalProperties: false
       # -- Whether Role Based Access Control objects like roles and rolebindings should be created
       enabled: true
-      # When set to true:
-      # 1. It switches respectively the use of `ClusterRole` and `ClusterRoleBinding` to `Role` and `RoleBinding`.
-      # 2. It adds `disableClusterScopeResources` on Ingress and CRD (Kubernetes) providers
-      # **NOTE**: `IngressClass`, `NodePortLB` and **Gateway** provider cannot be used with namespaced RBAC.
-      # See [upstream documentation](https://doc.traefik.io/traefik/providers/kubernetes-ingress/#disableclusterscoperesources) for more details.
+      # -- When set to true: <br />
+      # 1. It switches respectively the use of `ClusterRole` and `ClusterRoleBinding` to `Role` and `RoleBinding`.<br />
+      # 2. It adds `disableClusterScopeResources` on Ingress and CRD (Kubernetes) providers<br />
+      # **NOTE**: `IngressClass`, `NodePortLB` and **Gateway** provider cannot be used with namespaced RBAC. <br />
+      # See [upstream documentation](https://doc.traefik.io/traefik/reference/install-configuration/providers/kubernetes/kubernetes-ingress/#opt-providers-kubernetesIngress-disableClusterScopeResources) for more details.
       namespaced: false
-      # Enable user-facing roles
+      # -- Enable user-facing roles
       # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles
       aggregateTo: []
 
@@ -1222,7 +1254,7 @@ data:
     # -- This field overrides the default app.kubernetes.io/instance label for all Objects.
     instanceLabelOverride: ""
 
-    # -- This field overrides the default version extracted from image.tag
+    # -- This field overrides the default version extracted from image.tag. Required when pinning by `image.digest`, since the version cannot be derived from a digest.
     versionOverride: ""
 
     # -- overrides the app.kubernetes.io/name label
@@ -1292,7 +1324,7 @@ data:
             # -- Data center to use. If not provided, the default agent data center is used
             datacenter: ""
             # -- WaitTime limits how long a Watch will block. If not provided, the agent default
-            endpointWaitTime: 0
+            endpointWaitTime:  # @schema type:[integer, null]
             httpauth:
               # -- Basic Auth password
               password: ""
