@@ -3,7 +3,6 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: main-gateway
-  namespace: traefik-gateway
   annotations:
     cert-manager.io/issuer: letsencrypt-production
 spec:
