@@ -3,7 +3,3 @@ software_ref:
   gateway_api:
     version: v1.5.1
     channel: standard
-
-  # https://artifacthub.io/packages/helm/traefik/traefik
-  traefik:
-    crd_version: v3.7

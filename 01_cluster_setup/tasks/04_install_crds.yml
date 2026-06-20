@@ -7,15 +7,4 @@
     apply: true
     server_side_apply:
       field_manager: ansible
-  when: inv_k8s.crds.gateway_api
-
-- name: Install Traefik CRDs
-  kubernetes.core.k8s:
-    kubeconfig: '{{ K8S_CONFIG }}'
-    context: '{{ K8S_CONTEXT }}'
-    state: present
-    src: https://raw.githubusercontent.com/traefik/traefik/{{ software_ref.traefik.crd_version }}/docs/content/reference/dynamic-configuration/kubernetes-gateway-rbac.yml
-    apply: true
-    server_side_apply:
-      field_manager: ansible
-  when: inv_k8s.crds.traefik
+  when: inv_k8s.gateway_api.install_crds

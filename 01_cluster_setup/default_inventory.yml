@@ -21,10 +21,9 @@ all:
         inv_k8s:
           kubeconfig: ~/.kube/config # /path/to/kubeconfig
           context: user@cluster # user and cluster name, seperated by an '@'
-          crds:
+          gateway_api:
             enable: true
-            gateway_api: true
-            traefik: true
+            install_crds: true
 
         inv_flux:
           enable: true

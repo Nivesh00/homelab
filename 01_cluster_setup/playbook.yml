@@ -22,8 +22,8 @@
     - name: Install CRDs
       delegate_to: localhost
       ansible.builtin.import_tasks: tasks/04_install_crds.yml
-      when: inv_k8s.crds.enable
-      tags: [crds]
+      when: inv_k8s.gateway_api.enable
+      tags: [gateway_api]
 
     - name: Create Kubeconfig file
       delegate_to: localhost
