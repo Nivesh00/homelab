@@ -3,5 +3,5 @@ kind: Kustomization
 
 resources:
   - namespace.yml
-  - ./traefik
-  - ./cert-manager
+  - traefik
+  - cert-manager
