@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: traefik-gateway
 
 resources:
-  - namespace.yml
   - helm.yml
   - helm-values.yml
-  - helm-values-mod.yml
+  - gateway.yml
