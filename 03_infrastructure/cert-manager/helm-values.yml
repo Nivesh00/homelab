@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cert-manager-helm-values
+data:
+  values.yml: |-
+    crds:
+      enabled: true
+      keep: true
+
+    image:
+      registry: quay.io
+      name: cert-manager-controller
+      repository: jetstack
+      tag: v1.20.2
+      pullPolicy: IfNotPresent
+
+    enableCertificateOwnerRef: true
+
+    resources:
+      requests:
+        cpu: 20m
+        memory: 40Mi
+      limits:
+        cpu: 40m
+        memory: 60Mi
+
+    prometheus:
+      enabled: false
+
+    webhook:
+      replicaCount: 1
+
+      resources:
+        requests:
+          cpu: 10m
+          memory: 30Mi
+        limits:
+          cpu: 30m
+          memory: 50Mi
+
+      image:
+        registry: quay.io
+        name: cert-manager-webhook
+        repository: jetstack
+        tag: v1.20.2
+        pullPolicy: IfNotPresent
+
+    cainjector:
+      replicaCount: 1
+
+      resources:
+        requests:
+          cpu: 10m
+          memory: 30Mi
+        limits:
+          cpu: 30m
+          memory: 50Mi
+
+      image:
+        registry: quay.io
+        name: cert-manager-cainjector
+        repository: jetstack
+        tag: v1.20.2
+        pullPolicy: IfNotPresent
+
+    acmesolver:
+      image:
+        registry: quay.io
+        name: cert-manager-acmesolver
+        repository: jetstack
+        tag: v1.20.2
+        pullPolicy: IfNotPresent
+
+    startupapicheck:
+      enabled: true
+
+      resources:
+        requests:
+          cpu: 10m
+          memory: 30Mi
+        limits:
+          cpu: 30m
+          memory: 50Mi
+
+      image:
+        registry: quay.io
+        name: cert-manager-startupapicheck
+        repository: jetstack
+        tag: v1.20.2
+        pullPolicy: IfNotPresent
