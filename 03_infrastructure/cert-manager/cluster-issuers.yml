@@ -28,7 +28,7 @@ spec:
     profile: tlsserver
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: staging-issuer-account-key
+      name: production-issuer-account-key
     solvers:
       - http01:
           gatewayHTTPRoute:
