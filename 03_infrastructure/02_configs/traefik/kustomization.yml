@@ -1,9 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: traefik-gateway
+namespace: operation-stack
 
 resources:
-  - helm-values.yml
-  - helm.yml
   - gateway.yml

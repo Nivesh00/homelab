@@ -4,6 +4,4 @@ kind: Kustomization
 namespace: operation-stack
 
 resources:
-  - helm-values.yml
-  - helm.yml
   - cluster-issuers.yml
