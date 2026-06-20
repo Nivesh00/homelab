@@ -5,7 +5,7 @@ metadata:
   name: traefik
 spec:
   interval: 30m
-  url: oci://ghcr.io/traefik/helm/traefik
+  url: oci://ghcr.io/traefik/helm
   type: oci
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
