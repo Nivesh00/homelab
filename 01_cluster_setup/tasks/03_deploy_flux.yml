@@ -31,6 +31,23 @@
       when: 
         - "'prerequisites checks passed' not in flux_prereqs.stderr"
 
+- name: Check if Flux Secret already exists
+  kubernetes.core.k8s_info:
+    kubeconfig: '{{ K8S_CONFIG }}'
+    context: '{{ K8S_CONTEXT }}'
+    api_version: v1
+    kind: Secret
+    name: flux-system
+    namespace: flux-system
+  register: flux_secrets
+
+- name: Fail if Flux is already deployed
+  ansible.builtin.fail:
+    msg: Flux is already deployed. Delete secret 'flux-system/flux-system' to redeploy it.
+  when: 
+    - flux_secrets is defined
+    - (flux_secrets.resources | length) > 0
+
 # https://fluxcd.io/flux/get-started/#install-flux-onto-your-cluster
 - name: Bootstrap Flux with GitHub
   ansible.builtin.command:

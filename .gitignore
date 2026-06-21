@@ -2,6 +2,8 @@
 .local
 .inventory
 .debug
+.github
+00_misc
 # Python virtual environment
 .venv
 
