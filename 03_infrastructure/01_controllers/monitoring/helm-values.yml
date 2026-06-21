@@ -205,6 +205,10 @@ data:
                 requests:
                   storage: 10Gi
 
+              selector:
+                matchExpressions: []
+                matchLabels: {}
+
         additionalScrapeConfigs: []
 
       additionalServiceMonitors: []
