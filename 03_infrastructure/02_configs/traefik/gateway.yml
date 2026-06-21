@@ -8,7 +8,6 @@ metadata:
 spec:
   gatewayClassName: traefik
 
-  # Only Routes from the same namespace are allowed.
   listeners:
     - name: http-default
       protocol: HTTP
@@ -17,15 +16,15 @@ spec:
         namespaces:
           from: All 
 
-    # - name: certmanager
-    #   protocol: HTTPS
-    #   port: 443
-    #   tls:
-    #     mode: Terminate
-    #     certificateRefs:
-    #       - name: secret-tls
-    #         namespace: default
+    - name: monitoring-grafana
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: secret-tls
+            namespace: monitoring-stack
 
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: All
+      allowedRoutes:
+        namespaces:
+          from: All

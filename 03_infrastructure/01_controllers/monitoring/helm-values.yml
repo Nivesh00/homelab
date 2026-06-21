@@ -37,10 +37,10 @@ data:
       resources:
         limits:
           cpu: 100m
-          memory: 450Mi
+          memory: 500Mi
         requests:
           cpu: 50m
-          memory: 50Mi
+          memory: 100Mi
 
       defaultDashboardsEnabled: true
 
@@ -205,9 +205,7 @@ data:
                 requests:
                   storage: 10Gi
 
-              selector:
-                matchExpressions: []
-                matchLabels: {}
+              selector: {}
 
         additionalScrapeConfigs: []
 

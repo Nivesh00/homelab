@@ -9,11 +9,7 @@ Playbook will:
 
 1. (Optional) Create a virtual python environment for ansible
 
-1. Run the [install_ansible.sh](../01_cluster_setup/install_ansible.sh) script, set the variables `USE_VENV` and `VENV_DIR` in the script according to your setup
-    ```bash
-    bash install_ansible.sh
-    ```
-   Ansible modules can also be installed manually.
+1. Install the required modules using the [requirements.txt](../requirements.txt) file, either in a virtual python environment or whereever.
 
 1. Configure your inventory using the [default_inventory](../01_cluster_setup/default_inventory.yml) template. To setup the K3S cluster, the following minimal template can be used
 
