@@ -1,0 +1,213 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-prometheus-stack-helm-values
+data:
+  values.yml: |-
+    crds:
+      enabled: true
+
+    defaultRules:
+      create: true
+
+    alertmanager:
+      enabled: false
+
+    grafana:
+      enabled: true
+
+      server:
+        root_url: https://localhost:3000
+        domain: localhost:3000
+
+      grafana.ini:
+        auth.anonymous:
+          enabled: false
+
+        auth.basic:
+          enabled: true
+
+      image:
+        registry: docker.io
+        repository: grafana/grafana
+        tag: 13.0.2
+        sha: ""
+        pullPolicy: IfNotPresent
+
+      resources:
+        limits:
+          cpu: 100m
+          memory: 128Mi
+        requests:
+          cpu: 50m
+          memory: 50Mi
+
+      defaultDashboardsEnabled: true
+
+      operator:
+        dashboardsConfigMapRefEnabled: false
+
+      ingress:
+        enabled: false
+
+      sidecar:
+        dashboards:
+          enabled: true
+          label: grafana_dashboard
+          labelValue: "1"
+          searchNamespace: ALL
+
+        datasources:
+          enabled: true
+          defaultDatasourceEnabled: true
+          isDefaultDatasource: true
+
+          name: Prometheus
+          uid: prometheus
+
+          alertmanager:
+            enabled: false
+
+      extraConfigmapMounts: []
+
+      additionalDataSources: []
+
+      serviceMonitor:
+        enabled: true
+
+    kubernetesServiceMonitors:
+      enabled: true
+
+    kubeApiServer:
+      enabled: true
+
+    kubelet:
+      enabled: true
+      namespace: kube-system
+
+    kubeControllerManager:
+      enabled: true
+
+    coreDns:
+      enabled: true
+
+    kubeDns:
+      enabled: false
+
+    kubeEtcd:
+      enabled: true
+
+    kubeScheduler:
+      enabled: true
+
+    kubeProxy:
+      enabled: true
+
+    nodeExporter:
+      enabled: true
+
+    prometheusOperator:
+      enabled: true
+      image:
+        registry: quay.io
+        repository: prometheus-operator/prometheus-operator
+        # if not set appVersion field from Chart.yaml is used
+        tag: v0.91.0
+        sha: ""
+        pullPolicy: IfNotPresent
+
+      resources:
+        limits:
+          cpu: 150m
+          memory: 100Mi
+        requests:
+          cpu: 80m
+          memory: 50Mi
+
+      prometheusConfigReloader:
+        image:
+          registry: quay.io
+          repository: prometheus-operator/prometheus-config-reloader
+          # if not set appVersion field from Chart.yaml is used
+          tag: v0.91.0
+          sha: ""
+
+        resources:
+          requests:
+            cpu: 10m
+            memory: 10Mi
+          limits:
+            cpu: 50m
+            memory: 50Mi
+
+      admissionWebhooks:
+        deployment:
+          image:
+            registry: quay.io
+            repository: prometheus-operator/admission-webhook
+            tag: ""
+            sha: ""
+            pullPolicy: IfNotPresent
+
+          requests:
+            cpu: 10m
+            memory: 10Mi
+          limits:
+            cpu: 50m
+            memory: 50Mi
+
+        patch:
+          enabled: true
+          image:
+            registry: ghcr.io
+            repository: jkroepke/kube-webhook-certgen
+            tag: 1.8.4
+            sha: ""
+            pullPolicy: IfNotPresent
+
+          requests:
+            cpu: 10m
+            memory: 10Mi
+          limits:
+            cpu: 50m
+            memory: 50Mi
+
+    prometheus:
+      enabled: true
+      prometheusSpec:
+        image:
+          registry: quay.io
+          repository: prometheus/prometheus
+          tag: v3.12.0-distroless
+          sha: ""
+          pullPolicy: IfNotPresent
+
+        resources:
+          limits:
+            cpu: 350m
+            memory: 250Mi
+          requests:
+            cpu: 150m
+            memory: 150Mi
+
+        ## The ConfigMaps are mounted into /etc/prometheus/configmaps/.
+        configMaps: []
+
+        retention: 10d
+        retentionSize: 8GiB
+
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: local-path
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 10Gi
+              selector: {}
+
+
+        additionalScrapeConfigs: []
+
+      additionalServiceMonitors: []
+      additionalPodMonitors: []

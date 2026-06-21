@@ -9,3 +9,8 @@ kind: Namespace
 metadata:
   name: operation-stack
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring-stack
+---
