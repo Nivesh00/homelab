@@ -50,10 +50,10 @@ data:
       resources:
         requests:
           cpu: 10m
-          memory: 30Mi
+          memory: 50Mi
         limits:
           cpu: 30m
-          memory: 50Mi
+          memory: 100Mi
 
       image:
         name: cert-manager-cainjector
