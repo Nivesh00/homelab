@@ -7,7 +7,9 @@ spec:
   parentRefs:
     - name: traefik
       sectionName: monitoring-grafana
+      group: gateway.networking.k8s.io/v1
       kind: Gateway
+      namespace: traefik-gateway
 
   hostnames:
     - monitoring-curepipe.duckdns.org

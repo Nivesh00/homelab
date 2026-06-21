@@ -17,13 +17,15 @@ spec:
           from: All 
 
     - name: monitoring-grafana
+      hostname: monitoring-curepipe.duckdns.org
       protocol: HTTPS
       port: 443
       tls:
         mode: Terminate
         certificateRefs:
-          - name: secret-tls
-            namespace: monitoring-stack
+          - name: monitoring-grafana-tls
+            kind: Secret
+            group: ""
 
       allowedRoutes:
         namespaces:
