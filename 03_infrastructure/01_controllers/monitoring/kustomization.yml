@@ -6,4 +6,3 @@ namespace: monitoring-stack
 resources:
   - helm.yml
   - helm-values.yml
-  - secrets.yml
