@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: kube-prometheus-stack-helm-values
+  namespace: ${ns_monitoring}
 data:
   values.yml: |-
     crds:
@@ -17,8 +18,8 @@ data:
       enabled: true
 
       server:
-        root_url: https://localhost:3000
-        domain: localhost:3000
+        root_url: https://monitoring.${DOMAIN}
+        domain: monitoring.${DOMAIN}
 
       grafana.ini:
         auth.anonymous:

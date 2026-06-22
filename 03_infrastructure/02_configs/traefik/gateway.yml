@@ -3,8 +3,9 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: main-gateway
+  namespace: ${ns_traefik}
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-production
+    cert-manager.io/cluster-issuer: ${K8S_CLUSTER_ISSUER}
 spec:
   gatewayClassName: traefik
 
@@ -17,7 +18,7 @@ spec:
           from: All 
 
     - name: monitoring-grafana
-      hostname: monitoring-curepipe.duckdns.org
+      hostname: monitoring.${DOMAIN}
       protocol: HTTPS
       port: 443
       tls:

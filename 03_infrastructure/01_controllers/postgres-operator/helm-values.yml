@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postgres-operator-helm-values
+  namespace: ${ENVIRONMENT}-${ns_operation}
 data:
   values.yml: |-
     image:

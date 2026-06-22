@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-vars-common
+  namespace: flux-system
+data:
+  DOMAIN: abc.xyz
+  ENVIRONMENT: dev
+
+  ## Kubernetes variables
+  K8S_CLUSTER_ISSUER: letsencrypt-production
+
+  ## Namespaces
+  ns_monitoring: monitoring-stack
+  ns_operation: operation-stack
+  ns_traefik: traefik-gateway
