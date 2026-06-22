@@ -1,0 +1,36 @@
+# Flow is intended to be run manually, hence why the branch is non-existent
+name: Create static K8S resources
+
+on:
+  push:
+    branches:
+      - never-run
+
+env:
+  KUBECONFIG_DIR: /etc/.kube
+  KUBECONFIG: /etc/.kube/config
+  MANIFEST_DIR: /etc/manifests
+
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment: homelab
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Write kubeconfig to file
+        shell: bash
+        run: |-
+          mkdir -p ${{ env.KUBECONFIG_DIR }}
+          echo "${{ secrets.KUBECONFIG_RAW }}" > ${{ env.KUBECONFIG }}
+
+      - name: Write manifest files to directory
+        run: |-
+          mkdir ${{ env.KUBECONFIG_DIR }}
+          echo "${{ secrets.SOPS_SECRET }}" > ${{ env.MANIFEST_DIR }}/sops-secrets.yml
+          echo "${{ secrets.CLUSTER_VARS_COMMON }}" > ${{ env.MANIFEST_DIR }}/cluster-vars-common.yml
+
+      - name: Create K8S resources
+        run: |-
+          kubectl --kubeconfig ${{ env.KUBECONFIG }} --context {{ secrets.CONTEXT }} apply -f ${{ MANIFEST_DIR }}
