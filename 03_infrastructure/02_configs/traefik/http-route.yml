@@ -10,7 +10,7 @@ spec:
       sectionName: monitoring-grafana
       group: gateway.networking.k8s.io
       kind: Gateway
-      namespace: traefik-gateway
+      namespace: ${ns_traefik}
 
   hostnames:
     - monitoring.${DOMAIN}
