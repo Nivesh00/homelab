@@ -33,4 +33,4 @@ jobs:
 
       - name: Create K8S resources
         run: |-
-          kubectl --kubeconfig ${{ env.KUBECONFIG }} --context {{ secrets.CONTEXT }} apply -f ${{ MANIFEST_DIR }}
+          kubectl --kubeconfig ${{ env.KUBECONFIG }} --context {{ secrets.CONTEXT }} apply -f ${{ env.MANIFEST_DIR }}
