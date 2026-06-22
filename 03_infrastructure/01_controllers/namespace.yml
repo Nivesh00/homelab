@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: ${ENVIRONMENT}-${ns_traefik}
+  name: ${ENVIRONMENT}-${ns_monitoring}
 ---
 apiVersion: v1
 kind: Namespace
