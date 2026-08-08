@@ -199,6 +199,8 @@ data:
 
         storageSpec:
           volumeClaimTemplate:
+            metadata:
+              name: prometheus-pvc
             spec:
               storageClassName: local-path
               accessModes: ["ReadWriteOnce"]
