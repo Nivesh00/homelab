@@ -45,5 +45,5 @@ spec:
     kind: Gateway
     group: gateway.networking.k8s.io
   
-  listeners: {}
+  listeners: []
 ---
