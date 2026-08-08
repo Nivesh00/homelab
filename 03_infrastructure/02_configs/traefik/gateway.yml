@@ -2,12 +2,19 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: main-gateway
+  name: ${tr_gateway}
   namespace: ${ns_traefik}
   annotations:
     cert-manager.io/cluster-issuer: ${K8S_CLUSTER_ISSUER}
 spec:
-  gatewayClassName: traefik
+  gatewayClassName: ${tr_gateway_class}
+
+  # https://github.com/kubernetes-sigs/gateway-api/issues/4425
+  listeners:
+    - name: http
+      hostname: dummy
+      protocol: HTTP
+      port: 8000
 
   allowedListeners:
     namespaces:

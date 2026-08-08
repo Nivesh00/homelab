@@ -1,27 +1,23 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: ListenerSet
 metadata:
-  name: workload-listeners
+  name: ${tr_listener_set}
   namespace: ${ns_traefik}
+  annotations:
+    cert-manager.io/cluster-issuer: ${K8S_CLUSTER_ISSUER_PROD}
 spec:
   parentRef:
     namespace: ${ns_traefik}
-    name: main-gateway
+    name: ${tr_gateway}
     kind: Gateway
     group: gateway.networking.k8s.io
 
   listeners:
-    - name: http-default
-      protocol: HTTP
-      port: 80
-      allowedRoutes:
-        namespaces:
-          from: All 
 
     - name: monitoring-grafana
       hostname: monitoring.${DOMAIN}
       protocol: HTTPS
-      port: 443
+      port: 8443
       tls:
         mode: Terminate
         certificateRefs:
@@ -32,3 +28,20 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+---
+# Listener for staging cluster issuer for tests, etc...
+apiVersion: gateway.networking.k8s.io/v1
+kind: ListenerSet
+metadata:
+  name: ${tr_test_listener_set}
+  namespace: ${ns_traefik}
+  annotations:
+    cert-manager.io/cluster-issuer: ${K8S_CLUSTER_ISSUER_STG}
+spec:
+  parentRef:
+    namespace: ${ns_traefik}
+    name: ${tr_gateway}
+    kind: Gateway
+    group: gateway.networking.k8s.io
+  
+  listeners: {}
