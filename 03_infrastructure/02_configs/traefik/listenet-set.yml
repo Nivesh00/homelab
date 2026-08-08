@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: ListenerSet
+metadata:
+  name: workload-listeners
+  namespace: ${ns_traefik}
+spec:
+  parentRef:
+    namespace: ${ns_traefik}
+    name: main-gateway
+    kind: Gateway
+    group: gateway.networking.k8s.io
+
+  listeners:
+    - name: http-default
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All 
+
+    - name: monitoring-grafana
+      hostname: monitoring.${DOMAIN}
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: monitoring-grafana-tls
+            kind: Secret
+            group: ""
+
+      allowedRoutes:
+        namespaces:
+          from: All
