@@ -6,10 +6,10 @@ metadata:
   namespace: ${ENVIRONMENT}-${ns_monitoring}
 spec:
   parentRefs:
-    - name: traefik
+    - name: workload-listeners
       sectionName: monitoring-grafana
       group: gateway.networking.k8s.io
-      kind: Gateway
+      kind: ListenerSet
       namespace: ${ns_traefik}
 
   hostnames:

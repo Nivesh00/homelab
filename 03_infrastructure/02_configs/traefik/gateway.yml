@@ -9,25 +9,6 @@ metadata:
 spec:
   gatewayClassName: traefik
 
-  listeners:
-    - name: http-default
-      protocol: HTTP
-      port: 80
-      allowedRoutes:
-        namespaces:
-          from: All 
-
-    - name: monitoring-grafana
-      hostname: monitoring.${DOMAIN}
-      protocol: HTTPS
-      port: 443
-      tls:
-        mode: Terminate
-        certificateRefs:
-          - name: monitoring-grafana-tls
-            kind: Secret
-            group: ""
-
-      allowedRoutes:
-        namespaces:
-          from: All
+  allowedListeners:
+    namespaces:
+      from: All
