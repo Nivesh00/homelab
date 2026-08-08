@@ -208,8 +208,6 @@ data:
                 requests:
                   storage: 10Gi
 
-              selector: {}
-
         additionalScrapeConfigs: []
 
       additionalServiceMonitors: []
