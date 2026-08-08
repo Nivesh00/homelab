@@ -206,8 +206,7 @@ data:
                 requests:
                   storage: 10Gi
 
-              selector:
-                app.kubernetes.io/name: prometheus
+              selector: {}
 
         additionalScrapeConfigs: []
 

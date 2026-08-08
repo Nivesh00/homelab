@@ -41,18 +41,18 @@
     namespace: flux-system
   register: flux_secrets
 
-- name: Fail if Flux is already deployed
-  ansible.builtin.fail:
-    msg: Flux is already deployed. Delete secret 'flux-system/flux-system' to redeploy it.
-  when: 
-    - flux_secrets is defined
-    - (flux_secrets.resources | length) > 0
+# - name: Fail if Flux is already deployed
+#   ansible.builtin.fail:
+#     msg: Flux is already deployed. Delete secret 'flux-system/flux-system' to redeploy it.
+#   when: 
+#     - flux_secrets is defined
+#     - (flux_secrets.resources | length) > 0
 
 # https://fluxcd.io/flux/get-started/#install-flux-onto-your-cluster
 - name: Bootstrap Flux with Git and SSH
   ansible.builtin.command:
     cmd: >-
-      flux bootstrap git
+      y | flux bootstrap git
       --kubeconfig {{ K8S_CONFIG }}
       --context {{ K8S_CONTEXT }}
       --url ssh://{{ inv_flux.git.ssh_url }}
