@@ -4,7 +4,7 @@ metadata:
   name: cluster-vars-common
   namespace: flux-system
 data:
-  DOMAIN: 
+  DOMAIN: abc.xyz
   ENVIRONMENT: stg
 
   ## Kubernetes variables
