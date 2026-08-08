@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: kube-prometheus-stack-helm-values
-  namespace: ${ns_monitoring}
+  namespace: ${ENVIRONMENT}-${ns_monitoring}
 data:
   values.yml: |-
     crds:

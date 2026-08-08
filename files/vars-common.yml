@@ -5,12 +5,12 @@ metadata:
   namespace: flux-system
 data:
   DOMAIN: 
-  ENVIRONMENT: dev
+  ENVIRONMENT: stg
 
   ## Kubernetes variables
   K8S_CLUSTER_ISSUER: letsencrypt-production
 
   ## Namespaces
-  ns_monitoring:
-  ns_operation:
-  ns_traefik:
+  ns_monitoring: monitoring-stack
+  ns_operation: operation-stack
+  ns_traefik: traefik-gateway

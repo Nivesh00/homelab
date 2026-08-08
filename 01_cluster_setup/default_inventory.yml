@@ -27,10 +27,10 @@ all:
 
         inv_flux:
           enable: true
-          # GitHub personal access token with repo permissions
-          github:
-            user:
-            token:
+          # https://fluxcd.io/flux/cmd/flux_bootstrap_git/
+          git:
+            ssh_url: git@github.com/user/repo
+            ssh_private_key: /path/to/ssh # SSH must be set up before running
             repo: homelab
             branch:
             private: false
