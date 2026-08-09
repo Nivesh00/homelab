@@ -4,6 +4,5 @@ kind: Kustomization
 resources:
   - gateway-class.yml
   - gateway.yml
-  # ListenerSet removed until ready: https://github.com/traefik/traefik/pull/12909
   # - listener-set.yml
   - http-route.yml

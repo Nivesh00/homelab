@@ -4,6 +4,11 @@ Clusters for FluxCD. Each cluster is divided into stacks:
 - Infrastructure: for components that make up the cluster (proxy, certificate managers, etc)
 - Applications: for application running inside the cluster
 
+All variables are defined in file [vars-common.yml](../files/vars-common.yml) and then applied to the cluster using following command
+```sh
+kubectl apply -f files/vars-common.yml
+```
+
 ## Secrets
 
 - SOPs as secret encryption
