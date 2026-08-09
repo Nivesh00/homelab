@@ -6,6 +6,7 @@ metadata:
   namespace: ${ns_traefik}
   annotations:
     cert-manager.io/cluster-issuer: ${K8S_CLUSTER_ISSUER_PROD}
+    acme.cert-manager.io/http01-parentreffallback: "true"
 spec:
   parentRef:
     namespace: ${ns_traefik}
@@ -38,6 +39,7 @@ metadata:
   namespace: ${ns_traefik}
   annotations:
     cert-manager.io/cluster-issuer: ${K8S_CLUSTER_ISSUER_STG}
+    acme.cert-manager.io/http01-parentreffallback: "true"
 spec:
   parentRef:
     namespace: ${ns_traefik}
