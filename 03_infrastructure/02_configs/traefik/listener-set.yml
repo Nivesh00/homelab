@@ -47,14 +47,14 @@ spec:
   
   listeners:
 
-    - name: monitoring-grafana
-      hostname: monitoring.${DOMAIN}
+    - name: default-test
+      hostname: default-test.${DOMAIN}
       protocol: HTTPS
       port: 8443
       tls:
         mode: Terminate
         certificateRefs:
-          - name: monitoring-grafana-tls
+          - name: default-test-tls
             kind: Secret
             group: ""
 
