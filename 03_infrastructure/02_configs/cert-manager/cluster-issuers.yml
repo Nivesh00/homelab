@@ -2,14 +2,14 @@
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: ${K8S_CLUSTER_ISSUER_STG}
+  name: ${cm_cluster_issuer_prd}
 spec:
   acme:
-    email: niveshramlochun055@gmail.com
+    email: ${cm_email}
     profile: tlsserver
-    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: staging-issuer-account-key
+      name: production-issuer-account-key
     solvers:
       - http01:
           gatewayHTTPRoute:
@@ -21,14 +21,14 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: ${K8S_CLUSTER_ISSUER_PROD}
+  name: ${cm_cluster_issuer_stg}
 spec:
   acme:
-    email: niveshramlochun055@gmail.com
+    email: ${cm_email}
     profile: tlsserver
-    server: https://acme-v02.api.letsencrypt.org/directory
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: production-issuer-account-key
+      name: staging-issuer-account-key
     solvers:
       - http01:
           gatewayHTTPRoute:

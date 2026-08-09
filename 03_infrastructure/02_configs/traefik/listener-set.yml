@@ -2,10 +2,10 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: ListenerSet
 metadata:
-  name: ${tr_listener_set}
+  name: ${tr_listener_set_prd}
   namespace: ${ns_traefik}
   annotations:
-    cert-manager.io/cluster-issuer: ${K8S_CLUSTER_ISSUER_PROD}
+    cert-manager.io/cluster-issuer: ${cm_cluster_issuer_prd}
     acme.cert-manager.io/http01-parentreffallback: "true"
 spec:
   parentRef:
@@ -35,10 +35,10 @@ spec:
 apiVersion: gateway.networking.k8s.io/v1
 kind: ListenerSet
 metadata:
-  name: ${tr_test_listener_set}
+  name: ${tr_listener_set_stg}
   namespace: ${ns_traefik}
   annotations:
-    cert-manager.io/cluster-issuer: ${K8S_CLUSTER_ISSUER_STG}
+    cert-manager.io/cluster-issuer: ${cm_cluster_issuer_stg}
     acme.cert-manager.io/http01-parentreffallback: "true"
 spec:
   parentRef:
