@@ -2,7 +2,7 @@
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-staging
+  name: ${K8S_CLUSTER_ISSUER_STG}
 spec:
   acme:
     email: niveshramlochun055@gmail.com
@@ -14,14 +14,14 @@ spec:
       - http01:
           gatewayHTTPRoute:
             parentRefs:
-              - name: main-gateway
-                namespace: traefik-gateway
+              - name: ${tr_gateway}
+                namespace: ${ns_traefik}
                 kind: Gateway
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-production
+  name: ${K8S_CLUSTER_ISSUER_PROD}
 spec:
   acme:
     email: niveshramlochun055@gmail.com
@@ -33,7 +33,7 @@ spec:
       - http01:
           gatewayHTTPRoute:
             parentRefs:
-              - name: main-gateway
-                namespace: traefik-gateway
+              - name: ${tr_gateway}
+                namespace: ${ns_traefik}
                 kind: Gateway
 ---
