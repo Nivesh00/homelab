@@ -5,19 +5,21 @@ metadata:
   namespace: flux-system
 data:
   DOMAIN:
-  ENVIRONMENT: stg
-
-  ## Kubernetes variables
-  K8S_CLUSTER_ISSUER_PROD:
-  K8S_CLUSTER_ISSUER_STG:
+  ENVIRONMENT:
 
   ## Namespaces
   ns_monitoring:
   ns_operation:
   ns_traefik:
 
+  ## Cert Manager
+  cm_cluster_issuer_prd:
+  cm_cluster_issuer_stg:
+  cm_email:
+
   ## Traefik
   tr_gateway_class:
   tr_gateway:
-  tr_listener_set:
-  tr_test_listener_set:
+  tr_controller_name:
+  tr_listener_set_prd:
+  tr_listener_set_stg:
