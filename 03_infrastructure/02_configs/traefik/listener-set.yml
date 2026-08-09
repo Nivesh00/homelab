@@ -45,5 +45,20 @@ spec:
     kind: Gateway
     group: gateway.networking.k8s.io
   
-  # listeners: []
+  listeners:
+
+    - name: monitoring-grafana
+      hostname: monitoring.${DOMAIN}
+      protocol: HTTPS
+      port: 8443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: monitoring-grafana-tls
+            kind: Secret
+            group: ""
+
+      allowedRoutes:
+        namespaces:
+          from: All
 ---
