@@ -19,17 +19,17 @@
       ansible.builtin.import_tasks: tasks/02_create_kubeconfig.yml
       tags: [kubeconfig]
 
-    - name: Install CRDs
-      delegate_to: localhost
-      ansible.builtin.import_tasks: tasks/04_install_crds.yml
-      when: inv_k8s.gateway_api.enable
-      tags: [gateway_api]
-
     - name: Create Kubeconfig file
       delegate_to: localhost
       ansible.builtin.import_tasks: tasks/03_deploy_flux.yml
       when: inv_flux.enable
       tags: [flux]
+
+    - name: Install CRDs
+      delegate_to: localhost
+      ansible.builtin.import_tasks: tasks/04_install_crds.yml
+      when: inv_k8s.gateway_api.enable
+      tags: [gateway_api]
 
     - name: Uninstall K3S
       ansible.builtin.shell: /usr/local/bin/k3s-uninstall.sh
