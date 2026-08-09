@@ -1,11 +1,44 @@
 ---
+# apiVersion: gateway.networking.k8s.io/v1
+# kind: ListenerSet
+# metadata:
+#   name: ${tr_listener_set_prd}
+#   namespace: ${ns_traefik}
+#   annotations:
+#     cert-manager.io/cluster-issuer: ${cm_cluster_issuer_prd}
+#     acme.cert-manager.io/http01-parentreffallback: "true"
+# spec:
+#   parentRef:
+#     namespace: ${ns_traefik}
+#     name: ${tr_gateway}
+#     kind: Gateway
+#     group: gateway.networking.k8s.io
+
+#   listeners:
+
+#     - name: monitoring-grafana
+#       hostname: monitoring.${DOMAIN}
+#       protocol: HTTPS
+#       port: 8443
+#       tls:
+#         mode: Terminate
+#         certificateRefs:
+#           - name: monitoring-grafana-tls
+#             kind: Secret
+#             group: ""
+
+#       allowedRoutes:
+#         namespaces:
+#           from: All
+---
+# Listener for staging cluster issuer for tests, etc...
 apiVersion: gateway.networking.k8s.io/v1
 kind: ListenerSet
 metadata:
-  name: ${tr_listener_set_prd}
+  name: ${tr_listener_set_stg}
   namespace: ${ns_traefik}
   annotations:
-    cert-manager.io/cluster-issuer: ${cm_cluster_issuer_prd}
+    cert-manager.io/cluster-issuer: ${cm_cluster_issuer_stg}
     acme.cert-manager.io/http01-parentreffallback: "true"
 spec:
   parentRef:
@@ -30,37 +63,4 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
----
-# # Listener for staging cluster issuer for tests, etc...
-# apiVersion: gateway.networking.k8s.io/v1
-# kind: ListenerSet
-# metadata:
-#   name: ${tr_listener_set_stg}
-#   namespace: ${ns_traefik}
-#   annotations:
-#     cert-manager.io/cluster-issuer: ${cm_cluster_issuer_stg}
-#     acme.cert-manager.io/http01-parentreffallback: "true"
-# spec:
-#   parentRef:
-#     namespace: ${ns_traefik}
-#     name: ${tr_gateway}
-#     kind: Gateway
-#     group: gateway.networking.k8s.io
-
-#   listeners:
-
-#     - name: default-test
-#       hostname: default-test.${DOMAIN}
-#       protocol: HTTPS
-#       port: 8443
-#       tls:
-#         mode: Terminate
-#         certificateRefs:
-#           - name: default-test-tls
-#             kind: Secret
-#             group: ""
-
-#       allowedRoutes:
-#         namespaces:
-#           from: All
 ---
