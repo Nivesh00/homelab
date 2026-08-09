@@ -12,9 +12,11 @@ spec:
   # https://github.com/kubernetes-sigs/gateway-api/issues/4425
   listeners:
     - name: http
-      hostname: dummy
       protocol: HTTP
-      port: 8000
+      port: 80
+      allowedRoutes:
+          namespaces:
+            from: All
 
   allowedListeners:
     namespaces:
