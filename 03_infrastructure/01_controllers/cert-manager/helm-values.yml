@@ -29,9 +29,8 @@ data:
       enabled: false
 
     config:
-      gatewayAPI:
-        enabled: true
-        enableListenerSet: true
+      enableGatewayAPI: true
+      enableGatewayAPIListenerSet: true
       featureGates:
         ListenerSets: true
 
