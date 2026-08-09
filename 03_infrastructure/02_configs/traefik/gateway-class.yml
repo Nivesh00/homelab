@@ -2,7 +2,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
 metadata:
-  name: ${tr_gateway_class}-test
+  name: ${tr_gateway_class}
 spec:
-  controllerName: "example.net/gateway-controller"
+  controllerName: ${tr_controller_name}
 ---
