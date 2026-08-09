@@ -4,8 +4,6 @@ kind: Gateway
 metadata:
   name: ${tr_gateway}
   namespace: ${ns_traefik}
-  annotations:
-    cert-manager.io/cluster-issuer: ${K8S_CLUSTER_ISSUER}
 spec:
   gatewayClassName: ${tr_gateway_class}
 
