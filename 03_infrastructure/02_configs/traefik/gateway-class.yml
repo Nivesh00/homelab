@@ -1,0 +1,7 @@
+---
+kind: GatewayClass
+metadata:
+  name: ${tr_gateway_class}
+spec:
+  controllerName: "example.net/gateway-controller"
+---
