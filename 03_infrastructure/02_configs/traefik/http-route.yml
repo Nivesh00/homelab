@@ -6,7 +6,7 @@ metadata:
   namespace: ${ENVIRONMENT}-${ns_monitoring}
 spec:
   parentRefs:
-    - name: ${tr_listener_set}
+    - name: ${tr_listener_set_prd}
       sectionName: monitoring-grafana
       group: gateway.networking.k8s.io
       kind: ListenerSet
