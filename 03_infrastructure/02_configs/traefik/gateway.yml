@@ -65,7 +65,7 @@ spec:
           - name: keycloak-tls
             kind: Secret
             group: ""
-            namespace: ${ns_iam}
+            namespace: ${ENVIRONMENT}-${ns_iam}
 
       allowedRoutes:
         namespaces:
