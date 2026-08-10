@@ -28,6 +28,7 @@ spec:
           - name: monitoring-grafana-tls
             kind: Secret
             group: ""
+            namespace: ${ENVIRONMENT}-${ns_monitoring}
 
       allowedRoutes:
         namespaces:
