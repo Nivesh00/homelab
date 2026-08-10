@@ -40,3 +40,4 @@ spec:
       valuesKey: values.yml
   driftDetection:
     mode: enabled
+---

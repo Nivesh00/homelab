@@ -11,6 +11,7 @@ data:
   ns_monitoring:
   ns_operation:
   ns_traefik:
+  ns_iam:
 
   ## Cert Manager
   cm_cluster_issuer_prd:
@@ -23,3 +24,6 @@ data:
   tr_controller_name:
   tr_listener_set_prd:
   tr_listener_set_stg:
+
+  ## IAM
+  iam_db_replicas: 
