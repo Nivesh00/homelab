@@ -20,7 +20,9 @@ spec:
       name: keycloak-owner-user.keycloak-db.credentials.postgresql.acid.zalan.do
       key: password
   http:
-    tlsSecret: keycloak-tls
+    tlsSecret: keycloak-tls.${ns_traefik}
+    serviceHttpPort: 8080
+    httpEnabled: true
   hostname:
     hostname: iam.${DOMAIN}
     admin: iam.${DOMAIN}/admin

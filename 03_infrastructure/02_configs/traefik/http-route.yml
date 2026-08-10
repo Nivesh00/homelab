@@ -49,6 +49,6 @@ spec:
             value: /
 
        backendRefs:
-        - name: kube-prometheus-stack-grafana
-          port: 80
+        - name: keycloak-service
+          port: 8080
 ---
