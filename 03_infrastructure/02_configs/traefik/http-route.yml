@@ -36,7 +36,7 @@ spec:
     - name: ${tr_gateway}-staging
       sectionName: keycloak
       group: gateway.networking.k8s.io
-      kind: Gateway # ListenerSet
+      kind: Gateway
       namespace: ${ns_traefik}
 
   hostnames:
