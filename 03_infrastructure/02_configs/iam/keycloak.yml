@@ -21,14 +21,17 @@ spec:
       key: password
   http:
     serviceHttpPort: 8080
-    httpEnabled: true
+    serviceHttpsPort: 8443
+    httpEnabled: false
   hostname:
     hostname: iam.${DOMAIN}
     admin: iam.${DOMAIN}/admin
+  proxy:
+    headers: xforwarded 
   resources:
     limits:
       cpu: 400m
-      memory: 400Mi
+      memory: 500Mi
     requests:
       cpu: 150m
       memory: 200Mi
