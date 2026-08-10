@@ -29,7 +29,7 @@ spec:
     headers: xforwarded 
   resources:
     limits:
-      cpu: 500m
+      cpu: 450m
       memory: 600Mi
     requests:
       cpu: 150m
