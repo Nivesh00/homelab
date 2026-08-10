@@ -4,7 +4,7 @@ apiVersion: k8s.keycloak.org/v2beta1
 kind: Keycloak
 metadata:
   name: keycloak
-  namesace: ${ENVIRONMENT}-{ns_iam}
+  namespace: ${ENVIRONMENT}-{ns_iam}
 spec:
   instances: 1
   db:
