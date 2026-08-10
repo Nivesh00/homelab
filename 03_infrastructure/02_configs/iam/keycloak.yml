@@ -1,0 +1,27 @@
+---
+# Main keycloak instance
+apiVersion: k8s.keycloak.org/v2beta1
+kind: Keycloak
+metadata:
+  name: keycloak
+  namesace: ${ENVIRONMENT}-{ns_iam}
+spec:
+  instances: 1
+  db:
+    vendor: postgres
+    host: keycloak-db
+    database: keycloak
+    port: 5432
+    schema: keycloak-data
+    usernameSecret:
+      name: keycloak-owner-user.keycloak-db.credentials.postgresql.acid.zalan.do
+      key: username
+    passwordSecret:
+      name: keycloak-owner-user.keycloak-db.credentials.postgresql.acid.zalan.do
+      key: password
+  http:
+    tlsSecret: keycloak-tls
+  hostname:
+    hostname: iam.${DOMAIN}
+    admin: iam.${DOMAIN}/admin
+---

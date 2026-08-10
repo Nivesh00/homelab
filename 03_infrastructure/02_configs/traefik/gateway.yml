@@ -36,3 +36,38 @@ spec:
   # allowedListeners:
   #   namespaces:
   #     from: All
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: ${tr_gateway}-staging
+  namespace: ${ns_traefik}
+  annotations:
+    cert-manager.io/cluster-issuer: ${cm_cluster_issuer_stg}
+spec:
+  gatewayClassName: ${tr_gateway_class}
+
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 8000
+      allowedRoutes:
+          namespaces:
+            from: All
+
+    - name: keycloak
+      hostname: iam.${DOMAIN}
+      protocol: HTTPS
+      port: 8443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: keycloak-tls
+            kind: Secret
+            group: ""
+            namespace: ${ns_iam}
+
+      allowedRoutes:
+        namespaces:
+          from: All
+---

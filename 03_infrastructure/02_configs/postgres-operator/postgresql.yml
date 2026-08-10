@@ -18,7 +18,8 @@ spec:
   preparedDatabases:
     keycloak:
       defaultUsers: true
-      schemas: {}
+      schemas:
+        keycloak-data: {}
   postgresql:
     version: "15"
   resources:
