@@ -6,4 +6,3 @@ resources:
   - gateway.yml
   - http-route.yml
   # - listener-set.yml
-  - reference-grant.yml

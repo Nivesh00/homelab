@@ -28,7 +28,6 @@ spec:
           - name: monitoring-grafana-tls
             kind: Secret
             group: ""
-            namespace: ${ENVIRONMENT}-${ns_monitoring}
 
       allowedRoutes:
         namespaces:
@@ -66,7 +65,6 @@ spec:
           - name: keycloak-tls
             kind: Secret
             group: ""
-            namespace: ${ENVIRONMENT}-${ns_iam}
 
       allowedRoutes:
         namespaces:
