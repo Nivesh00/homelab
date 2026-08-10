@@ -13,8 +13,14 @@ spec:
   numberOfInstances: 1
   users:
     postgres:
-    - superuser
-    - createdb
+      - superuser
+      - createdb
+      - createrole
+    keycloak_owner:
+      - nologin
+      - createdb
+  databases:
+    keycloak: keycloan_owner
   preparedDatabases:
     keycloak:
       defaultUsers: true
