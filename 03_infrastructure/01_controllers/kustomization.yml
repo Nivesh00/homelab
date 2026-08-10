@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - cert-manager/
+  - iam/
   - monitoring/
   - postgres-operator/
   - traefik/

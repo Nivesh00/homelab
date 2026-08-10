@@ -3,11 +3,12 @@
 apiVersion: "acid.zalan.do/v1"
 kind: postgresql
 metadata:
-  name: keycloak
+  name: keycloak-db
   namespace: ${ENVIRONMENT}-${ns_iam}
 spec:
   teamId: keycloak-db
   volume:
+    storageClass: ${k8s_storage_class}
     size: 1Gi
   numberOfInstances: 1
   users:

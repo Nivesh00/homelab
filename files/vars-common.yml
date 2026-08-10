@@ -7,6 +7,9 @@ data:
   DOMAIN:
   ENVIRONMENT:
 
+  ## K8S Global Vars
+  k8s_storage_class:
+
   ## Namespaces
   ns_monitoring:
   ns_operation:
