@@ -12,5 +12,5 @@ spec:
   to:
     - group: ""
       kind: Secret
-      name: cafe-secret
+      name: monitoring-grafana-tls
 ---
