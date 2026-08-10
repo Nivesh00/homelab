@@ -21,8 +21,7 @@ spec:
       key: password
   http:
     serviceHttpPort: 8080
-    serviceHttpsPort: 8443
-    httpEnabled: false
+    httpEnabled: true
   hostname:
     hostname: iam.${DOMAIN}
     admin: iam.${DOMAIN}/admin

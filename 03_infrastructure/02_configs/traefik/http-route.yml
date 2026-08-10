@@ -50,5 +50,5 @@ spec:
 
        backendRefs:
         - name: keycloak-service
-          port: 8443
+          port: 8080
 ---
