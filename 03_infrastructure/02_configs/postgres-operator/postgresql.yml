@@ -6,7 +6,7 @@ metadata:
   name: keycloak-db
   namespace: ${ENVIRONMENT}-${ns_iam}
 spec:
-  teamId: keycloak-db
+  teamId: keycloak
   volume:
     storageClass: ${k8s_storage_class}
     size: 1Gi
@@ -31,4 +31,8 @@ spec:
     requests:
       cpu: 10m
       memory: 50Mi
+  # patroni:
+  #   pg_hba:
+  #     - local     all             all          md5
+  #     - host      all             all          0.0.0.0/0     md5
 ---
