@@ -22,7 +22,7 @@ spec:
     keycloak:
       defaultUsers: true
       schemas:
-        keycloak: {}
+        keycloak_data: {}
   postgresql:
     version: "15"
   resources:
