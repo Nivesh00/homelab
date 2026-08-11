@@ -20,7 +20,7 @@ spec:
       - nologin
       - createdb
   databases:
-    keycloak: keycloan_owner
+    keycloak: keycloak_owner
   preparedDatabases:
     keycloak:
       defaultUsers: true
