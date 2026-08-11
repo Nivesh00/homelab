@@ -9,25 +9,14 @@ spec:
   teamId: keycloak
   volume:
     storageClass: ${k8s_storage_class}
-    size: 5Gi
+    size: 1Gi
   numberOfInstances: 1
-  users:
-    postgres:
-      - superuser
-      - createdb
-      - createrole
-  #   keycloak_owner:
-  #     - createdb
-  #     - createrole
-  #     - nologin
-  # databases:
-  #   keycloak: keycloak_owner
   preparedDatabases:
     keycloak:
       defaultUsers: true
       schemas:
         keycloak_data:
-          defaultUsers: true
+          defaultUsers: false
   postgresql:
     version: "15"
   resources:
