@@ -15,7 +15,6 @@ spec:
     postgres:
       - superuser
       - createdb
-      - createrole
   preparedDatabases:
     keycloak:
       defaultUsers: true
