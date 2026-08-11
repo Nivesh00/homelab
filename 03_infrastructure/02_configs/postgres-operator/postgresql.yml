@@ -1,6 +1,6 @@
 ---
 # Database for keycloak
-apiVersion: "acid.zalan.do/v1"
+apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
   name: keycloak-db
@@ -16,6 +16,10 @@ spec:
       - superuser
       - createdb
       - createrole
+    keycloak_owner:
+      - createdb
+      - createrole
+      - nologin
   databases:
     keycloak: keycloak_owner
   preparedDatabases:
