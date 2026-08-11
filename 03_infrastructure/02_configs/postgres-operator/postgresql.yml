@@ -16,11 +16,6 @@ spec:
       - superuser
       - createdb
       - createrole
-    keycloak_owner:
-      - nologin
-      - createdb
-  databases:
-    keycloak: keycloak_owner
   preparedDatabases:
     keycloak:
       defaultUsers: true
