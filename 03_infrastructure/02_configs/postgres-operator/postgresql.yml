@@ -26,7 +26,8 @@ spec:
     keycloak:
       defaultUsers: true
       schemas:
-        keycloak_data: {}
+        keycloak_data:
+          defaultUsers: true
   postgresql:
     version: "15"
   resources:
