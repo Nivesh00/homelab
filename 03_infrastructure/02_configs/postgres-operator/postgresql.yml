@@ -9,7 +9,7 @@ spec:
   teamId: keycloak
   volume:
     storageClass: ${k8s_storage_class}
-    size: 1Gi
+    size: 5Gi
   numberOfInstances: 1
   users:
     postgres:
@@ -20,7 +20,7 @@ spec:
     keycloak:
       defaultUsers: true
       schemas:
-        keycloak-data: {}
+        keycloak: {}
   postgresql:
     version: "15"
   resources:
