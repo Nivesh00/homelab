@@ -9,7 +9,7 @@ spec:
   teamId: keycloak
   volume:
     storageClass: ${k8s_storage_class}
-    size: 1Gi
+    size: 2Gi
   numberOfInstances: 1
   users:
     postgres:
