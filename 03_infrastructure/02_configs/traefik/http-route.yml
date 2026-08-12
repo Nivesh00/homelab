@@ -51,3 +51,29 @@ spec:
         - name: keycloak-service
           port: 8080
 ---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: keycloak
+  namespace: ${ENVIRONMENT}-${ns_iam}
+spec:
+  parentRefs:
+    - name: ${tr_gateway}
+      sectionName: keycloak-admin
+      group: gateway.networking.k8s.io
+      kind: Gateway
+      namespace: ${ns_traefik}
+
+  hostnames:
+    - iam-admin.${DOMAIN}
+
+  rules:
+     - matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+       backendRefs:
+        - name: keycloak-service
+          port: 8080
+---

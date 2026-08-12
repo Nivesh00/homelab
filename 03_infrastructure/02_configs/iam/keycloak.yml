@@ -26,8 +26,7 @@ spec:
     serviceHttpPort: 8080
   hostname:
     hostname: https://iam.${DOMAIN}
-    admin: https://iam.${DOMAIN}/admin
-    strict: false
+    admin: https://iam-admin.${DOMAIN}
   proxy:
     headers: xforwarded
   resources:
