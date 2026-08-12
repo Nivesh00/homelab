@@ -25,9 +25,6 @@ data:
       workers: 8
 
     configUsers:
-      additional_owner_roles:
-        - admin
-
       enable_password_rotation: false
       password_rotation_interval: 90
       password_rotation_user_retention: 180
