@@ -25,6 +25,8 @@ spec:
   hostname:
     hostname: https://iam.${DOMAIN}
     admin: https://iam.${DOMAIN}/admin
+  proxy:
+    headers: forwarded
   resources:
     limits:
       cpu: 500m
