@@ -30,9 +30,9 @@ spec:
   proxy:
     headers: xforwarded
   additionalOptions:
-    - name: KC_BOOTSTRAP_ADMIN_USERNAME
+    - name: BOOTSTRAP_ADMIN_USERNAME
       value: ${KC_ADMIN_USER}
-    - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+    - name: BOOTSTRAP_ADMIN_PASSWORD
       value: ${KC_ADMIN_PASSWORD}
   resources:
     limits:
