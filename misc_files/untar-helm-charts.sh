@@ -23,7 +23,7 @@ declare -A chart_https_list=(
 declare -A version_list=(
     ['cert-manager']='v1.20.2'
     ['kube-prometheus-stack']='86.3.2'
-    ['postgres-operator']='v2.0.1'
+    ['postgres-operator']='v1.15.1'
     ['traefik']='41.0.0'
 )
 

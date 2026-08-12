@@ -20,7 +20,7 @@ spec:
     keycloak:
       defaultUsers: true
       schemas:
-        public:
+        keycloak_data:
           defaultUsers: false
   postgresql:
     version: "15"
@@ -31,8 +31,4 @@ spec:
     requests:
       cpu: 10m
       memory: 50Mi
-  # patroni:
-  #   pg_hba:
-  #     - local     all             all          md5
-  #     - host      all             all          0.0.0.0/0     md5
 ---
