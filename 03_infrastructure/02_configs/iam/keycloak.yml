@@ -20,10 +20,11 @@ spec:
       name: keycloak-owner-user.keycloak-db.credentials.postgresql.acid.zalan.do
       key: password
   ingress:
-    enabled: true
+    enabled: false
   http:
+    httpEnabled: false
     serviceHttpPort: 8080
-    httpEnabled: true
+    strict: true
   hostname:
     hostname: https://iam.${DOMAIN}
     admin: https://iam.${DOMAIN}/admin
