@@ -24,12 +24,6 @@ data:
       resync_period: 30m
       workers: 8
 
-      enable_password_rotation: false
-      password_rotation_interval: 90
-      password_rotation_user_retention: 180
-      replication_username: standby
-      super_username: postgres
-
     configKubernetes:
       cluster_domain: cluster.local
       cluster_labels:
