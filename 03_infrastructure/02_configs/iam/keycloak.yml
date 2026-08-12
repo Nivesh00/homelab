@@ -24,10 +24,10 @@ spec:
   http:
     httpEnabled: false
     serviceHttpPort: 8080
-    strict: true
   hostname:
     hostname: https://iam.${DOMAIN}
     admin: https://iam.${DOMAIN}/admin
+    strict: true
   proxy:
     headers: xforwarded
   resources:
