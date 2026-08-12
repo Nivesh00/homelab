@@ -16,11 +16,11 @@ spec:
       - superuser
       - createdb
   preparedDatabases:
-    keycloak:
-      defaultUsers: true
-      schemas:
-        public:
-          defaultUsers: false
+    keycloak: {}
+      # defaultUsers: true
+      # schemas:
+      #   public:
+      #     defaultUsers: false
   postgresql:
     version: "15"
   resources:
