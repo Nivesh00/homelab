@@ -27,3 +27,7 @@ data:
   tr_controller_name:
   tr_listener_set_prd:
   tr_listener_set_stg:
+
+  ## Keycloak
+  KC_ADMIN_USER:
+  KC_ADMIN_PASSWORD:
