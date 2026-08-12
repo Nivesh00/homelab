@@ -59,7 +59,7 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-          - name: keycloak-tls
+          - name: keycloak-admin-tls
             kind: Secret
             group: ""
 
