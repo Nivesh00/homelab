@@ -25,7 +25,6 @@ spec:
         - name: kube-prometheus-stack-grafana
           port: 80
 ---
-# Test HTTPRoute with LetsEncrypt staging
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -33,7 +32,7 @@ metadata:
   namespace: ${ENVIRONMENT}-${ns_iam}
 spec:
   parentRefs:
-    - name: ${tr_gateway}-staging
+    - name: ${tr_gateway}
       sectionName: keycloak
       group: gateway.networking.k8s.io
       kind: Gateway

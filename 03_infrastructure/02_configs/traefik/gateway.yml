@@ -9,6 +9,10 @@ metadata:
 spec:
   gatewayClassName: ${tr_gateway_class}
 
+  # allowedListeners:
+  #   namespaces:
+  #     from: All
+
   # https://github.com/kubernetes-sigs/gateway-api/issues/4425
   listeners:
     - name: http
@@ -33,9 +37,20 @@ spec:
         namespaces:
           from: All
 
-  # allowedListeners:
-  #   namespaces:
-  #     from: All
+    - name: keycloak
+      hostname: iam.${DOMAIN}
+      protocol: HTTPS
+      port: 8443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: keycloak-tls
+            kind: Secret
+            group: ""
+
+      allowedRoutes:
+        namespaces:
+          from: All
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
@@ -55,18 +70,18 @@ spec:
           namespaces:
             from: All
 
-    - name: keycloak
-      hostname: iam.${DOMAIN}
-      protocol: HTTPS
-      port: 8443
-      tls:
-        mode: Terminate
-        certificateRefs:
-          - name: keycloak-tls
-            kind: Secret
-            group: ""
+    # - name: keycloak
+    #   hostname: iam.${DOMAIN}
+    #   protocol: HTTPS
+    #   port: 8443
+    #   tls:
+    #     mode: Terminate
+    #     certificateRefs:
+    #       - name: keycloak-tls
+    #         kind: Secret
+    #         group: ""
 
-      allowedRoutes:
-        namespaces:
-          from: All
+    #   allowedRoutes:
+    #     namespaces:
+    #       from: All
 ---
