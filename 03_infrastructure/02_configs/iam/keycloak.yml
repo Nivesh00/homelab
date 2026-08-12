@@ -22,8 +22,6 @@ spec:
   ingress:
     enabled: false
   http:
-    serviceHttpPort: 8080
-    serviceHttpsPort: 8443
     httpEnabled: true
   hostname:
     hostname: https://iam.${DOMAIN}
