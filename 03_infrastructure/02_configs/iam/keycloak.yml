@@ -27,7 +27,7 @@ spec:
   hostname:
     hostname: https://iam.${DOMAIN}
     admin: https://iam.${DOMAIN}/admin
-    strict: true
+    strict: false
   proxy:
     headers: xforwarded
   resources:
