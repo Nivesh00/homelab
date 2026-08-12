@@ -29,9 +29,9 @@ spec:
     headers: forwarded
   resources:
     limits:
-      cpu: 500m
+      cpu: 600m
       memory: 600Mi
     requests:
-      cpu: 150m
+      cpu: 200m
       memory: 200Mi
 ---
