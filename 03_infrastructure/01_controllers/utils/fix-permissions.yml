@@ -1,0 +1,25 @@
+# Error in helm chart, therefore fix needed
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: fix-secrets-role
+  namespace: ${ENVIRONMENT}-${ns_utils}
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: fix-secrets-role
+  namespace: ${ENVIRONMENT}-${ns_utils}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: fix-secrets-role
+subjects:
+  - kind: ServiceAccount
+    name: gha-runner-controller-gha-rs-controller
+    namespace: ${ENVIRONMENT}-${ns_utils}
+---
