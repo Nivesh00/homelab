@@ -40,4 +40,3 @@
 
     flux bootstrap git --url ssh://git@github.com/Nivesh00/homelab --branch main --private-key-file ~/.ssh/homelab_github_ed25519 --path ./02_clusters/homelab
     ```
-

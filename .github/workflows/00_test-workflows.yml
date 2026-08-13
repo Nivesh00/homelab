@@ -2,7 +2,8 @@
 name: Test Github Actions workflows
 
 on:
-  push:
+  # Manual trigger
+  workflow_dispatch:
 
 jobs:
   # First test
@@ -18,7 +19,6 @@ jobs:
 
   # Test creating env file from secret and view encryption
   test_1:
-    if: ${{ github.event.head_commit.message == 'Test workflow 1' }}
     runs-on: homelab-gha-runner
     environment: workflow-test
     container:
