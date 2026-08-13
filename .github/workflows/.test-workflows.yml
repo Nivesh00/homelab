@@ -12,7 +12,7 @@ jobs:
     runs-on: homelab-gha-runner
     environment: workflow-test
     container:
-      image: ubuntu
+      image: curlimages/curl
     steps:
       - run: echo Hello world!!!
 
@@ -22,7 +22,7 @@ jobs:
     runs-on: homelab-gha-runner
     environment: workflow-test
     container:
-      image: ubuntu
+      image: curlimages/curl
     steps:      
       - name: Use test API key 1
         run: |-
