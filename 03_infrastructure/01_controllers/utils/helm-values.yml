@@ -13,7 +13,7 @@ data:
       tag: 0.14.2
 
     flags:
-      logLevel: "info"
+      logLevel: "debug"
       logFormat: "text"
 
     resources:
