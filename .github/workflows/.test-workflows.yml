@@ -4,6 +4,9 @@ name: .test Github Actions workflows
 on:
   push
 
+env:
+  SCRIPT_PATH: ./05_scripts/.test_scripts
+
 jobs:
   ### First test
   test_0:
@@ -12,7 +15,7 @@ jobs:
     runs-on: homelab-gha-runner
     environment: workflow-test
     container:
-      image: curlimages/curl
+      image: ubuntu
     steps:
       - run: echo Hello world!!!
 
@@ -22,18 +25,12 @@ jobs:
     runs-on: homelab-gha-runner
     environment: workflow-test
     container:
-      image: curlimages/curl
+      image: ghcr.io/nivesh00/utillity-tools
     steps:
-      - name: Creat env file
-        run: |-
-          touch .env
-          echo ${{ secrets.TEST_ENV }} > .env
-          source .env
+      - name: Check out the repository to the runner
+        uses: actions/checkout@v7
 
-      - name: Use test API key 1
-        run: |-
-          curl --verbose --header "API-Key: $API_KEY_1" https://prometheus.io
-
-      - name: Use test API key 2
-        run: |-
-          curl --verbose --header "API-Key: $API_KEY_2" https://prometheus.io
+      - name: Run a script
+        run: $SCRIPT_PATH/01_test_curl.sh
+        env:
+          TEST_ENV: ${{ secrets.TEST_ENV }}
