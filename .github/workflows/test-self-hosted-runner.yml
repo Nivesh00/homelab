@@ -11,4 +11,4 @@ jobs:
     runs-on: ${{ env.GHA_RUNNER_NAME }}
     environment: homelab
     steps:
-      - run: echo Hello world!
+      - run: echo Hello world!!!
