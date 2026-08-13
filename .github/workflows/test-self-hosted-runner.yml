@@ -1,5 +1,4 @@
-# Flow is intended to be run manually, hence why the branch is non-existent
-name: Create static K8S resources
+name: Test action
 
 on:
   push:
@@ -7,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy-dev:
+  deploy:
     runs-on: ${{ vars.GHA_RUNNER_NAME }}
     environment: homelab
     steps:
