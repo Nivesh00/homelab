@@ -9,5 +9,7 @@ jobs:
   deploy:
     runs-on: homelab-gha-runner
     environment: homelab
+    container:
+      image: ubuntu:22.04
     steps:
       - run: echo Hello world!!!
