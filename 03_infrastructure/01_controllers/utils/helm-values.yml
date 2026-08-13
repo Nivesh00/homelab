@@ -16,10 +16,6 @@ data:
       logLevel: "info"
       logFormat: "text"
 
-    githubConfigUrl: ${gh_config_url}
-    githubConfigSecret:
-      github_token: ${gh_config_token}
-
     resources:
       limits:
         cpu: 250m
@@ -27,3 +23,37 @@ data:
       requests:
         cpu: 50m
         memory: 50Mi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gha-runner-helm-values
+  namespace: ${ENVIRONMENT}-${ns_utils}
+data:
+  values.yml: |-
+    githubConfigUrl: ${gh_config_url}
+    githubConfigSecret:
+      github_token: ${gh_config_token}
+
+    runnerScaleSetName: ${gh_runner_name}
+
+    minRunners: 0
+    maxRunners: 2
+
+    containerMode:
+      type: "kubernetes"
+      kubernetesModeWorkVolumeClaim:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: ${k8s_storage_class}
+        resources:
+          requests:
+            storage: 1Gi
+      kubernetesModeAdditionalRoleRules: []
+
+    template:
+      spec:
+        containers:
+          - name: runner
+            image: ghcr.io/actions/actions-runner:2.336.0
+            command: ["/home/runner/run.sh"]
+---
