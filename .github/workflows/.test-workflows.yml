@@ -27,9 +27,7 @@ jobs:
       - name: Use test API key 1
         run: |-
           curl --verbose --header "API-Key: ${{ secrets.API_KEY_2 }}" https://prometheus.io
-        continue-on-error: true
 
       - name: Use test API key 2
         run: |-
           curl --verbose --header "API-Key: ${{ secrets.API_KEY_2 }}" https://prometheus.io
-        continue-on-error: true
