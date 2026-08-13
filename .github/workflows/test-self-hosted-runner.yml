@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ${{ vars.RUNNER_NAME }}
+    runs-on: homelab-gha-runner
     environment: homelab
     steps:
       - run: echo Hello world!!!
