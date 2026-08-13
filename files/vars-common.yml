@@ -15,6 +15,13 @@ data:
   ns_operation:
   ns_traefik:
   ns_iam:
+  ns_utils:
+
+  ## Github
+  gh_runner_name:
+  gh_runner_token:
+  gh_config_url:
+  gh_config_token:
 
   ## Cert Manager
   cm_cluster_issuer_prd:
