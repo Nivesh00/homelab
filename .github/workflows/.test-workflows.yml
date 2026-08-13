@@ -24,7 +24,7 @@ jobs:
     container:
       image: curlimages/curl
     steps:
-      - nam: Creat env file
+      - name: Creat env file
         run: |-
           touch .env
           echo ${{ secrets.TEST_ENV }} > .env
