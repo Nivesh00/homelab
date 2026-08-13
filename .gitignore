@@ -6,4 +6,6 @@
 # Python virtual environment
 .venv
 
+.important
+
 .ansible.log

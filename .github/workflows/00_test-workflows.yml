@@ -1,0 +1,41 @@
+# Test file
+name: Test Github Actions workflows
+
+on:
+  push:
+
+jobs:
+  # First test
+  test_0:
+    # Evaluate last commit message
+    if: ${{ github.event.head_commit.message }} == "Test workflow 0"
+    runs-on: homelab-gha-runner
+    environment: workflow-test
+    container:
+      image: ubuntu:22.04
+    steps:
+      - run: echo Hello world!!!
+
+  # Test creating env file from secret and view encryption
+  test_1:
+    if: ${{ github.event.head_commit.message }} == "Test workflow 1"
+    runs-on: homelab-gha-runner
+    environment: workflow-test
+    container:
+      image: ubuntu:22.04
+    steps:
+      - name: Create env file
+        run: |-
+          touch .env
+          echo ${{ secrets.TEST_ENV }} > .env
+          source .env
+      
+      - name: Use test API key 1
+        run: |-
+          curl --verbose --header "API-Key: $API_KEY_1" www.google.com
+        continue-on-error: true
+
+      - name: Use test API key 2
+        run: |-
+          curl --verbose --header "API-Key: $API_KEY_2" www.google.com
+        continue-on-error: true

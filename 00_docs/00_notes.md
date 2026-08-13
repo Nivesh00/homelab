@@ -1,6 +1,14 @@
 
 # General notes
 
+## Flux commands
+
+- `flux reconcile` - reconcile git repo state with cluster state
+
+## Github Actions
+
+- `workflow_dispatch` - manually trigger github actions workflow
+
 ## SOPS
 
 - Flux SOPS docs: https://fluxcd.io/flux/guides/mozilla-sops/

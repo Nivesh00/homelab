@@ -1,4 +1,4 @@
-# Flow is intended to be run manually, hence why the branch is non-existent
+# Never run flow
 name: Create static K8S resources
 
 on:
