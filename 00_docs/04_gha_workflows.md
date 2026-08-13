@@ -16,7 +16,7 @@ Notes about Gihub Actions flows
 echo <token> | docker login ghcr.io --username <user> --password-stdin
 
 # Build and push
-docker build --tag ghcr.io/nivesh00/utillity-tools -f utils .
+docker build --tag ghcr.io/nivesh00/utillity-tools -f utility-tools .
 docker push ghcr.io/nivesh00/utillity-tools:latest 
 ```
 
