@@ -28,7 +28,7 @@ jobs:
         run: |-
           touch .env
           echo ${{ secrets.TEST_ENV }} > .env
-          . /.env
+          set -o allexport && source .env && set +o allexport
       
       - name: Use test API key 1
         run: |-
