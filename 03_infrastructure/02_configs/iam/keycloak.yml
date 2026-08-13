@@ -29,11 +29,6 @@ spec:
     admin: https://iam-admin.${DOMAIN}
   proxy:
     headers: xforwarded
-  additionalOptions:
-    - name: KC_BOOTSTRAP_ADMIN_USERNAME
-      value: ${KC_ADMIN_USER}
-    - name: KC_BOOTSTRAP_ADMIN_PASSWORD
-      value: ${KC_ADMIN_PASSWORD}
   resources:
     limits:
       cpu: 600m

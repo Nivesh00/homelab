@@ -14,6 +14,7 @@ declare -A repo_list=(
     ['kube-prometheus-stack']='oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack'
     ['postgres-operator']='https://opensource.zalando.com/postgres-operator/charts/postgres-operator'
     ['traefik']='oci://ghcr.io/traefik/helm/traefik'
+    ['github-runner']='oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller'
 )
 
 declare -A chart_https_list=(
@@ -25,6 +26,7 @@ declare -A version_list=(
     ['kube-prometheus-stack']='86.3.2'
     ['postgres-operator']='v1.15.1'
     ['traefik']='41.0.0'
+    ['github-runner']='0.14.2'
 )
 
 for app in "${!repo_list[@]}"

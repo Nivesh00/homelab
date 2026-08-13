@@ -7,4 +7,5 @@ resources:
   - monitoring/
   - postgres-operator/
   - traefik/
+  - utils/
   - namespace.yml
