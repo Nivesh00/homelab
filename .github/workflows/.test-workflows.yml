@@ -5,7 +5,7 @@ on:
   push
 
 jobs:
-  # First test
+  ### First test
   test_0:
     # Evaluate last commit message
     if: ${{ contains(github.event.head_commit.message, '#wf_test_0') }}
@@ -16,18 +16,24 @@ jobs:
     steps:
       - run: echo Hello world!!!
 
-  # Test encryption
+  ### Test encryption using file as secret
   test_1:
     if: ${{ contains(github.event.head_commit.message, '#wf_test_1') }}
     runs-on: homelab-gha-runner
     environment: workflow-test
     container:
       image: curlimages/curl
-    steps:      
+    steps:
+      - nam: Creat env file
+        run: |-
+          touch .env
+          echo ${{ secrets.TEST_ENV }} > .env
+          source .env
+
       - name: Use test API key 1
         run: |-
-          curl --verbose --header "API-Key: ${{ secrets.API_KEY_2 }}" https://prometheus.io
+          curl --verbose --header "API-Key: $API_KEY_1" https://prometheus.io
 
       - name: Use test API key 2
         run: |-
-          curl --verbose --header "API-Key: ${{ secrets.API_KEY_2 }}" https://prometheus.io
+          curl --verbose --header "API-Key: $API_KEY_2" https://prometheus.io
