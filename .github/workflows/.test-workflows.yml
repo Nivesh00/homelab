@@ -2,8 +2,7 @@
 name: .Test Github Actions workflows
 
 on:
-  # Manual trigger
-  workflow_dispatch:
+  push
 
 env:
   COMMIT_MSG: ${{ github.event.head_commit.message }}
@@ -12,7 +11,7 @@ jobs:
   # First test
   test_0:
     # Evaluate last commit message
-    if: ${{ contains($COMMIT_MSG, '#wf_test_0') }}
+    if: ${{ contains(COMMIT_MSG, '#wf_test_0') }}
     runs-on: homelab-gha-runner
     environment: workflow-test
     container:
@@ -22,7 +21,7 @@ jobs:
 
   # Test creating env file from secret and view encryption
   test_1:
-    if: ${{ contains($COMMIT_MSG, '#wf_test_1') }}
+    if: ${{ contains(COMMIT_MSG, '#wf_test_1') }}
     runs-on: homelab-gha-runner
     environment: workflow-test
     container:
