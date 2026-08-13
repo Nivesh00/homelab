@@ -8,7 +8,7 @@ jobs:
   # First test
   test_0:
     # Evaluate last commit message
-    if: ${{ github.event.head_commit.message }} == "Test workflow 0"
+    if: ${{ github.event.head_commit.message == "Test workflow 0" }}
     runs-on: homelab-gha-runner
     environment: workflow-test
     container:
@@ -18,7 +18,7 @@ jobs:
 
   # Test creating env file from secret and view encryption
   test_1:
-    if: ${{ github.event.head_commit.message }} == "Test workflow 1"
+    if: ${{ github.event.head_commit.message == "Test workflow 1" }}
     runs-on: homelab-gha-runner
     environment: workflow-test
     container:

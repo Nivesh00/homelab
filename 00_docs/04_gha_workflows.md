@@ -10,6 +10,9 @@ Notes about Gihub Actions flows
 
 ## References
 
-- Github built-in variables: https://docs.github.com/en/actions/reference/workflows-and-actions/variables
+- Github:
+    - built-in variables: https://docs.github.com/en/actions/reference/workflows-and-actions/variables
 
-- Github built-in contexts: https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#github-context
+    - built-in contexts: https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#github-context
+
+    - Evaluation: https://docs.github.com/en/actions/reference/workflows-and-actions/expressions
