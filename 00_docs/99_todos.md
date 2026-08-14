@@ -1,9 +1,8 @@
-# Deploy Keycloak
+## Deploy Grafana
 
-- Deploy Postgres CR for Keycloak DB
-- Install Keycloak CRDs
-- Deploy Keycloak using CRs
+- Remove Grafana installation from kube prom stack and install its own helm chart
+- Add OIDC to grafana
 
-Links:
-- https://www.keycloak.org/operator/basic-deployment
-- https://medium.com/@martin.hodges/how-to-install-keycloak-iam-on-your-kubernetes-cluster-backed-by-postgres-1228eae4faeb
+## Deploy Logs monitoring
+
+- Loki and Alloy

@@ -6,11 +6,16 @@ Folder `05_scripts` contains scripts for workflows
 
 ## Environment Variables
 
+Variables for workflow
+
 | variable key  | variable value  |
 |---|---|
+| `GH_ACCESS_TOKEN`  | Github classic access token with `delete:packages`, `repo` and `write:packages` access token  |
 |   |   |
 
 ## Utility docker image
+
+- Docker file at [files/dockerfiles/utility-tools](../files/dockerfiles/utility-tools)
 
 ```bash
 # ghcr login
@@ -23,6 +28,15 @@ docker push ghcr.io/nivesh00/utillity-tools:latest
 # Debug
 docker run -it --rm --name utility-tools ghcr.io/nivesh00/utillity-tools:latest
 ```
+
+## Workflows
+
+- `.publish-utility-image.yml` - build and push utility tools docker image, usese Github hostes runners
+- `.test-workflows.yml` - test workflows for miscellaneous runs
+
+## Scripts
+
+Scripts are found at [05_scripts](../05_scripts/)
 
 ## Notes
 

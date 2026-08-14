@@ -4,23 +4,39 @@ Clusters for FluxCD. Each cluster is divided into stacks:
 - Infrastructure: for components that make up the cluster (proxy, certificate managers, etc)
 - Applications: for application running inside the cluster
 
-All variables are defined in file [vars-common.yml](../files/vars-common.yml) and then applied to the cluster using following command
+## Global Vars
+
+All variables are defined in file [vars-common.yml](../files/manual-deployments/vars-common.yml) and then applied to the cluster using following command
 ```sh
-kubectl apply -f files/vars-common.yml
+kubectl apply -f files/manual-deployments/vars-common.yml
 ```
 
 ## Secrets
 
 - SOPs as secret encryption
-- Command is
-    ```bash
-    sops --encrypt --encrypted-regex '^(data|stringData)$' --pgp ${KEY_FP} \
-    --in-place 02_flux2/03_SOPS_demo/secret.yaml
+
+- List all secrets
+    ```sh
+    gpg --list-secret-keys
+    ```
+
+- Secret [sops-secret.yml](../files/manual-deployments/sops-secret.yml) must be applied
+    ```sh
+    kubectl apply -f files/manual-deployments/sops-secret.yml
+    ```
+
+- Encrypt secret
+    ```sh
+    # template
+    sops --encrypt --encrypted-regex <regex-of-secret-keys> --pgp <PGP-key-id> --in-place /path/to/secret/file.yml
+    # example with values
+    sops --encrypt --encrypted-regex '^(data|stringData)$' --pgp "87AD5A3C61D4124E53D41EACAB6F74E497AB" --in-place secrets.yml
     ```
 
 - Useful links:
     - https://fluxcd.io/flux/guides/mozilla-sops/
     - https://devopstales.github.io/kubernetes/gitops-flux2-sops/
+    - Flux SOPS docs: https://fluxcd.io/flux/guides/mozilla-sops/
 
 ## Infrastructure
 

@@ -3,28 +3,33 @@
 
 ## Flux commands
 
+- Build manifests locally
+    ```sh
+    kubectl kustomize  03_infrastructure/01_controllers --output .local/infra-controllers.yml
+    ```
+
+    ```sh
+    kubectl kustomize  03_infrastructure/02_configs --output .local/infra-config.yml
+    ```
+
+- [flux build](https://fluxcd.io/flux/cmd/flux_build_kustomization/)
+
+    Build controllers
+    ```sh
+    flux build kustomization infra-controllers --path ./02_clusters/homelab/flux-system > .local/infra-controllers.yml
+    ```
+
+    Build configs
+    ```sh
+    flux build kustomization infra-config --path ./02_clusters/homelab/flux-system > .local/infra-config.yml     
+    ```
+
 - `flux reconcile` - reconcile git repo state with cluster state
+
 
 ## Github Actions
 
 - `workflow_dispatch` - manually trigger github actions workflow
-
-## SOPS
-
-- Flux SOPS docs: https://fluxcd.io/flux/guides/mozilla-sops/
-
-- List all secrets
-    ```sh
-    gpg --list-secret-keys
-    ```
-
-- Encrypt secret
-    ```sh
-    # template
-    sops --encrypt --encrypted-regex <regex-of-secret-keys> --pgp <PGP-key-id> --in-place /path/to/secret/file.yml
-    # example with values
-    sops --encrypt --encrypted-regex '^(data|stringData)$' --pgp "87AD5A3C61D4124E53D41EACAB6F74E497AB" --in-place secrets.yml
-    ```
 
 ## Rotate Token
 

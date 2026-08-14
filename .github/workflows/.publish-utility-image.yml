@@ -2,6 +2,7 @@ name: .build and push utility image
 
 on:
   push:
+    # Only run when following file is updated
     paths:
       - 'files/dockerfiles/utility-tools'
 
@@ -12,6 +13,7 @@ env:
 
 jobs:
   docker_image:
+    # Uses Github runner
     runs-on: ubuntu-latest
     environment: homelab
     steps:
