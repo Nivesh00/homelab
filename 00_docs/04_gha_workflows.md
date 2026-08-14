@@ -11,13 +11,15 @@ Notes about Gihub Actions flows
 ## Utility docker image
 
 ```bash
-
 # ghcr login
 echo <token> | docker login ghcr.io --username <user> --password-stdin
 
 # Build and push
 docker build --tag ghcr.io/nivesh00/utillity-tools -f utility-tools .
-docker push ghcr.io/nivesh00/utillity-tools:latest 
+docker push ghcr.io/nivesh00/utillity-tools:latest
+
+# Debug
+docker run -it --rm --name utility-tools ghcr.io/nivesh00/utillity-tools:latest
 ```
 
 ## References
