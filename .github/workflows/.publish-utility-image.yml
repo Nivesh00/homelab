@@ -12,9 +12,7 @@ env:
 
 jobs:
   docker_image:
-    runs-on: homelab-gha-runner
-    container:
-      image: ubuntu
+    runs-on: ubuntu-latest
     steps:
       # Checkout the code
       - name: Checkout code
