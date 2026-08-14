@@ -1,9 +1,9 @@
-name: Build and push utility image
+name: .build and push utility image
 
 on:
   push:
     paths:
-      - './misc_files/dockerfile/utility-tools'
+      - './files/dockerfile/utility-tools'
 
 env:
   DOCKER_REGISTRY_URL: ghcr.io
@@ -36,7 +36,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./misc_files/dockerfile/utility-tools
+          file: ./files/dockerfile/utility-tools
           push: true
           tags: |
             ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPOSITORY }}/${{ env.DOCKER_IMAGE_NAME }}
