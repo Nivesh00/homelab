@@ -1,6 +1,8 @@
 # Github Actions Workflows
 
-Notes about Gihub Actions flows
+Notes about Gihub Actions flows.
+
+Folder `05_scripts` contains scripts for workflows
 
 ## Environment Variables
 
@@ -21,6 +23,10 @@ docker push ghcr.io/nivesh00/utillity-tools:latest
 # Debug
 docker run -it --rm --name utility-tools ghcr.io/nivesh00/utillity-tools:latest
 ```
+
+## Notes
+
+- Seting a file as secret does not work as encrytion may be broken
 
 ## References
 
