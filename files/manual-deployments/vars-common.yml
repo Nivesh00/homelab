@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-vars-common
+  namespace: flux-system
+data:
+  DOMAIN:
+  ENVIRONMENT:
+
+  ## K8S Global Vars
+  k8s_storage_class:
+
+  ## Namespaces
+  ns_monitoring:
+  ns_operation:
+  ns_traefik:
+  ns_iam:
+  ns_utils:
+
+  ## Github
+  gh_runner_name:
+  gh_runner_token:
+  gh_config_url:
+  gh_config_token:
+
+  ## Cert Manager
+  cm_cluster_issuer_prd:
+  cm_cluster_issuer_stg:
+  cm_email:
+
+  ## Traefik
+  tr_gateway_class:
+  tr_gateway:
+  tr_controller_name:
+  tr_listener_set_prd:
+  tr_listener_set_stg:
+
+  ## Keycloak
+  KC_ADMIN_USER:
+  KC_ADMIN_PASSWORD:
