@@ -5,3 +5,4 @@ resources:
   - fix-permissions.yml
   - helm.yml
   - helm-values.yml
+  - service-account.yml

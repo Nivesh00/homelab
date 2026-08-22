@@ -23,11 +23,14 @@ spec:
       - kind: ConfigMap
         name: cluster-vars-common
         optional: false
+      - kind: Secret
+        name: cluster-secrets-common
+        optional: false
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infra-config
+  name: infra-configs
   namespace: flux-system
 spec:
   dependsOn:
@@ -49,5 +52,8 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: cluster-vars-common
+        optional: false
+      - kind: Secret
+        name: cluster-secrets-common
         optional: false
 ---

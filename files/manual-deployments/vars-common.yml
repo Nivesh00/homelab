@@ -19,9 +19,7 @@ data:
 
   ## Github
   gh_runner_name:
-  gh_runner_token:
   gh_config_url:
-  gh_config_token:
 
   ## Cert Manager
   cm_cluster_issuer_prd:
@@ -34,7 +32,3 @@ data:
   tr_controller_name:
   tr_listener_set_prd:
   tr_listener_set_stg:
-
-  ## Keycloak
-  KC_ADMIN_USER:
-  KC_ADMIN_PASSWORD:

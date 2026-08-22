@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: initial-kc-user
+  namespace: ${ENVIRONMENT}-${ns_iam}
+stringData:
+  username: ${KC_INITIAL_USER}
+  password: ${KC_INITIAL_PASSWORD}
+---

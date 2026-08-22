@@ -7,6 +7,9 @@ metadata:
   namespace: ${ENVIRONMENT}-${ns_iam}
 spec:
   instances: 1
+  bootstrapAdmin:
+    user:
+      secret: initial-kc-user
   db:
     vendor: postgres
     host: keycloak-db

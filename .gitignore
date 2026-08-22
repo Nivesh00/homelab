@@ -3,9 +3,10 @@
 .inventory
 .debug
 .misc
+
 # Python virtual environment
 .venv
-
+__pycache__
+.env
 .important
-
 .ansible.log

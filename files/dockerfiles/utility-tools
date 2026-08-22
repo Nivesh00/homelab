@@ -1,5 +1,5 @@
 ## Dockerfile for tools
-FROM ubuntu:22.04
+FROM python:3.13
 
 USER root
 
@@ -10,4 +10,4 @@ RUN apt-get update && apt-get install -y \
  net-tools \
  && rm -rf /var/lib/apt/lists/*
 
- WORKDIR /app
+WORKDIR /app
