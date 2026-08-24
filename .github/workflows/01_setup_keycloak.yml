@@ -1,0 +1,55 @@
+name: 01 - Set up Keycloak
+
+on: workflow_dispatch
+
+jobs:
+  checkout_code:
+    runs-on: homelab-gha-runner
+    container:
+      image: ghcr.io/nivesh00/utillity-tools
+    environment: homelab
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Do not get extra git branches to save time
+
+  wait_for_keycloak_resource:
+    needs: checkout_code
+    runs-on: homelab-gha-runner
+    container:
+      image: ghcr.io/nivesh00/utillity-tools
+    environment: homelab
+    steps:
+      - name: Switch to Kubernetes scripts directory
+        run: cd 05_scripts/kubernetes
+
+      - name: Load ENV file
+        run: echo "${{ secrets.KUBERNETES_ENV }}" > .env
+      
+      - name: Install Python modules
+        run: pip install -r requirements.txt
+
+      - name: Run script
+        run: python3 01_wait_for_resource.py --load-env --incluster
+
+  setup_keycloak:
+    if: false
+    needs: wait_for_keycloak_resource
+    runs-on: homelab-gha-runner
+    container:
+      image: ghcr.io/nivesh00/utillity-tools
+    environment: homelab
+    steps:
+      - name: Switch to Keycloak scripts directory
+        run: cd 05_scripts/keycloak
+      
+      - name: Load ENV file
+        run: echo "${{ secrets.KEYCLOAK_ENV }}" > .env
+      
+      - name: Install Python modules
+        run: pip install -r requirements.txt
+      
+      - name: Run script
+        run: python3 01_create_user_and_realm.py --load-env

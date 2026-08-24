@@ -13,6 +13,10 @@ Variables for workflow
 | `GH_ACCESS_TOKEN`  | Github classic access token with `delete:packages`, `repo` and `write:packages` access token  |
 |   |   |
 
+## Github Actions
+
+- `workflow_dispatch` - manually trigger github actions workflow
+
 ## Utility docker image
 
 - Docker file at [files/dockerfiles/utility-tools](../files/dockerfiles/utility-tools)
@@ -41,6 +45,10 @@ Scripts are found at [05_scripts](../05_scripts/)
 ## Notes
 
 - Seting a file as secret does not work as encrytion may be broken
+
+## Kubernetes
+
+- Python Client docs https://github.com/kubernetes-client/python/tree/master/kubernetes/docs
 
 ## References
 
