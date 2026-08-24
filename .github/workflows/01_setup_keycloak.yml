@@ -34,6 +34,8 @@ jobs:
           name: scripts-directory
           path: ./05_scripts
 
+      - run: ls -a
+
       - name: Switch to Kubernetes scripts directory
         run: cd 05_scripts/kubernetes
 
