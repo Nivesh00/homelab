@@ -1,8 +1,6 @@
 ## Dockerfile for tools
 FROM python:3.13
 
-USER root
-
 RUN apt-get update && apt-get install -y \
  curl \
  git \
