@@ -32,12 +32,12 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: scripts-directory
-          path: ./05_scripts
+          path: kubernetes
 
       - run: ls -aR
 
       - name: Switch to Kubernetes scripts directory
-        run: cd 05_scripts/kubernetes
+        run: cd kubernetes
 
       - name: Load ENV file
         run: echo "${{ secrets.KUBERNETES_ENV }}" > .env
