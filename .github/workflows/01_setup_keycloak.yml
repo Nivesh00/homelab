@@ -19,7 +19,6 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: scripts-directory
-          archive: false
           path: |-
             05_scripts/keycloak
             05_scripts/kubernetes
