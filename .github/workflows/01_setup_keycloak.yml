@@ -41,7 +41,9 @@ jobs:
 
       - name: Load ENV file
         run: echo "${{ secrets.KUBERNETES_ENV }}" > .env
-      
+
+      - run: ls -aR
+
       - name: Install Python modules
         run: pip install --no-cache-dir -r requirements.txt
 
