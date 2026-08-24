@@ -19,7 +19,10 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: scripts-directory
-          path: 05_scripts
+          archive: false
+          path: |-
+            05_scripts/keycloak
+            05_scripts/kubernetes
 
   wait_for_keycloak_resource:
     needs: checkout_code
@@ -31,13 +34,13 @@ jobs:
       - name: Download scripts artifact
         uses: actions/download-artifact@v8
         with:
-          name: scripts-directory
-          path: ./scripts-directory
+          path: ./kubernetes
+          pattern: 05_scripts/kubernetes
 
       - run: ls -aR
 
       - name: Switch to Kubernetes scripts directory
-        run: cd ./scripts-directory/kubernetes
+        run: cd ./kubernetes
 
       - name: Load ENV file
         run: echo "${{ secrets.KUBERNETES_ENV }}" > .env
