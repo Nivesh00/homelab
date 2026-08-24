@@ -15,6 +15,12 @@ jobs:
         with:
           fetch-depth: 0 # Do not get extra git branches to save time
 
+      - name: Upload scripts as artifact for later use
+        uses: actions/upload-artifact@v7
+        with:
+          name: scripts-directory
+          path: 05_scripts
+
   wait_for_keycloak_resource:
     needs: checkout_code
     runs-on: homelab-gha-runner
@@ -22,6 +28,11 @@ jobs:
       image: ghcr.io/nivesh00/utillity-tools
     environment: homelab
     steps:
+      - name: Download scripts artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: 05_scripts
+
       - name: Switch to Kubernetes scripts directory
         run: cd 05_scripts/kubernetes
 
@@ -42,6 +53,11 @@ jobs:
       image: ghcr.io/nivesh00/utillity-tools
     environment: homelab
     steps:
+      - name: Download scripts artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: 05_scripts
+
       - name: Switch to Keycloak scripts directory
         run: cd 05_scripts/keycloak
       
