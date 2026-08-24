@@ -6,7 +6,7 @@ jobs:
   checkout_code:
     runs-on: homelab-gha-runner
     container:
-      image: ghcr.io/nivesh00/utillity-tools
+      image: ghcr.io/nivesh00/utility-tools
     environment: homelab
     steps:
       # Checkout the code
@@ -25,7 +25,7 @@ jobs:
     needs: checkout_code
     runs-on: homelab-gha-runner
     container:
-      image: ghcr.io/nivesh00/utillity-tools
+      image: ghcr.io/nivesh00/utility-tools
     environment: homelab
     steps:
       - name: Download scripts artifact
@@ -41,7 +41,7 @@ jobs:
         run: echo "${{ secrets.KUBERNETES_ENV }}" > .env
       
       - name: Install Python modules
-        run: pip install -r requirements.txt
+        run: pip install --no-cache-dir -r requirements.txt
 
       - name: Run script
         run: python3 01_wait_for_resource.py --load-env --incluster
@@ -51,7 +51,7 @@ jobs:
     needs: wait_for_keycloak_resource
     runs-on: homelab-gha-runner
     container:
-      image: ghcr.io/nivesh00/utillity-tools
+      image: ghcr.io/nivesh00/utility-tools
     environment: homelab
     steps:
       - name: Download scripts artifact
@@ -67,7 +67,7 @@ jobs:
         run: echo "${{ secrets.KEYCLOAK_ENV }}" > .env
       
       - name: Install Python modules
-        run: pip install -r requirements.txt
+        run: pip install --no-cache-dir -r requirements.txt
       
       - name: Run script
         run: python3 01_create_user_and_realm.py --load-env

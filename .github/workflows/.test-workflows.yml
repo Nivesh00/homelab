@@ -26,7 +26,7 @@ jobs:
     runs-on: homelab-gha-runner
     environment: workflow-test
     container:
-      image: ghcr.io/nivesh00/utillity-tools
+      image: ghcr.io/nivesh00/utility-tools
     steps:
       - name: Check out the repository to the runner
         uses: actions/checkout@v7
