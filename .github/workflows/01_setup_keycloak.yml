@@ -32,7 +32,7 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: scripts-directory
-          path: ./
+          path: ./05_scripts
 
       - name: Switch to Kubernetes scripts directory
         run: cd 05_scripts/kubernetes
@@ -58,7 +58,7 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: scripts-directory
-          path: ./
+          path: ./05_scripts
 
       - name: Switch to Keycloak scripts directory
         run: cd 05_scripts/keycloak
