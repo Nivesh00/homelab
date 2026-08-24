@@ -31,7 +31,7 @@ jobs:
       - name: Download scripts artifact
         uses: actions/download-artifact@v8
         with:
-          name: 05_scripts
+          name: scripts-directory
 
       - name: Switch to Kubernetes scripts directory
         run: cd 05_scripts/kubernetes
@@ -56,7 +56,7 @@ jobs:
       - name: Download scripts artifact
         uses: actions/download-artifact@v8
         with:
-          name: 05_scripts
+          name: scripts-directory
 
       - name: Switch to Keycloak scripts directory
         run: cd 05_scripts/keycloak
