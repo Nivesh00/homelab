@@ -41,6 +41,8 @@ jobs:
       - name: Change to Kubernetes scripts directory
         run: cd scripts/kubernetes
 
+      - run: ls -alh
+
       - name: Load ENV file
         run: echo "${{ secrets.KUBERNETES_ENV }}" > .env
 
