@@ -44,7 +44,6 @@ jobs:
           python3 01_wait_for_resource.py --load-env --incluster
 
   setup_keycloak:
-    if: false
     needs: wait_for_keycloak_resource
     runs-on: homelab-gha-runner
     container:
@@ -57,14 +56,9 @@ jobs:
           name: scripts-directory
           path: ./05_scripts
 
-      - name: Switch to Keycloak scripts directory
-        run: cd ./scripts-directory/keycloak
-      
-      - name: Load ENV file
-        run: echo "${{ secrets.KEYCLOAK_ENV }}" > .env
-      
-      - name: Install Python modules
-        run: pip install --no-cache-dir -r requirements.txt
-      
-      - name: Run script
-        run: python3 01_create_user_and_realm.py --load-env
+      - name: Setup Keycloak
+        run: |-
+          cd scripts/keycloak
+          pip install --no-cache-dir -r requirements.txt
+          echo "${{ secrets.KEYCLOAK_ENV }}" > .env
+          python3 01_create_user_and_realm.py --load-env
