@@ -12,7 +12,7 @@ Infrastructure repository contains the controllers (`01_controllers`) and config
 
 - Github runner helm charts are installed
 - Dockerfile for runner container can be found at [utility-tools](../files/dockerfiles/utility-tools)
-
+- Docs for runner scale set is found here: https://docs.github.com/en/actions/how-tos/manage-runners/use-actions-runner-controller/deploy-runner-scale-sets#configuring-hook-extensions. A configmap is mounted to the runner pod so that the workflow pod will have the configs
 
 ## Keycloak
 
