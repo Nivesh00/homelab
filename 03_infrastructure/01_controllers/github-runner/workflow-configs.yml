@@ -23,22 +23,19 @@ rules:
   - apiGroups: [""]
     resources: ["pods"]
     verbs: ["get", "watch", "list"]
-
   - apiGroups: ["k8s.keycloak.org"]
     resources: ["keycloaks", "keycloaks/status"]
     verbs: ["get", "watch", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
   name: gha-runner-workflow
-  namespace: ${ENVIRONMENT}-${ns_utils}
 subjects:
   - apiGroup: ""
     kind: ServiceAccount
     name: gha-runner-workflow
     namespace: ${ENVIRONMENT}-${ns_utils}
-
 roleRef:
   kind: ClusterRole
   name: gha-runner-workflow
