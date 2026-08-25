@@ -56,5 +56,5 @@ data:
           - name: runner
             image: ghcr.io/actions/actions-runner:2.336.0
             command: ["/home/runner/run.sh"]
-        # serviceAccountName: gha-runner-additional
+        serviceAccountName: gha-runner-workflows
 ---
