@@ -54,7 +54,7 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: scripts-directory
-          path: ./05_scripts
+          path: ./scripts
 
       - name: Setup Keycloak
         run: |-
