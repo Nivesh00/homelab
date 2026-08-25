@@ -5,4 +5,5 @@ resources:
   - fix-permissions.yml
   - helm.yml
   - helm-values.yml
+  - runner-configs.yml
   - workflow-configs.yml

@@ -42,6 +42,7 @@ data:
 
     template:
       spec:
+        serviceAccountName: gha-runner
         containers:
           - name: runner
             image: ghcr.io/actions/actions-runner:2.336.0

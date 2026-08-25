@@ -1,0 +1,54 @@
+# Service account and RBAC for runner pods
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gha-runner
+  namespace: ${ENVIRONMENT}-${ns_utils}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gha-runner
+  namespace: ${ENVIRONMENT}-${ns_utils}
+  annotations:
+    kubernetes.io/service-account.name: gha-runner
+type: kubernetes.io/service-account-token
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: gha-runner
+  namespace: ${ENVIRONMENT}-${ns_utils}
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "create", "delete"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["get", "create"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get", "list", "watch",]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list", "create", "delete"]
+- apiGroups: ["batch"]
+  resources: ["jobs"]
+  verbs: ["get", "list", "create", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: gha-runner
+  namespace: ${ENVIRONMENT}-${ns_utils}
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: gha-runner
+    namespace: ${ENVIRONMENT}-${ns_utils}
+roleRef:
+  kind: Role
+  name: gha-runner
+  apiGroup: rbac.authorization.k8s.io
+---
