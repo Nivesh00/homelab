@@ -40,21 +40,41 @@ data:
     minRunners: 0
     maxRunners: 2
 
-    containerMode:
-      type: "kubernetes"
-      kubernetesModeWorkVolumeClaim:
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: ${k8s_storage_class}
-        resources:
-          requests:
-            storage: 1Gi
-      kubernetesModeAdditionalRoleRules: []
-
     template:
       spec:
         containers:
           - name: runner
             image: ghcr.io/actions/actions-runner:2.336.0
             command: ["/home/runner/run.sh"]
-        serviceAccountName: gha-runner-workflows
+            env:
+              - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+                value: "true"
+              - name: ACTIONS_RUNNER_CONTAINER_HOOK_TEMPLATE
+                value: /etc/gha-hook-extension/template.yml
+              - name: ACTIONS_RUNNER_POD_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.name
+            volumeMounts:
+              - name: gha-hook-extension
+                mountPath: /etc/gha-hook-extension/template.yml
+                subPath: template.yml
+              - name: work
+                mountPath: /home/runner/_work
+        volumes:
+          - name: gha-hook-extension
+            configMap:
+              name: gha-hook-extension
+              items:
+                - key: template.yml
+                  path: template.yml
+          - name: work
+            ephemeral:
+              volumeClaimTemplate:
+                spec:
+                  accessModes: [ "ReadWriteOnce" ]
+                  storageClassName: ${k8s_storage_class}
+                  resources:
+                    requests:
+                      storage: 1Gi
 ---

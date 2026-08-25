@@ -1,3 +1,5 @@
+# Service account and RBAC for workflow pods
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -41,4 +43,21 @@ roleRef:
   kind: ClusterRole
   name: gha-runner-workflows
   apiGroup: rbac.authorization.k8s.io
+---
+# https://docs.github.com/en/actions/how-tos/manage-runners/use-actions-runner-controller/deploy-runner-scale-sets#configuring-hook-extensions
+# Configmap for workflow pods
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gha-hook-extension
+  namespace: ${ENVIRONMENT}-${ns_utils}
+data:
+  template.yml: |-
+    metadata:
+      annotations:
+        example: "extension"
+    spec:
+      serviceAccountName: gha-runner-workflows
+      containers:
+        - name: "$job" # Target the job container
 ---
