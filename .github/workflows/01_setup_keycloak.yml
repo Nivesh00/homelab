@@ -38,15 +38,13 @@ jobs:
 
       - run: ls -alh
 
-      - name: Switch to Kubernetes scripts directory
-        run: cd ./scripts/kubernetes
+      - name: Change to Kubernetes scripts directory
+        run: cd scripts/kubernetes
 
       - name: Load ENV file
         run: echo "${{ secrets.KUBERNETES_ENV }}" > .env
 
       - run: ls -alh
-
-      - run: sleep 1000
 
       - name: Install Python modules
         run: pip install --no-cache-dir -r requirements.txt
