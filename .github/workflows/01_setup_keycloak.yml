@@ -36,20 +36,18 @@ jobs:
           name: scripts-directory
           path: ./scripts
 
-      - run: ls -alh
+      - run: ls -alhR
 
       - name: Change to Kubernetes scripts directory
         run: cd scripts/kubernetes
 
-      - run: ls -alh
-
-      - name: Load ENV file
-        run: echo "${{ secrets.KUBERNETES_ENV }}" > .env
-
-      - run: ls -alh
+      - run: ls -alhR
 
       - name: Install Python modules
         run: pip install --no-cache-dir -r requirements.txt
+
+      - name: Load ENV file
+        run: echo "${{ secrets.KUBERNETES_ENV }}" > .env
 
       - name: Run script
         run: python3 01_wait_for_resource.py --load-env --incluster
