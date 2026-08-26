@@ -6,9 +6,12 @@ Clusters for FluxCD. Each cluster is divided into stacks:
 
 ## Global Vars
 
-All variables are defined in file [vars-common.yml](../files/manual-deployments/vars-common.yml) and then applied to the cluster using following command
+- Variables are defined in file [vars-common.yml](../files/manual-deployments/vars-common.yml)
+
+- Secrets are defined in file [secrets-common.yml](../files/manual-deployments/secrets-common.yml)
+
 ```sh
-kubectl apply -f files/manual-deployments/vars-common.yml
+kubectl apply -f files/manual-deployments/
 ```
 
 ## Secrets
