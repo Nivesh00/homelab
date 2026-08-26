@@ -101,6 +101,15 @@ data:
       enabled: false
       replicas: 0
 
+    resultsCache:
+      enabled: false
+      replicas: 0
+    chunksCache:
+      enabled: false
+      replicas: 0
+    lokiCanary:
+      enabled: false
+
     monitoring:
       namespace: ${ENVIRONMENT}-${ns_monitoring}
       appInstanceLabelName: 'app_instance'
