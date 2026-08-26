@@ -60,26 +60,75 @@ def createClientRoleIfNotExists(
 
     return
 
-def formatClients(
-    kc_clients: str
+def formatEnvStringToDict(
+    env_string: str
 ) -> dict[str, str]:
     """
-    Transform a string of Keycloak clients into a dict
-    :param kc_clients: String of Keycloak clients, in the form client_id_1=client_secret_1,client_id_2=client_secret_2,
+    Transform a string to a dict
+    :param env_string: String in the form a_1=b_1,a_2=b_2,
     """
-    clients: dict[str, str] = {}
-    clients_list: list[str] = kc_clients.split(",")
+    res: dict[str, str] = {}
+    my_list: list[str] = env_string.split(",")
 
     try:
-        for client in clients_list:
-            [client_id, client_secret] = client.split("=")
-            clients[client_id] = client_secret
+        for item in my_list:
+            [key, value] = item.split("=")
+            res[key] = value
     except ValueError as e:
         pass
 
-    main_logger.info("Finished formatting clients into dictionary")
+    main_logger.info("Finished formatting env string into dictionary")
 
-    return clients
+    return res
+
+def assignAdminClientRoles(
+    kc_admin: KeycloakAdmin,
+    kc_user: str,
+    kc_client_roles: dict[str, str]
+) -> None:
+    """
+    Assign all client admin roles defined to an admin user
+    :param kc_admin: Keycloak admin client
+    :param kc_user: Name of admin user
+    :param kc_client_roles: Dictionary of client and admin role
+    """
+
+    try:
+        kc_user_id: str = kc_admin.get_user_id(kc_user)
+    except keycloak.KeycloakGetError as e:
+        main_logger.error("Admin user does not exists")
+        return
+
+    for client_id, admin_role in kc_client_roles.items():
+        try:
+            kc_client_internal_id: str = kc_admin.get_client_id(client_id)
+        except keycloak.KeycloakGetError as e:
+            main_logger.error(f"Client {client_id} user does not exists")
+            continue
+
+        try:
+            admin_role_representation: dict[str, Any] = kc_admin.get_client_role(
+                client_id=kc_client_internal_id,
+                role_name=admin_role
+            )
+        except keycloak.KeycloakGetError as e:
+            main_logger.error(f"Could not get role '{admin_role}' for client '{client_id}' ")
+
+        try:
+            res: dict[str, Any] = kc_admin.assign_client_role(
+                user_id=kc_user_id,
+                client_id=kc_client_internal_id,
+                roles=admin_role_representation
+            )
+        except keycloak.KeycloakPostError as e:
+            main_logger.error(f"Could not assign role '{admin_role}' to admin user for client '{client_id}'")
+            continue
+
+        main_logger.info(f"Successfully assigned role '{admin_role}' to admin user for client '{client_id}'")
+
+    main_logger.info("Finished assigning admin roles to admin user")
+    return
+
 
 def createClientsAndRoles(
     kc_admin: KeycloakAdmin,

@@ -34,8 +34,9 @@ if __name__ == "__main__":
     KC_APP_ADMIN_USER: str = os.getenv('KC_APP_ADMIN_USER')
     KC_APP_ADMIN_PASSWORD: str = os.getenv('KC_APP_ADMIN_PASSWORD')
 
-    # Clients and secrets
+    # Clients and secrets and roles
     KC_CLIENTS: str = os.getenv('KC_CLIENTS')
+    KC_APP_ADMIN_ROLES: str = os.getenv('KC_APP_ADMIN_ROLES')
 
     main_logger.info(f'Finished loading environment variables')
 
@@ -56,11 +57,12 @@ if __name__ == "__main__":
     ##
     # Get client dir
     current_dir: str = os.path.dirname(os.path.realpath(__file__))
-    clients_dir: str = os.path.join(current_dir, "clients")
-    roles_dir: str = os.path.join(current_dir, "roles")
+    clients_dir: str = os.path.join(current_dir, "files", "clients")
+    roles_dir: str = os.path.join(current_dir, "files", "roles")
 
     # Get client id and secrets as dict
-    kc_clients_dict: dict[str, str] = kc_clients.formatClients(KC_CLIENTS)
+    kc_clients_dict: dict[str, str] = kc_clients.formatEnvStringToDict(KC_CLIENTS)
+    kc_app_admin_roles: dict[str, str] = kc_clients.formatEnvStringToDict(KC_APP_ADMIN_ROLES)
 
     kc_clients.createClientsAndRoles(
         kc_admin=kc_admin_app,
@@ -68,6 +70,12 @@ if __name__ == "__main__":
         kc_clients=kc_clients_dict,
         clients_dir=clients_dir,
         roles_dir=roles_dir
+    )
+
+    kc_clients.assignAdminClientRoles(
+        kc_admin=kc_admin_app,
+        kc_user= KC_APP_ADMIN_USER,
+        kc_client_roles=kc_app_admin_roles
     )
 
     sys.exit()
