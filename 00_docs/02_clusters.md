@@ -42,5 +42,8 @@ kubectl apply -f files/manual-deployments/vars-common.yml
 
 The `infrastructure.yml` file contains:
 - `infra-controllers`: for controllers, helm charts deployment etc.
-- `infra-configs`: for configurations, crds, etc.
+- `infra-configs`: for configurations, crs, etc.
 
+## Application
+
+Analog to infrastructure

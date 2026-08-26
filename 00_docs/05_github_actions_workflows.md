@@ -11,32 +11,8 @@ Variables for workflow
 | variable key  | variable value  |
 |---|---|
 | `GH_ACCESS_TOKEN`  | Github classic access token with `delete:packages`, `repo` and `write:packages` access token  |
-|   |   |
-
-## Github Actions
-
-- `workflow_dispatch` - manually trigger github actions workflow
-
-## Utility docker image
-
-- Docker file at [files/dockerfiles/utility-tools](../files/dockerfiles/utility-tools)
-
-```bash
-# ghcr login
-echo <token> | docker login ghcr.io --username <user> --password-stdin
-
-# Build and push
-docker build --tag ghcr.io/nivesh00/utillity-tools -f utility-tools .
-docker push ghcr.io/nivesh00/utillity-tools:latest
-
-# Debug
-docker run -it --rm --name utility-tools ghcr.io/nivesh00/utillity-tools:latest
-```
-
-## Workflows
-
-- `.publish-utility-image.yml` - build and push utility tools docker image, usese Github hostes runners
-- `.test-workflows.yml` - test workflows for miscellaneous runs
+| `KEYCLOAK_ENV`  | [Keycloak .env file](../05_scripts/keycloak/.env.example)  |
+| `KUBERNETES_ENV` | [Kubernetes .env file](../05_scripts/kubernetes/.env.example)
 
 ## Actions
 
@@ -52,15 +28,52 @@ docker run -it --rm --name utility-tools ghcr.io/nivesh00/utillity-tools:latest
 
 Scripts are found at [05_scripts](../05_scripts/)
 
+### Misc flows
+
+- `.publish-utility-image.yml` - build and push utility tools docker image, usese Github hostes runners
+- `.test-workflows.yml` - test workflows for miscellaneous runs
+
+### Keycloak
+
+1. `01_create_user_and_realm.py`: Create the admin user in master realm, and another realm (called the app realm) with its own admin user
+
+1. `02_create_clients_and_roles.py`: Create the clients and roles, and assign the admin client roles to the admin user in the app realm
+
+### Kubernetes
+
+1. `01_wait_for_resource.py`: Wait for a resource to be created
+
 ## Notes
 
 - Seting a file as secret does not work as encrytion may be broken
 
-## Kubernetes
+
+### Github Actions
+
+- `workflow_dispatch` - manually trigger github actions workflow
+
+### Utility docker image
+
+- Docker file at [files/dockerfiles/utility-tools](../files/dockerfiles/utility-tools)
+
+```bash
+# ghcr login
+echo <token> | docker login ghcr.io --username <user> --password-stdin
+
+# Build and push
+docker build --tag ghcr.io/nivesh00/utillity-tools -f utility-tools .
+docker push ghcr.io/nivesh00/utillity-tools:latest
+
+# Debug
+docker run -it --rm --name utility-tools ghcr.io/nivesh00/utillity-tools:latest
+```
+
+
+### Kubernetes
 
 - Python Client docs https://github.com/kubernetes-client/python/tree/master/kubernetes/docs
 
-## References
+### References
 
 - built-in variables: https://docs.github.com/en/actions/reference/workflows-and-actions/variables
 
