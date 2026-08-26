@@ -7,13 +7,13 @@ metadata:
 spec:
   parentRefs:
     - name: ${tr_gateway} # ${tr_listener_set_prd}
-      sectionName: monitoring-grafana
+      sectionName: grafana
       group: gateway.networking.k8s.io
       kind: Gateway # ListenerSet
       namespace: ${ns_traefik}
 
   hostnames:
-    - monitoring.${DOMAIN}
+    - grafana.${DOMAIN}
 
   rules:
      - matches:

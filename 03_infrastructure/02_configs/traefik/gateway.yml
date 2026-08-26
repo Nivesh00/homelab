@@ -22,14 +22,14 @@ spec:
           namespaces:
             from: All
 
-    - name: monitoring-grafana
-      hostname: monitoring.${DOMAIN}
+    - name: grafana
+      hostname: grafana.${DOMAIN}
       protocol: HTTPS
       port: 8443
       tls:
         mode: Terminate
         certificateRefs:
-          - name: monitoring-grafana-tls
+          - name: grafana-tls
             kind: Secret
             group: ""
 

@@ -16,6 +16,7 @@ data:
   ns_traefik:
   ns_iam:
   ns_utils:
+  ns_data:
 
   ## Github
   gh_runner_name:
