@@ -1,5 +1,6 @@
 import os, sys, logging, keycloak
-import helpers.kc_helpers as kc_helpers, helpers.init as init
+import helpers.init as init
+import helpers.kc_realms as kc_realms 
 
 from dotenv import load_dotenv
 from typing import Any
@@ -53,7 +54,7 @@ if __name__ == "__main__":
 
     try:
         # Create Master Admin User
-        kc_helpers.createAdminIfNotExists(
+        kc_realms.createAdminIfNotExists(
             kc_admin = kc_admin_temp,
             username = KC_ADMIN_USERNAME,
             password = KC_ADMIN_PASSWORD,
@@ -77,10 +78,10 @@ if __name__ == "__main__":
     kc_admin_master = KeycloakAdmin(connection=kc_conn_master)
 
     # Delete initial kc user
-    kc_helpers.deleteUserIfExists(kc_admin_master, KC_INITIAL_USERNAME)
+    kc_realms.deleteUserIfExists(kc_admin_master, KC_INITIAL_USERNAME)
 
     # Create app realm
-    kc_helpers.createRealmIfNotExists(kc_admin_master, KC_APP_REALM)
+    kc_realms.createRealmIfNotExists(kc_admin_master, KC_APP_REALM)
 
     ##
     # Create connection for master admin user
@@ -97,7 +98,7 @@ if __name__ == "__main__":
     kc_admin_app = KeycloakAdmin(connection=kc_conn_app)
 
     # Create app admin user
-    kc_helpers.createAdminIfNotExists(
+    kc_realms.createAdminIfNotExists(
         kc_admin = kc_admin_app,
         username = KC_APP_ADMIN_USER,
         password = KC_APP_ADMIN_PASSWORD

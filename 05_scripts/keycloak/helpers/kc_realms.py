@@ -9,7 +9,7 @@ def deleteUserIfExists(
     kc_admin: KeycloakAdmin,
     username: str = None,
     user_id: str = None
-    ) -> None:
+) -> None:
     """
     Look for a user and delete it if it exists
     :param kc-admin: Keycloak admin client
@@ -37,7 +37,7 @@ def createAdminIfNotExists(
     username: str,
     password: str,
     create_realm: bool = False
-    ) -> None:
+) -> None:
     """
     Create user, set password and assign realm roles if user does not already exists, otherwise return without doing anything
     :param kc_admin: Keycloak admin client
@@ -87,7 +87,7 @@ def createAdminIfNotExists(
 def createRealmIfNotExists(
     kc_admin: KeycloakAdmin,
     realm_name: str
-    ) -> None:
+) -> None:
     """
     Create a realm if it does not already exists
     :param kc_admin: Keycloak admin client

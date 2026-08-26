@@ -1,0 +1,14 @@
+[
+    {
+        "name": "grafanaServerAdmin"
+    },
+    {
+        "name": "grafanaAdmin"
+    },
+    {
+        "name": "grafanaEditor"
+    },
+    {
+        "name": "grafanaViewer"
+    }
+]

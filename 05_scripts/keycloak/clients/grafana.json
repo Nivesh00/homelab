@@ -1,0 +1,63 @@
+{
+  "clientId": "grafana",
+  "name": "Grafana",
+  "description": "Grafana instance for monitoring and other dashboards",
+  "rootUrl": "https://grafana.$DOMAIN",
+  "adminUrl": "https://grafana.$DOMAIN",
+  "baseUrl": "https://grafana.$DOMAIN",
+  "surrogateAuthRequired": false,
+  "enabled": true,
+  "alwaysDisplayInConsole": false,
+  "clientAuthenticatorType": "client-secret",
+  "secret": "$KC_CLIENT_SECRET",
+  "redirectUris": [
+    "https://grafana.$DOMAIN/login/generic_oauth"
+  ],
+  "webOrigins": [
+    "https://grafana.$DOMAIN"
+  ],
+  "notBefore": 0,
+  "bearerOnly": false,
+  "consentRequired": false,
+  "standardFlowEnabled": true,
+  "implicitFlowEnabled": false,
+  "directAccessGrantsEnabled": true,
+  "serviceAccountsEnabled": false,
+  "publicClient": false,
+  "frontchannelLogout": true,
+  "protocol": "openid-connect",
+  "attributes": {
+    "realm_client": "false",
+    "oidc.ciba.grant.enabled": "false",
+    "client.secret.creation.time": "1787737861",
+    "backchannel.logout.session.required": "true",
+    "oauth2.jwt.authorization.grant.enabled": "false",
+    "standard.token.exchange.enabled": "false",
+    "oauth2.device.authorization.grant.enabled": "false",
+    "backchannel.logout.revoke.offline.tokens": "false",
+    "dpop.bound.access.tokens": "false"
+  },
+  "authenticationFlowBindingOverrides": {},
+  "fullScopeAllowed": true,
+  "nodeReRegistrationTimeout": -1,
+  "defaultClientScopes": [
+    "web-origins",
+    "acr",
+    "profile",
+    "roles",
+    "basic",
+    "email"
+  ],
+  "optionalClientScopes": [
+    "address",
+    "phone",
+    "offline_access",
+    "organization",
+    "microprofile-jwt"
+  ],
+  "access": {
+    "view": true,
+    "configure": true,
+    "manage": true
+  }
+}

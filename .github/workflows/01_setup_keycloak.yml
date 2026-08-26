@@ -30,3 +30,10 @@ jobs:
           pip install --no-cache-dir -r requirements.txt
           echo "${{ secrets.KEYCLOAK_ENV }}" > .env
           python3 01_create_user_and_realm.py --load-env
+      
+      # Switch to Keycloak directory and run script
+      - name: Setup Keycloak clients and roles
+        run: |-
+          cd 05_scripts/keycloak
+          python3 02_create_clients_and_roles.py --load-env
+
