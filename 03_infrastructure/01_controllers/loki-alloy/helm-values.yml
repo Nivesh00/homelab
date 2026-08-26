@@ -23,6 +23,10 @@ data:
         query_timeout: 300s
         volume_enabled: true
 
+      commonConfig:
+        path_prefix: /var/loki
+        replication_factor: 1
+
       storage:
         type: filesystem
         filesystem:
