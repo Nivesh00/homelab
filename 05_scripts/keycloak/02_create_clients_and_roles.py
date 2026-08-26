@@ -21,9 +21,6 @@ if __name__ == "__main__":
     DOMAIN: str = os.getenv('DOMAIN')
     KC_URL: str = os.getenv('KC_URL')
 
-    # Client
-    KC_CLIENT_ID: str = os.getenv('KC_CLIENT_ID')
-
     # Master Admin User
     KC_ADMIN_REALM: str = os.getenv('KC_ADMIN_REALM')
     KC_ADMIN_USERNAME: str = os.getenv('KC_ADMIN_USERNAME')
