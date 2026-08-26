@@ -27,7 +27,7 @@ data:
       sidecar:
         dashboards:
           annotations:
-            grafana_folder: "KUBE_METIRCS"
+            grafana_folder: "KUBE-METIRCS"
 
     kubernetesServiceMonitors:
       enabled: true
