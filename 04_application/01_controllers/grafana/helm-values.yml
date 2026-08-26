@@ -9,7 +9,7 @@ data:
     image:
       registry: docker.io
       repository: grafana/grafana
-      tag: 12.3.1
+      tag: "{{ .Chart.AppVersion }}-distroless"
       sha: ""
       pullPolicy: IfNotPresent
 
@@ -36,7 +36,7 @@ data:
 
     persistence:
       type: pvc
-      enabled: false
+      enabled: true
       storageClassName: ${k8s_storage_class}
       volumeName: ""
       accessModes:
@@ -46,7 +46,7 @@ data:
     downloadDashboardsImage:
       registry: docker.io
       repository: curlimages/curl
-      tag: 8.9.1
+      tag: 8.21.0
       sha: ""
       pullPolicy: IfNotPresent
 
@@ -54,7 +54,7 @@ data:
       image:
         registry: quay.io
         repository: kiwigrid/k8s-sidecar
-        tag: 2.5.0
+        tag: 2.10.1
         sha: ""
       imagePullPolicy: IfNotPresent
       resources:
@@ -116,5 +116,5 @@ data:
           uid: prometheus
           url: http://kube-prometheus-stack-prometheus.${ENVIRONMENT}-${ns_monitoring}:9090
           access: proxy
-          isDefault: true
+          isDefault: false
 ---
