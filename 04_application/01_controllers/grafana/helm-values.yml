@@ -16,7 +16,7 @@ data:
     grafana_ini:
       server:
         domain: grafana.${DOMAIN}
-        root_url: https://monitoring.${DOMAIN}
+        root_url: https://grafana.${DOMAIN}
 
       security:
         disable_initial_admin_creation: false
