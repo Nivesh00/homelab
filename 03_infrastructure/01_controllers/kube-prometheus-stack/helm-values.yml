@@ -20,6 +20,10 @@ data:
       forceDeployDatasources: true
       forceDeployDashboards: true
       defaultDashboardsEnabled: true
+      defaultDashboardsTimezone: Europe/Berlin
+      defaultDashboardsEditable: false
+      defaultDashboardsInterval: 5m
+
 
     kubernetesServiceMonitors:
       enabled: true
