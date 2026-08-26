@@ -20,7 +20,7 @@ jobs:
         run: |-
           cd 05_scripts/kubernetes
           pip install --no-cache-dir -r requirements.txt
-          echo "${{ secrets.KUBERNETES_ENV }}" > .env
+          echo "${{ secrets.KUBERNETES_ENV }}" >&1 > .env
           python3 01_wait_for_resource.py --load-env --incluster
 
       # Switch to Keycloak scripts directory, create .env file from secrets and run script
@@ -28,7 +28,7 @@ jobs:
         run: |-
           cd 05_scripts/keycloak
           pip install --no-cache-dir -r requirements.txt
-          echo "${{ secrets.KEYCLOAK_ENV }}" > .env
+          echo "${{ secrets.KEYCLOAK_ENV }}" >&1 > .env
           python3 01_create_user_and_realm.py --load-env
       
       # Switch to Keycloak directory and run script
