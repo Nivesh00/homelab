@@ -56,7 +56,9 @@ data:
         repository: kiwigrid/k8s-sidecar
         tag: 2.10.1
         sha: ""
+
       imagePullPolicy: IfNotPresent
+
       resources:
         limits:
           cpu: 100m
@@ -64,8 +66,7 @@ data:
         requests:
           cpu: 20m
           memory: 20Mi
-      provider:
-        foldersFromFilesStructure: true
+
       dashboards:
         enabled: true
         label: grafana_dashboard
@@ -73,6 +74,11 @@ data:
         searchNamespace: ALL
         defaultFolderName: null
         folderAnnotation: "grafana_folder"
+        provider:
+          disableDelete: true
+          allowUiUpdates: false
+          foldersFromFilesStructure: true
+
       datasources:
         enabled: true
         label: grafana_datasource
@@ -108,7 +114,7 @@ data:
         cpu: 150m
         memory: 400Mi
 
-    datasources.yaml:
+    datasources:
       apiVersion: 1
       datasources:
         - name: Prometheus
