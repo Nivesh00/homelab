@@ -79,7 +79,7 @@ def createAdminIfNotExists(
         main_logger.info(f'Realm roles successfully assigned')
 
     except keycloak.KeycloakPostError as e:
-        main_logger.info(f'User already exists, skipping function')
+        main_logger.info(f'User already exists, skipping creating')
         return
 
     return

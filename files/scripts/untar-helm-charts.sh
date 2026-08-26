@@ -16,10 +16,12 @@ declare -A repo_list=(
     ['traefik']='oci://ghcr.io/traefik/helm/traefik'
     ['github-runner-controller']='oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller'
     ['github-runner']='oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set'
+    ['grafana']='https://grafana.github.io/helm-charts'
 )
 
 declare -A chart_https_list=(
     ['postgres-operator']=postgres-operator
+    ['grafana']=grafana
 )
 
 declare -A version_list=(
@@ -29,6 +31,7 @@ declare -A version_list=(
     ['traefik']='41.0.0'
     ['github-runner-controller']='0.14.2'
     ['github-runner']='0.14.2'
+    ['grafana']='10.5.15'
 )
 
 for app in "${!repo_list[@]}"

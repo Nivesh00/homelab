@@ -2,30 +2,30 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: postgres-operator
-  namespace: ${ENVIRONMENT}-${ns_operation}
+  name: grafana
+  namespace: ${ENVIRONMENT}-${ns_data}
 spec:
   interval: 30m
-  url: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+  url: https://grafana.github.io/helm-charts
   type: default
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: postgres-operator
-  namespace: ${ENVIRONMENT}-${ns_operation}
+  name: grafana
+  namespace: ${ENVIRONMENT}-${ns_data}
 spec:
   interval: 30m
   timeout: 5m
   chart:
     spec:
-      chart: postgres-operator
-      version: v1.15.1
+      chart: grafana
+      version: 10.5.15
       sourceRef:
         kind: HelmRepository
-        name: postgres-operator
+        name: grafana
       interval: 30m
-  releaseName: postgres-operator
+  releaseName: grafana
   install:
     remediation:
       retries: 3
@@ -36,7 +36,7 @@ spec:
     enable: true
   valuesFrom:
     - kind: ConfigMap
-      name: postgres-operator-helm-values
+      name: grafana-helm-values
       valuesKey: values.yml
   driftDetection:
     mode: enabled

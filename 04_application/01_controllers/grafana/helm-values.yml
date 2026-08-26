@@ -1,0 +1,108 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-helm-values
+  namespace: ${ENVIRONMENT}-${ns_data}
+data:
+  values.yml: |-
+    image:
+      registry: docker.io
+      repository: grafana/grafana
+      tag: 12.3.1
+      sha: ""
+      pullPolicy: IfNotPresent
+
+    createConfigmap: true
+
+    server:
+      root_url: https://monitoring.${DOMAIN}
+      domain: monitoring.${DOMAIN}
+
+    auth.generic_oauth:
+      enabled: true
+      name: Keycloak-OAuth
+      allow_sign_up: false
+      client_id: grafana
+      client_secret: ${KC_CLIENT_SECRET_GRAFANA}
+      scopes: openid email profile offline_access roles
+      email_attribute_path: email
+      login_attribute_path: username
+      name_attribute_path: full_name
+      auth_url: https://iam.${DOMAIN}/realms/${KC_APP_REALM}/protocol/openid-connect/auth
+      token_url: https://iam.${DOMAIN}/realms/${KC_APP_REALM}/protocol/openid-connect/token
+      api_url: https://iam.${DOMAIN}/realms/${KC_APP_REALM}/protocol/openid-connect/userinfo
+      role_attribute_path: contains(roles[*], 'grafanaServerAdmin') && 'grafanaAdmin' || contains(roles[*], 'grafanaAdmin') && 'Admin' || contains(roles[*], 'grafanaEditor') && 'Editor' || contains(roles[*], 'grafanaViewer') && 'Viewer' || ''
+
+    downloadDashboardsImage:
+      registry: docker.io
+      repository: curlimages/curl
+      tag: 8.9.1
+      sha: ""
+      pullPolicy: IfNotPresent
+
+    sidecar:
+      image:
+        registry: quay.io
+        repository: kiwigrid/k8s-sidecar
+        tag: 2.5.0
+        sha: ""
+      imagePullPolicy: IfNotPresent
+      resources:
+        limits:
+          cpu: 100m
+          memory: 100Mi
+        requests:
+          cpu: 20m
+          memory: 20Mi
+      dashboards:
+        enabled: true
+        label: grafana_dashboard
+        labelValue: "1"
+        searchNamespace: ALL
+        defaultFolderName: null
+      datasources:
+        enabled: true
+        label: grafana_datasource
+        labelValue: "1"
+        searchNamespace: ALL
+
+    downloadDashboards:
+      env: {}
+      envFromSecret: ""
+      resources: {}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+      envValueFrom: {}
+
+    serviceMonitor:
+      enabled: true
+      path: /metrics
+      namespace: ${ENVIRONMENT}-${ns_monitoring}
+
+    ingress:
+      enabled: false
+
+    resources:
+      limits:
+        cpu: 400m
+        memory: 750Mi
+      requests:
+        cpu: 150m
+        memory: 400Mi
+
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Prometheus
+          type: prometheus
+          uid: prometheus
+          url: http://kube-prometheus-stack-prometheus.${ENVIRONMENT}-${ns_monitoring}:9090
+          access: proxy
+          isDefault: true
+---
