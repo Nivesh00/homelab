@@ -23,7 +23,8 @@ data:
 
       auth:
         disable_login_form: true   
-        oauth_auto_login: false
+        oauth_auto_login: true
+        disable_signout_menu: false
 
       auth.generic_oauth:
         enabled: true
@@ -34,7 +35,7 @@ data:
         scopes: openid email profile offline_access roles
         email_attribute_path: email
         login_attribute_path: username
-        name_attribute_path: full_name
+        name_attribute_path: username
         auth_url: https://iam.${DOMAIN}/realms/${KC_APP_REALM}/protocol/openid-connect/auth
         token_url: https://iam.${DOMAIN}/realms/${KC_APP_REALM}/protocol/openid-connect/token
         api_url: https://iam.${DOMAIN}/realms/${KC_APP_REALM}/protocol/openid-connect/userinfo
@@ -42,6 +43,15 @@ data:
         role_attribute_path: contains(roles[*], 'grafanaServerAdmin') && 'grafanaAdmin' || contains(roles[*], 'grafanaAdmin') && 'Admin' || contains(roles[*], 'grafanaEditor') && 'Editor' || contains(roles[*], 'grafanaViewer') && 'Viewer' || ''
 
     createConfigmap: true
+
+    persistence:
+      type: pvc
+      enabled: false
+      storageClassName: ${k8s_storage_class}
+      volumeName: ""
+      accessModes:
+        - ReadWriteOnce
+      size: 10Gi
 
     downloadDashboardsImage:
       registry: docker.io
