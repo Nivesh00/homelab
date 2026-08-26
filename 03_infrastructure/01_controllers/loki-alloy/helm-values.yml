@@ -23,11 +23,11 @@ data:
         query_timeout: 300s
         volume_enabled: true
 
-        storage:
-          type: filesystem
-          filesystem:
-            chunks_directory: /var/loki/chunks
-            rules_directory: /var/loki/rules
+      storage:
+        type: filesystem
+        filesystem:
+          chunks_directory: /var/loki/chunks
+          rules_directory: /var/loki/rules
 
     serviceAccount:
       create: true
