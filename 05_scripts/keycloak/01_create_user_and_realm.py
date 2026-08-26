@@ -1,4 +1,4 @@
-import os, sys, logging
+import os, sys, logging, keycloak
 import helpers.kc_helpers as kc_helpers, helpers.init as init
 
 from dotenv import load_dotenv
@@ -51,13 +51,17 @@ if __name__ == "__main__":
                         )
     kc_admin_temp = KeycloakAdmin(connection=kc_conn_temp)
 
-    # Create Master Admin User
-    kc_helpers.createAdminIfNotExists(
-        kc_admin = kc_admin_temp,
-        username = KC_ADMIN_USERNAME,
-        password = KC_ADMIN_PASSWORD,
-        create_realm = True
-    )
+    try:
+        # Create Master Admin User
+        kc_helpers.createAdminIfNotExists(
+            kc_admin = kc_admin_temp,
+            username = KC_ADMIN_USERNAME,
+            password = KC_ADMIN_PASSWORD,
+            create_realm = True
+        )
+    
+    except keycloak.KeycloakPostError as e:
+        main_logger.info("Initial user does not exist")
 
     ##
     # Create connection for master admin user

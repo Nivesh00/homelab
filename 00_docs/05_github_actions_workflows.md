@@ -38,6 +38,16 @@ docker run -it --rm --name utility-tools ghcr.io/nivesh00/utillity-tools:latest
 - `.publish-utility-image.yml` - build and push utility tools docker image, usese Github hostes runners
 - `.test-workflows.yml` - test workflows for miscellaneous runs
 
+## Actions
+
+- `actions/checkout@v6` - checkout code
+
+- `actions/upload-artifact@v8` - upload artifact to repo
+
+- `actions/download-artifact@v8` - download uploaded artifact
+
+- `actions/cache@v6` - cahce results without uploading
+
 ## Scripts
 
 Scripts are found at [05_scripts](../05_scripts/)

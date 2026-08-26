@@ -3,62 +3,30 @@ name: 01 - Set up Keycloak
 on: workflow_dispatch
 
 jobs:
-  checkout_code:
+  setup_keycloak:
     runs-on: homelab-gha-runner
     container:
       image: ghcr.io/nivesh00/utility-tools
     environment: homelab
     steps:
-      # Checkout the code
+      # Checkout code
       - name: Checkout code
         uses: actions/checkout@v6
         with:
-          fetch-depth: 0 # Do not get extra git branches to save time
+          fetch-depth: 0
 
-      - name: Upload scripts as artifact for later use
-        uses: actions/upload-artifact@v7
-        with:
-          name: scripts-directory
-          path: |-
-            05_scripts/keycloak
-            05_scripts/kubernetes
-
-  wait_for_keycloak_resource:
-    needs: checkout_code
-    runs-on: homelab-gha-runner
-    container:
-      image: ghcr.io/nivesh00/utility-tools
-    environment: homelab
-    steps:
-      - name: Download scripts artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: scripts-directory
-          path: ./scripts
-
+      # Switch to Kubernetes script directory, create .env file from secrets and run script
       - name: Wait for Keycloak to be ready
         run: |-
-          cd scripts/kubernetes
+          cd 05_scripts/kubernetes
           pip install --no-cache-dir -r requirements.txt
           echo "${{ secrets.KUBERNETES_ENV }}" > .env
           python3 01_wait_for_resource.py --load-env --incluster
 
-  setup_keycloak:
-    needs: wait_for_keycloak_resource
-    runs-on: homelab-gha-runner
-    container:
-      image: ghcr.io/nivesh00/utility-tools
-    environment: homelab
-    steps:
-      - name: Download scripts artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: scripts-directory
-          path: ./scripts
-
-      - name: Setup Keycloak
+      # Switch to Keycloak scripts directory, create .env file from secrets and run script
+      - name: Setup Keycloak users and realms
         run: |-
-          cd scripts/keycloak
+          cd 05_scripts/keycloak
           pip install --no-cache-dir -r requirements.txt
           echo "${{ secrets.KEYCLOAK_ENV }}" > .env
           python3 01_create_user_and_realm.py --load-env

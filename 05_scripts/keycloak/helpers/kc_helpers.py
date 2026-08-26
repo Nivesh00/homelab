@@ -23,7 +23,7 @@ def deleteUserIfExists(
     try:
         user = kc_admin.get_user(user_id)
     except keycloak.KeycloakGetError as e:
-        main_logger.warn("User does not exist, skipping delete")
+        main_logger.info("User does not exist, skipping delete")
         return
 
     kc_admin.delete_user(user_id)
