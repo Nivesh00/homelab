@@ -115,7 +115,7 @@ data:
       enabled: true
 
     monitoring:
-      namespace: ${ENVIRONMENT}-${ns_monitoring}
+      namespace: null
       appInstanceLabelName: 'app_instance'
       appInstanceLabelValue: '{{ include "loki.fullname" . }}'
 
@@ -309,4 +309,7 @@ data:
 
     controller:
       type: 'daemonset'
+    
+    serviceMonitor:
+      enabled: true
 ---
