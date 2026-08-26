@@ -108,7 +108,7 @@ data:
       enabled: false
       replicas: 0
     lokiCanary:
-      enabled: false
+      enabled: true
 
     monitoring:
       namespace: ${ENVIRONMENT}-${ns_monitoring}
