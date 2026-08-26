@@ -1,0 +1,85 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: loki
+  namespace: ${ENVIRONMENT}-${ns_monitoring}
+spec:
+  interval: 30m
+  url: oci://ghcr.io/grafana-community/helm-charts/loki
+  type: oci
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: loki
+  namespace: ${ENVIRONMENT}-${ns_monitoring}
+spec:
+  interval: 30m
+  timeout: 5m
+  chart:
+    spec:
+      chart: loki
+      version: 18.11.3
+      sourceRef:
+        kind: HelmRepository
+        name: loki
+      interval: 30m
+  releaseName: loki
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: true
+  valuesFrom:
+    - kind: ConfigMap
+      name: loki-helm-values
+      valuesKey: values.yml
+  driftDetection:
+    mode: enabled
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: alloy
+  namespace: ${ENVIRONMENT}-${ns_monitoring}
+spec:
+  interval: 30m
+  url: https://grafana.github.io/helm-charts
+  type: default
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: alloy
+  namespace: ${ENVIRONMENT}-${ns_monitoring}
+spec:
+  interval: 30m
+  timeout: 5m
+  chart:
+    spec:
+      chart: alloy
+      version: 1.12.0
+      sourceRef:
+        kind: HelmRepository
+        name: alloy
+      interval: 30m
+  releaseName: alloy
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: true
+  valuesFrom:
+    - kind: ConfigMap
+      name: alloy-helm-values
+      valuesKey: values.yml
+  driftDetection:
+    mode: enabled
+---

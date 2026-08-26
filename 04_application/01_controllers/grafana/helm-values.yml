@@ -117,4 +117,11 @@ data:
           url: http://kube-prometheus-stack-prometheus.${ENVIRONMENT}-${ns_monitoring}:9090
           access: proxy
           isDefault: false
+          editable: false
+        - name: Loki
+          type: loki
+          url: http://loki-gateway.${ENVIRONMENT}-${ns_monitoring}:80
+          access: proxy
+          isDefault: false
+          editable: false
 ---

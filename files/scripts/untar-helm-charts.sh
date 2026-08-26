@@ -17,10 +17,13 @@ declare -A repo_list=(
     ['github-runner-controller']='oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller'
     ['github-runner']='oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set'
     ['grafana']='oci://ghcr.io/grafana-community/helm-charts/grafana'
+    ['loki']='oci://ghcr.io/grafana-community/helm-charts/loki'
+    ['alloy']='https://grafana.github.io/helm-charts'
 )
 
 declare -A chart_https_list=(
     ['postgres-operator']=postgres-operator
+    ['alloy']='alloy'
 )
 
 declare -A version_list=(
@@ -31,6 +34,8 @@ declare -A version_list=(
     ['github-runner-controller']='0.14.2'
     ['github-runner']='0.14.2'
     ['grafana']='13.0.0'
+    ['loki']='18.11.3'
+    ['alloy']='1.12.0'
 )
 
 for app in "${!repo_list[@]}"

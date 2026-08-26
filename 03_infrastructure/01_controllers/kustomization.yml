@@ -6,6 +6,7 @@ resources:
   - github-runner/
   - keycloak/
   - kube-prometheus-stack/
+  - loki-alloy/
   - postgres-operator/
   - traefik/
   - namespace.yml
