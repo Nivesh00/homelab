@@ -125,131 +125,130 @@ data:
       configMap:
         create: true
         content: |-
-          alloy.conf: |-
-            logging {
-              level = "debug"
-              format = "logfmt"
-            }
+          logging {
+            level = "debug"
+            format = "logfmt"
+          }
 
-            loki.write "default" {
-              endpoint {
-                url = "http://loki-gateway.${ENVIRONMENT}-${ns_monitoring}/loki/api/v1/push:80"
-              }
+          loki.write "default" {
+            endpoint {
+              url = "http://loki-gateway.${ENVIRONMENT}-${ns_monitoring}/loki/api/v1/push:80"
             }
+          }
 
-            local.file_match "node_logs" {
-              path_targets = [{
-                  // Monitor syslog to scrape node-logs
-                  __path__  = "/var/log/syslog",
-                  job       = "node/syslog",
-                  node_name = sys.env("HOSTNAME"),
-                  cluster   = ${DOMAIN},
-              }]
-            }
+          local.file_match "node_logs" {
+            path_targets = [{
+                // Monitor syslog to scrape node-logs
+                __path__  = "/var/log/syslog",
+                job       = "node/syslog",
+                node_name = sys.env("HOSTNAME"),
+                cluster   = ${DOMAIN},
+            }]
+          }
 
-            loki.source.file "node_logs" {
-              targets    = local.file_match.node_logs.targets
-              forward_to = [loki.write.default.receiver]
-            }
+          loki.source.file "node_logs" {
+            targets    = local.file_match.node_logs.targets
+            forward_to = [loki.write.default.receiver]
+          }
 
-            discovery.kubernetes "pod" {
+          discovery.kubernetes "pod" {
+            role = "pod"
+            selectors {
               role = "pod"
-              selectors {
-                role = "pod"
-                field = "spec.nodeName=" + coalesce(sys.env("HOSTNAME"), constants.hostname)
-              }
+              field = "spec.nodeName=" + coalesce(sys.env("HOSTNAME"), constants.hostname)
+            }
+          }
+
+          discovery.relabel "pod_logs" {
+            targets = discovery.kubernetes.pod.targets
+
+            rule {
+              source_labels = ["__meta_kubernetes_namespace"]
+              action = "replace"
+              target_label = "namespace"
             }
 
-            discovery.relabel "pod_logs" {
-              targets = discovery.kubernetes.pod.targets
-
-              rule {
-                source_labels = ["__meta_kubernetes_namespace"]
-                action = "replace"
-                target_label = "namespace"
-              }
-
-              rule {
-                source_labels = ["__meta_kubernetes_pod_name"]
-                action = "replace"
-                target_label = "pod"
-              }
-
-              rule {
-                source_labels = ["__meta_kubernetes_pod_container_name"]
-                action = "replace"
-                target_label = "container"
-              }
-
-              rule {
-                source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
-                action = "replace"
-                target_label = "app"
-              }
-
-              rule {
-                source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_pod_container_name"]
-                action = "replace"
-                target_label = "job"
-                separator = "/"
-                replacement = "$1"
-              }
-
-              rule {
-                source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
-                action = "replace"
-                target_label = "__path__"
-                separator = "/"
-                replacement = "/var/log/pods/*$1/*.log"
-              }
-
-              rule {
-                source_labels = ["__meta_kubernetes_pod_container_id"]
-                action = "replace"
-                target_label = "container_runtime"
-                regex = `^(\S+):\/\/.+$`
-                replacement = "$1"
-              }
+            rule {
+              source_labels = ["__meta_kubernetes_pod_name"]
+              action = "replace"
+              target_label = "pod"
             }
 
-            loki.source.kubernetes "pod_logs" {
-              targets    = discovery.relabel.pod_logs.output
-              forward_to = [loki.process.pod_logs.receiver]
+            rule {
+              source_labels = ["__meta_kubernetes_pod_container_name"]
+              action = "replace"
+              target_label = "container"
             }
 
-            loki.process "pod_logs" {
-              stage.static_labels {
-                  values = {
-                    cluster = "${DOMAIN}",
-                  }
-              }
-
-              forward_to = [loki.write.default.receiver]
+            rule {
+              source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+              action = "replace"
+              target_label = "app"
             }
 
-            loki.source.kubernetes_events "cluster_events" {
-              job_name   = "integrations/kubernetes/eventhandler"
-              log_format = "logfmt"
-              forward_to = [
-                loki.process.cluster_events.receiver,
-              ]
+            rule {
+              source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_pod_container_name"]
+              action = "replace"
+              target_label = "job"
+              separator = "/"
+              replacement = "$1"
             }
 
-            loki.process "cluster_events" {
-              forward_to = [loki.write.default.receiver]
+            rule {
+              source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+              action = "replace"
+              target_label = "__path__"
+              separator = "/"
+              replacement = "/var/log/pods/*$1/*.log"
+            }
 
-              stage.static_labels {
+            rule {
+              source_labels = ["__meta_kubernetes_pod_container_id"]
+              action = "replace"
+              target_label = "container_runtime"
+              regex = `^(\S+):\/\/.+$`
+              replacement = "$1"
+            }
+          }
+
+          loki.source.kubernetes "pod_logs" {
+            targets    = discovery.relabel.pod_logs.output
+            forward_to = [loki.process.pod_logs.receiver]
+          }
+
+          loki.process "pod_logs" {
+            stage.static_labels {
                 values = {
                   cluster = "${DOMAIN}",
                 }
-              }
+            }
 
-              stage.labels {
-                values = {
-                  kubernetes_cluster_events = "job",
-                }
+            forward_to = [loki.write.default.receiver]
+          }
+
+          loki.source.kubernetes_events "cluster_events" {
+            job_name   = "integrations/kubernetes/eventhandler"
+            log_format = "logfmt"
+            forward_to = [
+              loki.process.cluster_events.receiver,
+            ]
+          }
+
+          loki.process "cluster_events" {
+            forward_to = [loki.write.default.receiver]
+
+            stage.static_labels {
+              values = {
+                cluster = "${DOMAIN}",
               }
             }
+
+            stage.labels {
+              values = {
+                kubernetes_cluster_events = "job",
+              }
+            }
+          }
 
       resources:
         limits:
