@@ -130,6 +130,9 @@ data:
         defaultDashboardsTimezone: Europe/Berlin
         defaultDashboardsEditable: false
         defaultDashboardsInterval: 5m
+
+      serviceMonitor:
+        enabled: true
 ---
 apiVersion: v1
 kind: ConfigMap
