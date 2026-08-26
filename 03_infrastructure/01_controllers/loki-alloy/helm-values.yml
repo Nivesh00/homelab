@@ -140,7 +140,7 @@ data:
             path_targets = [{
                 __path__  = "/var/log/syslog",
                 job       = "node/syslog",
-                node_name = sys.env("HOSTNAME")
+                node_name = sys.env("HOSTNAME"),
             }]
           }
 
