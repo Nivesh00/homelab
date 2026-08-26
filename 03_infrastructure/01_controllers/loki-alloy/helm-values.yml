@@ -162,7 +162,7 @@ data:
 
           loki.write "default" {
             endpoint {
-              url = "http://loki-gateway.${ENVIRONMENT}-${ns_monitoring}/loki/api/v1/push:80"
+              url = "http://loki-gateway.${ENVIRONMENT}-${ns_monitoring}:80/loki/api/v1/push"
             }
           }
 
