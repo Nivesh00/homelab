@@ -24,3 +24,9 @@ kind: Namespace
 metadata:
   name: ${ENVIRONMENT}-${ns_utils}
 ---
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${ENVIRONMENT}-${ns_data}
+---
