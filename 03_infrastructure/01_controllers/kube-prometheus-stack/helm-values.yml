@@ -24,6 +24,10 @@ data:
       defaultDashboardsEditable: false
       defaultDashboardsInterval: 5m
 
+      sidecar:
+        dashboards:
+          annotations:
+            grafana_folder: "KUBE_METIRCS"
 
     kubernetesServiceMonitors:
       enabled: true

@@ -13,11 +13,21 @@ data:
       sha: ""
       pullPolicy: IfNotPresent
 
+    grafana_ini:
+      server:
+        domain: grafana.${DOMAIN}
+      allow_assign_grafana_admin: true
+      role_attribute_path: contains(roles[*], 'grafanaServerAdmin') && 'grafanaAdmin' || contains(roles[*], 'grafanaAdmin') && 'Admin' || contains(roles[*], 'grafanaEditor') && 'Editor' || contains(roles[*], 'grafanaViewer') && 'Viewer' || ''
+
     createConfigmap: true
 
     server:
       root_url: https://monitoring.${DOMAIN}
       domain: monitoring.${DOMAIN}
+
+    auth.basic:
+      enabled: false
+      disable_login_form: true
 
     auth.generic_oauth:
       enabled: true
@@ -55,12 +65,15 @@ data:
         requests:
           cpu: 20m
           memory: 20Mi
+      provider:
+        foldersFromFilesStructure: true
       dashboards:
         enabled: true
         label: grafana_dashboard
         labelValue: "1"
         searchNamespace: ALL
         defaultFolderName: null
+        folderAnnotation: "grafana_folder"
       datasources:
         enabled: true
         label: grafana_datasource
