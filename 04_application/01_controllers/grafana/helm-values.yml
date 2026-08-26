@@ -15,7 +15,7 @@ data:
 
     grafana_ini:
       server:
-        domain: grafana.${DOMAIN}
+        domain: https://grafana.${DOMAIN}
         root_url: https://grafana.${DOMAIN}
 
       security:
@@ -27,7 +27,7 @@ data:
 
       auth.generic_oauth:
         enabled: true
-        name: Keycloak-OAuth
+        name: KEYCLOAK
         allow_sign_up: false
         client_id: grafana
         client_secret: ${KC_CLIENT_SECRET_GRAFANA}
@@ -42,7 +42,7 @@ data:
         role_attribute_path: contains(roles[*], 'grafanaServerAdmin') && 'grafanaAdmin' || contains(roles[*], 'grafanaAdmin') && 'Admin' || contains(roles[*], 'grafanaEditor') && 'Editor' || contains(roles[*], 'grafanaViewer') && 'Viewer' || ''
 
     createConfigmap: true
-      
+
     downloadDashboardsImage:
       registry: docker.io
       repository: curlimages/curl
