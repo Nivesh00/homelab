@@ -65,10 +65,10 @@ def formatClients(
 ) -> dict[str, str]:
     """
     Transform a string of Keycloak clients into a dict
-    :param kc_clients: String of Keycloak clients, in the form client_id_1=client_secret_1;client_id_2=client_secret_2;
+    :param kc_clients: String of Keycloak clients, in the form client_id_1=client_secret_1,client_id_2=client_secret_2,
     """
     clients: dict[str, str] = {}
-    clients_list: list[str] = kc_clients.split(";")
+    clients_list: list[str] = kc_clients.split(",")
 
     try:
         for client in clients_list:
