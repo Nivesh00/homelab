@@ -74,7 +74,9 @@ data:
         searchNamespace: ALL
         defaultFolderName: null
         folderAnnotation: "grafana_folder"
+
         provider:
+          name: sidecarProvider
           disableDelete: true
           allowUiUpdates: false
           foldersFromFilesStructure: true
@@ -117,17 +119,18 @@ data:
     datasources:
       apiVersion: 1
       datasources:
-        - name: Prometheus
-          type: prometheus
-          uid: prometheus
-          url: http://kube-prometheus-stack-prometheus.${ENVIRONMENT}-${ns_monitoring}:9090
-          access: proxy
-          isDefault: false
-          editable: false
-        - name: Loki
-          type: loki
-          url: http://loki-gateway.${ENVIRONMENT}-${ns_monitoring}:80
-          access: proxy
-          isDefault: false
-          editable: false
+        datasources.yaml:
+          - name: Prometheus
+            type: prometheus
+            uid: prometheus
+            url: http://kube-prometheus-stack-prometheus.${ENVIRONMENT}-${ns_monitoring}:9090
+            access: proxy
+            isDefault: false
+            editable: false
+          - name: Loki
+            type: loki
+            url: http://loki-gateway.${ENVIRONMENT}-${ns_monitoring}:80
+            access: proxy
+            isDefault: false
+            editable: false
 ---
