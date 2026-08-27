@@ -22,6 +22,12 @@ Infrastructure repository contains the controllers (`01_controllers`) and config
 
 - Used for monitoring
 
+## Loki Alloy
+
+- Loki for storing logs
+
+- Alloy for sending logs to loki
+
 ## Postgres Operator
 
 - Postgres as DB for cluster

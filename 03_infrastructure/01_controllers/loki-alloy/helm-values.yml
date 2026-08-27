@@ -123,7 +123,7 @@ data:
         enabled: false
 
       dashboards:
-        enabled: true
+        enabled: false
         annotations:
           grafana_dashboard: "1"
           grafana_folder: "LOKI"
