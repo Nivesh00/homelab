@@ -17,8 +17,8 @@ data:
         "name": "ho7p8x9",
         "namespace": "default",
         "uid": "a2d9e80d-a476-4a2b-a14a-702aaff471e2",
-        "resourceVersion": "1787788783020007",
-        "generation": 24,
+        "resourceVersion": "1787789579951995",
+        "generation": 25,
         "creationTimestamp": "2026-08-26T23:00:40Z",
         "labels": {
           "grafana.app/deprecatedInternalID": "3078868070719488"
@@ -27,7 +27,7 @@ data:
           "grafana.app/createdBy": "user:afwdy5audgkcgf",
           "grafana.app/saved-from-ui": "Grafana v13.2.0 (f681b1359f)",
           "grafana.app/updatedBy": "user:afwdy5audgkcgf",
-          "grafana.app/updatedTimestamp": "2026-08-26T23:59:43Z"
+          "grafana.app/updatedTimestamp": "2026-08-27T00:12:59Z"
         }
       },
       "spec": {
@@ -386,14 +386,14 @@ data:
                 },
                 "spec": {
                   "qryType": 1,
-                  "query": "label_values({namespace=\"$namespace\"},container)",
+                  "query": "label_values({namespace=\"$namespace\", pod=~\"$pod\"},container)",
                   "refId": "PrometheusVariableQueryEditor-VariableQuery"
                 }
               },
               "regex": "",
               "regexApplyTo": "value",
               "sort": "alphabeticalAsc",
-              "definition": "label_values({namespace=\"$namespace\"},container)",
+              "definition": "label_values({namespace=\"$namespace\", pod=~\"$pod\"},container)",
               "options": [],
               "multi": true,
               "includeAll": false,
