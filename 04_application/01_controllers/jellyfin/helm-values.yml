@@ -1,0 +1,70 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jellyfin-helm-values
+  namespace: ${ENVIRONMENT}-${ns_public}
+data:
+  values.yml: |-
+    replicaCount: 1
+    image:
+      repository: docker.io/jellyfin/jellyfin
+      tag: 10.11.11
+      pullPolicy: IfNotPresent
+
+    securityContext:
+      capabilities:
+        add:
+          - "SYS_ADMIN"
+        drop:
+          - "ALL"
+      privileged: false
+
+    ingress:
+      enabled: false
+
+    httpRoute:
+      enabled: false
+
+    resources:
+      limits:
+        cpu: 600m
+        memory: 600Mi
+      requests:
+        cpu: 200m
+        memory: 250Mi
+
+    volumes:
+      - name: hwa
+        hostPath:
+          path: /dev/dri
+
+    volumeMounts:
+      - name: hwa
+        mountPath: /dev/dri
+
+    persistence:
+      config:
+        enabled: true
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        annotations: {}
+        storageClass: ${k8s_storage_class}
+      media:
+        enabled: true
+        type: hostPath
+        hostPath: /media-server/media
+      cache:
+        enabled: true
+        type: pvc
+        accessMode: ReadWriteOnce
+        size: 5Gi
+
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+
+    networkPolicy:
+      enabled: false
+---
