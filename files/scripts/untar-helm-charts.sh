@@ -20,12 +20,14 @@ declare -A repo_list=(
     ['loki']='oci://ghcr.io/grafana-community/helm-charts/loki'
     ['alloy']='https://grafana.github.io/helm-charts'
     ['jellyfin']='https://jellyfin.github.io/jellyfin-helm'
+    ['vaultwarden']='https://guerzon.github.io/vaultwarden'
 )
 
 declare -A chart_https_list=(
     ['postgres-operator']=postgres-operator
     ['alloy']='alloy'
     ['jellyfin']='jellyfin'
+    ['vaultwarden']='vaultwarden'
 )
 
 declare -A version_list=(
@@ -39,6 +41,7 @@ declare -A version_list=(
     ['loki']='18.11.3'
     ['alloy']='1.12.0'
     ['jellyfin']='3.2.0'
+    ['vaultwarden']='v0.46.1'
 )
 
 for app in "${!repo_list[@]}"

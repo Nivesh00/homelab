@@ -32,3 +32,36 @@ spec:
       cpu: 50m
       memory: 150Mi
 ---
+# Database for vaultwarden
+# Database for keycloak
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: vaultwarden-db
+  namespace: ${ENVIRONMENT}-${ns_public}
+spec:
+  teamId: vaultwarden
+  volume:
+    storageClass: ${k8s_storage_class}
+    size: 10Gi
+  numberOfInstances: 1
+  users:
+    postgres:
+      - superuser
+      - createdb
+      - createrole
+  preparedDatabases:
+    vaultwarden:
+      defaultUsers: true
+      schemas:
+        vaultwarden_data:
+          defaultUsers: false
+  postgresql:
+    version: "15"
+  resources:
+    limits:
+      cpu: 200m
+      memory: 250Mi
+    requests:
+      cpu: 50m
+      memory: 150Mi

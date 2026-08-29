@@ -1,0 +1,11 @@
+[
+    {
+        "name": "vaultwardenAdmin"
+    },
+    {
+        "name": "vaultwardenMember"
+    },
+    {
+        "name": "vaultwardenViewer"
+    }
+]
