@@ -67,6 +67,7 @@ data:
     emergencyAccessAllowed: "true"
     emailChangeAllowed: "false"
     showPassHint: "false"
+    requireDeviceEmail: "false"
 
     adminToken:
       value: ${VW_ADMIN_TOKEN}
@@ -84,10 +85,11 @@ data:
       enforceSSO: true
       authority: https://iam.${DOMAIN}/realms/${KC_APP_REALM}
       scopes: "openid profile email offline_access"
+      ignoreEmailVerification: true
 
-      ignoreEmailVerification: false
       clientId:
         value: vaultwarden
+
       clientSecret:
         value: ${KC_CLIENT_SECRET_VAULTWARDEN}
 ---
