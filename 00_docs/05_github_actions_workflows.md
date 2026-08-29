@@ -35,6 +35,16 @@ Scripts are found at [05_scripts](../05_scripts/)
 
 ### Keycloak
 
+- `files` - directory
+    ```
+    └── files
+       ├── clients
+       └── roles
+    ```
+    - `clients`: Keycloak client representation in json
+    - `roles`: Keycloak role representation in json for clients
+    - Note: Both the files in the `clients` dir and `roles` dir must be named after their respective client id (e.g. for client-id `grafana`, client representation is named `client.json` and role representation is named `grafana.json` also )
+
 1. `01_create_user_and_realm.py`: Create the admin user in master realm, and another realm (called the app realm) with its own admin user
 
 1. `02_create_clients_and_roles.py`: Create the clients and roles, and assign the admin client roles to the admin user in the app realm
