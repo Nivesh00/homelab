@@ -28,8 +28,8 @@ data:
 
     resources:
       limits:
-        cpu: 600m
-        memory: 850Mi
+        cpu: 800m
+        memory: 1250Mi
       requests:
         cpu: 200m
         memory: 400Mi
