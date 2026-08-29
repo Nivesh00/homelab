@@ -1,4 +1,5 @@
 ---
+# Dashboard for Loki logs
 apiVersion: v1
 kind: ConfigMap
 metadata:

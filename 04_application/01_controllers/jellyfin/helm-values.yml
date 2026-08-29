@@ -29,10 +29,10 @@ data:
     resources:
       limits:
         cpu: 600m
-        memory: 600Mi
+        memory: 850Mi
       requests:
         cpu: 200m
-        memory: 250Mi
+        memory: 400Mi
 
     volumes:
       - name: hwa

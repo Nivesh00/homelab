@@ -139,10 +139,10 @@ data:
         resources:
           limits:
             cpu: 350m
-            memory: 750Mi
+            memory: 1200Mi
           requests:
             cpu: 150m
-            memory: 400Mi
+            memory: 800Mi
 
         ## The ConfigMaps are mounted into /etc/prometheus/configmaps/.
         configMaps: []
