@@ -33,10 +33,11 @@ spec:
               value: Europe/Berlin
             - name: FTLCONF_dns_upstreams
               value: ${PH_DNS_UPSTREAMS}
-            - valueFrom:
+            - name: FTLCONF_webserver_api_password
+              valueFrom:
                 secretKeyRef:
                   name: pihole-secret
-                  key: PIHOLE_UI_PASSWORD
+                  key: PH_UI_PASSWORD
           volumeMounts:
             - mountPath: /etc/pihole
               name: pi-hole-pvc
