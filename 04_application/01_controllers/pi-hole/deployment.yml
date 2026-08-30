@@ -39,7 +39,7 @@ spec:
               value: "true"
             - name: FTLCONF_dns_ignoreLocalhost
               value: "false"
-            - name: FTLCONF_dns_hostRecord
+            - name: FTLCONF_dns_listeningMode
               value: "LOCAL"
             - name: FTLCONF_webserver_api_password
               valueFrom:
