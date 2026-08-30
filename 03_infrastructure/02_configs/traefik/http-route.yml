@@ -137,7 +137,7 @@ metadata:
 spec:
   parentRefs:
     - name: ${tr_gateway}
-      sectionName: vaultwarden
+      sectionName: pi-hole
       group: gateway.networking.k8s.io
       kind: Gateway
       namespace: ${ns_traefik}
