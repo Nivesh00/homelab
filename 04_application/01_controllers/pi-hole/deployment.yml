@@ -44,6 +44,13 @@ spec:
           securityContext:
             capabilities:
               add: ["NET_ADMIN", "SYS_TIME", "SYS_NICE"]
+          resources:
+            limits:
+              cpu: 200m
+              memory: 250Mi
+            requests:
+              cpu: 80m
+              memory: 100Mi
       volumes:
         - name: pi-hole-pvc
           persistentVolumeClaim:

@@ -11,6 +11,5 @@ spec:
     requests:
       storage: 5Gi
   storageClassName: ${k8s_storage_class}
-  volumeName: pi-hole-pv
 ---
 
