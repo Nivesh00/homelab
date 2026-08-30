@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - grafana/
-  - jellyfin/
-  - pi-hole/
-  - vaultwarden/
+  - deployment.yml
+  - secrets.yml
+  - service.yml
+  - volume.yml

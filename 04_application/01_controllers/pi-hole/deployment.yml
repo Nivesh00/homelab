@@ -1,0 +1,50 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pi-hole
+  namespace: ${ENVIRONMENT}-${ns_utils}
+  labels:
+    app: pi-hole
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pi-hole
+  template:
+    metadata:
+      labels:
+        app: pi-hole
+    spec:
+      containers:
+        - name: pi-hole
+          image: pihole/pihole:2026.07.2
+          ports:
+            - containerPort: 53
+              protocol: TCP
+            - containerPort: 53
+              protocol: UDP
+            - containerPort: 80
+              protocol: TCP
+            - containerPort: 443
+              protocol: TCP
+          env:
+            - name: TZ
+              value: Europe/Berlin
+            - name: FTLCONF_dns_upstreams
+              value: ${PH_DNS_UPSTREAMS}
+            - valueFrom:
+                secretKeyRef:
+                  name: pihole-secret
+                  key: PIHOLE_UI_PASSWORD
+          volumeMounts:
+            - mountPath: /etc/pihole
+              name: pi-hole-pvc
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN", "SYS_TIME", "SYS_NICE"]
+      volumes:
+        - name: pi-hole-pvc
+          persistentVolumeClaim:
+            claimName: pi-hole-pvc
+---
