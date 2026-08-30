@@ -3,6 +3,6 @@ kind: Kustomization
 
 resources:
   - deployment.yml
+  - pvc.yml
   - secrets.yml
   - service.yml
-  - volume.yml
