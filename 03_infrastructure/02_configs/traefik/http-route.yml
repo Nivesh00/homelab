@@ -156,7 +156,7 @@ spec:
           requestRedirect:
             path:
               type: ReplacePrefixMatch
-              replaceFullPath: /admin
+              replacePrefixMatch: /admin
             statusCode: 302
       
       backendRefs:
