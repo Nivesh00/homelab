@@ -156,7 +156,7 @@ spec:
           urlRewrite:
             path:
               type: ReplaceFullPath
-              ReplaceFullPath: /admin
+              replaceFullPath: /admin
       
       backendRefs:
       - name: pi-hole-svc
