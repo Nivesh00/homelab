@@ -16,14 +16,14 @@ spec:
     - grafana.${DOMAIN}
 
   rules:
-     - matches:
-        - path:
-            type: PathPrefix
-            value: /
+    - matches:
+      - path:
+          type: PathPrefix
+          value: /
 
-       backendRefs:
-        - name: grafana
-          port: 80
+      backendRefs:
+      - name: grafana
+        port: 80
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -42,14 +42,14 @@ spec:
     - iam.${DOMAIN}
 
   rules:
-     - matches:
-        - path:
-            type: PathPrefix
-            value: /
+    - matches:
+      - path:
+          type: PathPrefix
+          value: /
 
-       backendRefs:
-        - name: keycloak-service
-          port: 8080
+      backendRefs:
+      - name: keycloak-service
+        port: 8080
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -68,14 +68,14 @@ spec:
     - iam-admin.${DOMAIN}
 
   rules:
-     - matches:
-        - path:
-            type: PathPrefix
-            value: /
+    - matches:
+      - path:
+          type: PathPrefix
+          value: /
 
-       backendRefs:
-        - name: keycloak-service
-          port: 8080
+      backendRefs:
+      - name: keycloak-service
+        port: 8080
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -94,14 +94,14 @@ spec:
     - jellyfin.${DOMAIN}
 
   rules:
-     - matches:
-        - path:
-            type: PathPrefix
-            value: /
+    - matches:
+      - path:
+          type: PathPrefix
+          value: /
 
-       backendRefs:
-        - name: jellyfin
-          port: 8096
+      backendRefs:
+      - name: jellyfin
+        port: 8096
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -120,14 +120,14 @@ spec:
     - vaultwarden.${DOMAIN}
 
   rules:
-     - matches:
-        - path:
-            type: PathPrefix
-            value: /
+    - matches:
+      - path:
+          type: PathPrefix
+          value: /
 
-       backendRefs:
-        - name: vaultwarden
-          port: 80
+      backendRefs:
+      - name: vaultwarden
+        port: 80
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -146,12 +146,20 @@ spec:
     - pi-hole.${DOMAIN}
 
   rules:
-     - matches:
-        - path:
-            type: PathPrefix
-            value: /
-
-       backendRefs:
-        - name: pi-hole-svc
-          port: 80
+    - matches:
+      - path:
+          type: PathPrefix
+          value: /
+      
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            path:
+              type: ReplacePrefixMatch
+              replaceFullPath: /admin
+            statusCode: 302
+      
+      backendRefs:
+      - name: pi-hole-svc
+        port: 80
 ---
