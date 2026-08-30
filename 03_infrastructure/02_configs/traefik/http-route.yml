@@ -149,7 +149,7 @@ spec:
     - matches:
         - path:
             type: Exact
-            value: https://pi-hole.${DOMAIN}
+            value: /
       
       filters:
         - type: URLRewrite
