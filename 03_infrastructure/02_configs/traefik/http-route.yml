@@ -152,11 +152,11 @@ spec:
           value: /
       
       filters:
-        - type: RequestRedirect
-          requestRedirect:
+        - type: URLRewrite
+          urlRewrite:
             path:
               type: ReplacePrefixMatch
-              replacePrefixMatch: /admin
+              replacePrefixMatch: "/admin"
             statusCode: 302
       
       backendRefs:
