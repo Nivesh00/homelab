@@ -157,7 +157,6 @@ spec:
             path:
               type: ReplacePrefixMatch
               replacePrefixMatch: "/admin"
-            statusCode: 302
       
       backendRefs:
       - name: pi-hole-svc
