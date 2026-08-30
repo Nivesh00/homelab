@@ -1,4 +1,5 @@
 ---
+# For env explanation, see https://docs.pi-hole.net/ftldns/configfile
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,6 +20,7 @@ spec:
       containers:
         - name: pi-hole
           image: pihole/pihole:2026.07.2
+          hostNetwork: true
           ports:
             - containerPort: 53
               protocol: TCP
@@ -33,6 +35,12 @@ spec:
               value: Europe/Berlin
             - name: FTLCONF_dns_upstreams
               value: ${PH_DNS_UPSTREAMS}
+            - name: FTLCONF_dns_CNAMEdeepInspect
+              value: "true"
+            - name: FTLCONF_dns_ignoreLocalhost
+              value: "false"
+            - name: FTLCONF_dns_hostRecord
+              value: "LOCAL"
             - name: FTLCONF_webserver_api_password
               valueFrom:
                 secretKeyRef:
@@ -41,6 +49,8 @@ spec:
           volumeMounts:
             - mountPath: /etc/pihole
               name: pi-hole-pvc
+            - mountPath: /etc/dnsmasq.d
+              name: pi-hole-dnsmasq-conf
           securityContext:
             capabilities:
               add: ["NET_ADMIN", "SYS_TIME", "SYS_NICE"]

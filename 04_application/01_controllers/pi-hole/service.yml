@@ -2,22 +2,39 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: pi-hole-svc
+  name: pi-hole-public-svc
   namespace: ${ENVIRONMENT}-${ns_utils}
 spec:
   selector:
     app: pi-hole
   ports:
     - protocol: TCP
-      port: 53
-      targetPort: 53
-      name: tcp-53
-    - protocol: TCP
       port: 80
       targetPort: 80
-      name: tcp-80
+      name: http
     - protocol: TCP
       port: 443
       targetPort: 443
-      name: tcp-443
+      name: https
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pi-hole-local-svc
+  namespace: ${ENVIRONMENT}-${ns_utils}
+spec:
+  selector:
+    app: pi-hole
+  type: NodePort
+  ports:
+    - name: dns-tcp
+      protocol:  TCP
+      port: 53
+      targetPort: 53
+      nodePort: 31053
+    - name: dns-udp
+      protocol: UDP
+      port: 53
+      targetPort: 53
+      nodePort: 31053
 ---

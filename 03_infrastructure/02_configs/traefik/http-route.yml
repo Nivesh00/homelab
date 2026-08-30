@@ -159,7 +159,7 @@ spec:
               replaceFullPath: /admin
       
       backendRefs:
-      - name: pi-hole-svc
+      - name: pi-hole-public-svc
         port: 80
 
     - matches:
@@ -168,6 +168,6 @@ spec:
             value: /
 
       backendRefs:
-        - name: pi-hole-svc
+        - name: pi-hole-public-svc
           port: 80
 ---
