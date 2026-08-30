@@ -49,8 +49,6 @@ spec:
           volumeMounts:
             - mountPath: /etc/pihole
               name: pi-hole-pvc
-            - mountPath: /etc/dnsmasq.d
-              name: pi-hole-dnsmasq-conf
           securityContext:
             capabilities:
               add: ["NET_ADMIN", "SYS_TIME", "SYS_NICE"]
