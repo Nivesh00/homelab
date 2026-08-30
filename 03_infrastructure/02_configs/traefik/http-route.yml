@@ -147,18 +147,27 @@ spec:
 
   rules:
     - matches:
-      - path:
-          type: PathPrefix
-          value: /
+        - path:
+            type: Exact
+            value: https://pi-hole.${DOMAIN}
       
       filters:
         - type: URLRewrite
           urlRewrite:
             path:
-              type: ReplacePrefixMatch
-              replacePrefixMatch: "/admin"
+              type: ReplaceFullPath
+              replacePrefixMatch: /admin
       
       backendRefs:
       - name: pi-hole-svc
         port: 80
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+      backendRefs:
+        - name: pi-hole-svc
+          port: 80
 ---
