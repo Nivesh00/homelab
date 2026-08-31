@@ -25,7 +25,7 @@ metadata:
 spec:
   selector:
     app: pi-hole
-  type: NodePort
+  type: LoadBalancer
   ports:
     - name: dns-tcp
       protocol:  TCP
