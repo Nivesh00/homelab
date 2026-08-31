@@ -33,7 +33,3 @@ data:
   tr_controller_name:
   tr_listener_set_prd:
   tr_listener_set_stg:
-
-  ## Pihole
-  # List of DNS: https://docs.pi-hole.net/guides/dns/upstream-dns-providers/
-  PH_DNS_UPSTREAMS: # https://docs.pi-hole.net/docker/configuration/#__tabbed_1_1
