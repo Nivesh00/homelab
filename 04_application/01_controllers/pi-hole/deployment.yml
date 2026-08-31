@@ -62,11 +62,6 @@ spec:
 
         - name: unbound
           image: klutchell/unbound:1.26.0
-          ports:
-            - containerPort: 53
-              protocol: TCP
-            - containerPort: 53
-              protocol: UDP
           volumeMounts:
             - mountPath: /etc/unbound/conf.d/pi-hole.conf
               subPath: pi-hole.conf
