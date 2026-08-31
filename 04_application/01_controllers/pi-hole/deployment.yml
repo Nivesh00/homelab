@@ -34,7 +34,7 @@ spec:
             - name: TZ
               value: Europe/Berlin
             - name: FTLCONF_dns_upstreams
-              value: ${PH_DNS_UPSTREAMS}
+              value: ["127.0.0.1#53"]
             - name: FTLCONF_dns_CNAMEdeepInspect
               value: "true"
             - name: FTLCONF_dns_ignoreLocalhost
@@ -59,8 +59,28 @@ spec:
             requests:
               cpu: 80m
               memory: 100Mi
+
+        - name: unbound
+          image: klutchell/unbound:1.26.0
+          hostNetwork: true
+          ports:
+            - containerPort: 53
+              protocol: TCP
+            - containerPort: 53
+              protocol: UDP
+          volumeMounts:
+            - mountPath: /etc/unbound/conf.d/pi-hole.conf
+              subPath: pi-hole.conf
+              name: unbound-config
+
       volumes:
         - name: pi-hole-pvc
           persistentVolumeClaim:
             claimName: pi-hole-pvc
+        - name: unbound-config
+          configMap:
+            name: unbound-config
+            items:
+              - key: pi-hole.conf
+                path: pi-hole.conf
 ---
