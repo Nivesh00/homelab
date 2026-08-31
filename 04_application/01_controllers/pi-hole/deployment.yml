@@ -17,10 +17,10 @@ spec:
       labels:
         app: pi-hole
     spec:
+      hostNetwork: true
       containers:
         - name: pi-hole
           image: pihole/pihole:2026.07.2
-          hostNetwork: true
           ports:
             - containerPort: 53
               protocol: TCP
@@ -62,7 +62,6 @@ spec:
 
         - name: unbound
           image: klutchell/unbound:1.26.0
-          hostNetwork: true
           ports:
             - containerPort: 53
               protocol: TCP
