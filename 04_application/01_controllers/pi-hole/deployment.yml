@@ -34,7 +34,7 @@ spec:
             - name: TZ
               value: Europe/Berlin
             - name: FTLCONF_dns_upstreams
-              value: ["127.0.0.1#53"]
+              value: "127.0.0.1#53"
             - name: FTLCONF_dns_CNAMEdeepInspect
               value: "true"
             - name: FTLCONF_dns_ignoreLocalhost
