@@ -90,7 +90,7 @@ spec:
             - containerPort: 53
               protocol: UDP
           volumeMounts:
-            - mountPath: /etc/unbound/conf.d/pi-hole.conf
+            - mountPath: /etc/unbound/custom.conf.d/pi-hole.conf
               subPath: pi-hole.conf
               name: unbound-config
           resources:
