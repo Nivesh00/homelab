@@ -33,7 +33,7 @@ spec:
             - name: TZ
               value: Europe/Berlin
             - name: FTLCONF_dns_upstreams
-              value: "127.0.0.1#5335"
+              value: "unbound-svc#53"
             - name: FTLCONF_dns_CNAMEdeepInspect
               value: "true"
             - name: FTLCONF_dns_ignoreLocalhost
@@ -59,12 +59,35 @@ spec:
               cpu: 80m
               memory: 100Mi
 
+      volumes:
+        - name: pi-hole-pvc
+          persistentVolumeClaim:
+            claimName: pi-hole-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unbound
+  namespace: ${ENVIRONMENT}-${ns_utils}
+  labels:
+    app: unbound
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unbound
+  template:
+    metadata:
+      labels:
+        app: unbound
+    spec:
+      containers:
         - name: unbound
           image: klutchell/unbound:1.26.0
           ports:
-            - containerPort: 5335
+            - containerPort: 53
               protocol: TCP
-            - containerPort: 5335
+            - containerPort: 53
               protocol: UDP
           volumeMounts:
             - mountPath: /etc/unbound/conf.d/pi-hole.conf
@@ -79,9 +102,6 @@ spec:
               memory: 50Mi
 
       volumes:
-        - name: pi-hole-pvc
-          persistentVolumeClaim:
-            claimName: pi-hole-pvc
         - name: unbound-config
           configMap:
             name: unbound-config
